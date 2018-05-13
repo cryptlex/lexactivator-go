@@ -12,7 +12,7 @@ import (
 
 func initData() {
 	var status C.int
-	//  status = C.SetProductFile(C.CString("ABSOLUTE_PATH_OF_PRODUCT.DAT_FILE"));
+	//  status = C.SetProductFile(C.CString("ABSOLUTE_PATH_OF_PRODUCT.DAT_FILE"))
 	status = C.SetProductData(C.CString("PASTE_CONTENT_OF_PRODUCT.DAT_FILE"))
 	if C.LA_OK != status {
 		fmt.Println("Error Code:", status)
