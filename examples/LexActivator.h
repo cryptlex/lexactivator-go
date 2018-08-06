@@ -360,7 +360,7 @@ LEXACTIVATOR_API int LA_CC GetTrialExpiryDate(uint32_t *trialExpiryDate);
     * trialId - pointer to a buffer that receives the value of the string
     * length - size of the buffer pointed to by the value parameter
 
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED,
     LA_E_BUFFER_SIZE
 */
 LEXACTIVATOR_API int LA_CC GetTrialId(STRTYPE trialId, uint32_t length);
