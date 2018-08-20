@@ -311,6 +311,20 @@ LEXACTIVATOR_API int LA_CC GetLicenseUserEmail(STRTYPE email, uint32_t length);
 LEXACTIVATOR_API int LA_CC GetLicenseUserName(STRTYPE name, uint32_t length);
 
 /*
+    FUNCTION: GetLicenseType()
+
+    PURPOSE: Gets the license type (node-locked or hosted-floating).
+
+    PARAMETERS:
+    * licenseType - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the name parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+    LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetLicenseType(STRTYPE licenseType, uint32_t length);
+
+/*
     FUNCTION: GetActivationMetadata()
 
     PURPOSE: Gets the activation metadata.
@@ -360,7 +374,7 @@ LEXACTIVATOR_API int LA_CC GetTrialExpiryDate(uint32_t *trialExpiryDate);
     * trialId - pointer to a buffer that receives the value of the string
     * length - size of the buffer pointed to by the value parameter
 
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED,
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
     LA_E_BUFFER_SIZE
 */
 LEXACTIVATOR_API int LA_CC GetTrialId(STRTYPE trialId, uint32_t length);
@@ -373,7 +387,7 @@ LEXACTIVATOR_API int LA_CC GetTrialId(STRTYPE trialId, uint32_t length);
     PARAMETERS:
     * trialExpiryDate - pointer to the integer that receives the value
 
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
 */
 LEXACTIVATOR_API int LA_CC GetLocalTrialExpiryDate(uint32_t *trialExpiryDate);
 
