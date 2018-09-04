@@ -1,5 +1,5 @@
 # lexactivator-go
-LexActivator API wrapper for Go
+LexActivator - Go licensing library
 
 Refer to following for documentation:
 
