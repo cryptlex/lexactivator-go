@@ -10,7 +10,7 @@
     #include <windows.h>
 
     #ifdef LEXACTIVATOR_EXPORTS
-        #ifdef LEXACTIVATOR__STATIC
+        #ifdef LEXACTIVATOR_STATIC
             #define LEXACTIVATOR_API extern "C"
         #else
             #define LEXACTIVATOR_API extern "C" __declspec(dllexport)
@@ -226,6 +226,19 @@ LEXACTIVATOR_API int LA_CC SetAppVersion(CSTRTYPE appVersion);
     cases you don't need to care whether your user is behind a proxy server or not.
 */
 LEXACTIVATOR_API int LA_CC SetNetworkProxy(CSTRTYPE proxy);
+
+/*
+    FUNCTION: SetCryptlexHost()
+
+    PURPOSE: In case you are running Cryptlex on-premise, you can set the
+    host for your on-premise server.
+
+    PARAMETERS:
+    * host - the address of the Cryptlex on-premise server
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_HOST_URL
+*/
+LEXACTIVATOR_API int LA_CC SetCryptlexHost(CSTRTYPE host);
 
 /*
     FUNCTION: GetProductMetadata()
