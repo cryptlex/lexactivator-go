@@ -16,9 +16,9 @@ const (
 )
 
 func GoToCString(goString string) *C.ushort {
-	runeByte := []rune(goString)
-	encodedByte := utf16.Encode(runeByte)
-	cString := (*C.ushort)(unsafe.Pointer(&encodedByte[0]))
+	bytes := []rune(goString)
+	encodedBytes := utf16.Encode(bytes)
+	cString := (*C.ushort)(unsafe.Pointer(&encodedBytes[0]))
 	return cString
 }
 
@@ -26,8 +26,6 @@ func CtoGoString(cString *C.ushort) string {
 	encodedBytes := C.GoBytes(unsafe.Pointer(cString), MaxGoArrayLength)
 	goString,_ := decodeUtf16(encodedBytes, binary.LittleEndian)
 	return goString
-	//decodedBytes := utf16.Decode(encodedBytes)
-	//return string(decodedBytes)
 }
 
 func GetCArray() [MaxCArrayLength]C.ushort {
