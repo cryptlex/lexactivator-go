@@ -4,7 +4,8 @@ package lexactivator
 #cgo LDFLAGS: -L./libs -lLexActivator -Wl,-rpath,./libs -Wl,-rpath,./
 #include "lexactivator/LexActivator.h"
 #include <stdlib.h>
-void licenseCallbackCgoGateway(int in); // Forward declaration.
+void licenseCallbackCgoGateway(int status);
+void releaseUpdateCallbackCgoGateway(int status);
 */
 import "C"
 import (
@@ -15,6 +16,8 @@ type CallbackType func(int)
 
 var licenseCallbackFuncion CallbackType
 
+var releaseUpdateCallbackFuncion CallbackType
+
 const (
 	LA_USER      uint = 0
 	LA_SYSTEM    uint = 1
@@ -23,8 +26,15 @@ const (
 
 //export licenseCallbackWrapper
 func licenseCallbackWrapper(status int) {
-	if licenseCallbackFuncion != nil{
+	if licenseCallbackFuncion != nil {
 		licenseCallbackFuncion(status)
+	}
+}
+
+//export releaseUpdateCallbackWrapper
+func releaseUpdateCallbackWrapper(status int) {
+	if releaseUpdateCallbackFuncion != nil {
+		releaseUpdateCallbackFuncion(status)
 	}
 }
 
@@ -73,9 +83,9 @@ func SetLicenseUserCredential(email string, password string) int {
 
 // SetLicenseCallback function as declared in lexactivator/LexActivator.h:175
 func SetLicenseCallback(callbackFunction CallbackType) int {
-	C.SetLicenseCallback((C.CallbackType)(unsafe.Pointer(C.licenseCallbackCgoGateway)))
+	status := C.SetLicenseCallback((C.CallbackType)(unsafe.Pointer(C.licenseCallbackCgoGateway)))
 	licenseCallbackFuncion = callbackFunction
-	return 0
+	return int(status)
 }
 
 // SetActivationMetadata function as declared in lexactivator/LexActivator.h:191
@@ -284,18 +294,17 @@ func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 }
 
 // CheckForReleaseUpdate function as declared in lexactivator/LexActivator.h:524
-// func CheckForReleaseUpdate(Platform string, Version string, Channel string, ReleaseUpdateCallback CallbackType) int {
-// 	cPlatform, _ := unpackArgSCSTRTYPE(Platform)
-// 	cVersion, _ := unpackArgSCSTRTYPE(Version)
-// 	cChannel, _ := unpackArgSCSTRTYPE(Channel)
-// 	cReleaseUpdateCallback, _ := ReleaseUpdateCallback.PassValue()
-// 	__ret := C.CheckForReleaseUpdate(cPlatform, cVersion, cChannel, cReleaseUpdateCallback)
-// 	packSCSTRTYPE(Channel, cChannel)
-// 	packSCSTRTYPE(Version, cVersion)
-// 	packSCSTRTYPE(Platform, cPlatform)
-// 	__v := (int)(__ret)
-// 	return __v
-// }
+func CheckForReleaseUpdate(platform string, version string, channel string, callbackFunction CallbackType) int {
+	cPlatform := ToCString(platform)
+	cVersion := ToCString(version)
+	cChannel := ToCString(channel)
+	status := C.CheckForReleaseUpdate(cPlatform, cVersion, cChannel, (C.CallbackType)(unsafe.Pointer(C.releaseUpdateCallbackCgoGateway)))
+	releaseUpdateCallbackFuncion = callbackFunction
+	defer C.free(unsafe.Pointer(cPlatform))
+	defer C.free(unsafe.Pointer(cVersion))
+	defer C.free(unsafe.Pointer(cChannel))
+	return int(status)
+}
 
 // ActivateLicense function as declared in lexactivator/LexActivator.h:540
 func ActivateLicense() int {
