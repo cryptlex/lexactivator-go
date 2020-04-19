@@ -9,11 +9,11 @@ import (
 
 // server sync license callback
 func licenseCallback(status int) {
-	if status == lexactivator.LA_OK{
+	if status == lexactivator.LA_OK {
 		fmt.Println("License is genuinely activated.")
 	} else if status == lexactivator.LA_EXPIRED {
 		fmt.Println("License is genuinely activated, but has expired")
-	} else if status == lexactivator.LA_SUSPENDED{
+	} else if status == lexactivator.LA_SUSPENDED {
 		fmt.Println("License is genuinely activated, but has been suspended")
 	} else {
 		fmt.Println("License error status:", status)
@@ -22,7 +22,7 @@ func licenseCallback(status int) {
 
 func initData() {
 	var status int
-	status = lexactivator.SetProductFile("ABSOLUTE_PATH_OF_PRODUCT.DAT_FILE")
+	status = lexactivator.SetProductData("PASTE_CONTENT_OF_PRODUCT.DAT_FILE")
 	if lexactivator.LA_OK != status {
 		fmt.Println("Error Code:", status)
 		os.Exit(1)
