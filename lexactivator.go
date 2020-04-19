@@ -40,7 +40,7 @@ func releaseUpdateCallbackWrapper(status int) {
 
 // SetProductFile function as declared in lexactivator/LexActivator.h:82
 func SetProductFile(filePath string) int {
-	cFilePath := ToCString(filePath)
+	cFilePath := GoToCString(filePath)
 	status := C.SetProductFile(cFilePath)
 	defer C.free(unsafe.Pointer(cFilePath))
 	return int(status)
@@ -48,7 +48,7 @@ func SetProductFile(filePath string) int {
 
 // SetProductData function as declared in lexactivator/LexActivator.h:103
 func SetProductData(productData string) int {
-	cProductData := ToCString(productData)
+	cProductData := GoToCString(productData)
 	status := C.SetProductData(cProductData)
 	defer C.free(unsafe.Pointer(cProductData))
 	return int(status)
@@ -56,7 +56,7 @@ func SetProductData(productData string) int {
 
 // SetProductId function as declared in lexactivator/LexActivator.h:128
 func SetProductId(productId string, flags uint) int {
-	cProductId := ToCString(productId)
+	cProductId := GoToCString(productId)
 	cFlags := (C.uint)(flags)
 	status := C.SetProductId(cProductId, cFlags)
 	defer C.free(unsafe.Pointer(cProductId))
@@ -65,7 +65,7 @@ func SetProductId(productId string, flags uint) int {
 
 // SetLicenseKey function as declared in lexactivator/LexActivator.h:140
 func SetLicenseKey(licenseKey string) int {
-	cLicenseKey := ToCString(licenseKey)
+	cLicenseKey := GoToCString(licenseKey)
 	status := C.SetLicenseKey(cLicenseKey)
 	defer C.free(unsafe.Pointer(cLicenseKey))
 	return int(status)
@@ -73,8 +73,8 @@ func SetLicenseKey(licenseKey string) int {
 
 // SetLicenseUserCredential function as declared in lexactivator/LexActivator.h:156
 func SetLicenseUserCredential(email string, password string) int {
-	cEmail := ToCString(email)
-	cPassword := ToCString(password)
+	cEmail := GoToCString(email)
+	cPassword := GoToCString(password)
 	status := C.SetLicenseUserCredential(cEmail, cPassword)
 	defer C.free(unsafe.Pointer(cEmail))
 	defer C.free(unsafe.Pointer(cPassword))
@@ -90,8 +90,8 @@ func SetLicenseCallback(callbackFunction CallbackType) int {
 
 // SetActivationMetadata function as declared in lexactivator/LexActivator.h:191
 func SetActivationMetadata(key string, value string) int {
-	cKey := ToCString(key)
-	cValue := ToCString(value)
+	cKey := GoToCString(key)
+	cValue := GoToCString(value)
 	status := C.SetActivationMetadata(cKey, cValue)
 	defer C.free(unsafe.Pointer(cKey))
 	defer C.free(unsafe.Pointer(cValue))
@@ -100,8 +100,8 @@ func SetActivationMetadata(key string, value string) int {
 
 // SetTrialActivationMetadata function as declared in lexactivator/LexActivator.h:208
 func SetTrialActivationMetadata(key string, value string) int {
-	cKey := ToCString(key)
-	cValue := ToCString(value)
+	cKey := GoToCString(key)
+	cValue := GoToCString(value)
 	status := C.SetTrialActivationMetadata(cKey, cValue)
 	defer C.free(unsafe.Pointer(cKey))
 	defer C.free(unsafe.Pointer(cValue))
@@ -110,7 +110,7 @@ func SetTrialActivationMetadata(key string, value string) int {
 
 // SetAppVersion function as declared in lexactivator/LexActivator.h:223
 func SetAppVersion(appVersion string) int {
-	cAppVersion := ToCString(appVersion)
+	cAppVersion := GoToCString(appVersion)
 	status := C.SetAppVersion(cAppVersion)
 	defer C.free(unsafe.Pointer(cAppVersion))
 	return int(status)
@@ -118,7 +118,7 @@ func SetAppVersion(appVersion string) int {
 
 // SetOfflineActivationRequestMeterAttributeUses function as declared in lexactivator/LexActivator.h:240
 func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
-	cName := ToCString(name)
+	cName := GoToCString(name)
 	cUses := (C.uint)(uses)
 	status := C.SetOfflineActivationRequestMeterAttributeUses(cName, cUses)
 	defer C.free(unsafe.Pointer(cName))
@@ -127,7 +127,7 @@ func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
 
 // SetNetworkProxy function as declared in lexactivator/LexActivator.h:262
 func SetNetworkProxy(proxy string) int {
-	cProxy := ToCString(proxy)
+	cProxy := GoToCString(proxy)
 	status := C.SetNetworkProxy(cProxy)
 	defer C.free(unsafe.Pointer(cProxy))
 	return int(status)
@@ -135,7 +135,7 @@ func SetNetworkProxy(proxy string) int {
 
 // SetCryptlexHost function as declared in lexactivator/LexActivator.h:275
 func SetCryptlexHost(host string) int {
-	cHost := ToCString(host)
+	cHost := GoToCString(host)
 	status := C.SetCryptlexHost(cHost)
 	defer C.free(unsafe.Pointer(cHost))
 	return int(status)
@@ -143,27 +143,27 @@ func SetCryptlexHost(host string) int {
 
 // GetProductMetadata function as declared in lexactivator/LexActivator.h:291
 func GetProductMetadata(key string, value *string) int {
-	cKey := ToCString(key)
+	cKey := GoToCString(key)
 	var cValue = GetCArray()
 	status := C.GetProductMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = C.GoStringN(&cValue[0], MaxGoArrayLength)
+	*value = CtoGoString(&cValue[0])
 	defer C.free(unsafe.Pointer(cKey))
 	return int(status)
 }
 
 // GetLicenseMetadata function as declared in lexactivator/LexActivator.h:305
 func GetLicenseMetadata(key string, value *string) int {
-	cKey := ToCString(key)
+	cKey := GoToCString(key)
 	var cValue = GetCArray()
 	status := C.GetLicenseMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = C.GoStringN(&cValue[0], MaxGoArrayLength)
+	*value = CtoGoString(&cValue[0])
 	defer C.free(unsafe.Pointer(cKey))
 	return int(status)
 }
 
 // GetLicenseMeterAttribute function as declared in lexactivator/LexActivator.h:319
 func GetLicenseMeterAttribute(name string, allowedUses *uint, totalUses *uint) int {
-	cName := ToCString(name)
+	cName := GoToCString(name)
 	var cAllowedUses C.uint
 	var cTotalUses C.uint
 	status := C.GetLicenseMeterAttribute(cName, &cAllowedUses, &cTotalUses)
@@ -177,7 +177,7 @@ func GetLicenseMeterAttribute(name string, allowedUses *uint, totalUses *uint) i
 func GetLicenseKey(licenseKey *string) int {
 	var cLicenseKey = GetCArray()
 	status := C.GetLicenseKey(&cLicenseKey[0], MaxCArrayLength)
-	*licenseKey = C.GoStringN(&cLicenseKey[0], MaxGoArrayLength)
+	*licenseKey = CtoGoString(&cLicenseKey[0])
 	return int(status)
 }
 
@@ -193,7 +193,7 @@ func GetLicenseExpiryDate(expiryDate *uint) int {
 func GetLicenseUserEmail(email *string) int {
 	var cEmail = GetCArray()
 	status := C.GetLicenseUserEmail(&cEmail[0], MaxCArrayLength)
-	*email = C.GoStringN(&cEmail[0], MaxGoArrayLength)
+	*email = CtoGoString(&cEmail[0])
 	return int(status)
 }
 
@@ -201,7 +201,7 @@ func GetLicenseUserEmail(email *string) int {
 func GetLicenseUserName(name *string) int {
 	var cName = GetCArray()
 	status := C.GetLicenseUserName(&cName[0], MaxCArrayLength)
-	*name = C.GoStringN(&cName[0], MaxGoArrayLength)
+	*name = CtoGoString(&cName[0])
 	return int(status)
 }
 
@@ -209,16 +209,16 @@ func GetLicenseUserName(name *string) int {
 func GetLicenseUserCompany(company *string) int {
 	var cCompany = GetCArray()
 	status := C.GetLicenseUserCompany(&cCompany[0], MaxCArrayLength)
-	*company = C.GoStringN(&cCompany[0], MaxGoArrayLength)
+	*company = CtoGoString(&cCompany[0])
 	return int(status)
 }
 
 // GetLicenseUserMetadata function as declared in lexactivator/LexActivator.h:400
 func GetLicenseUserMetadata(key string, value *string) int {
-	cKey := ToCString(key)
+	cKey := GoToCString(key)
 	var cValue = GetCArray()
 	status := C.GetLicenseUserMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = C.GoStringN(&cValue[0], MaxGoArrayLength)
+	*value = CtoGoString(&cValue[0])
 	defer C.free(unsafe.Pointer(cKey))
 	return int(status)
 }
@@ -227,23 +227,23 @@ func GetLicenseUserMetadata(key string, value *string) int {
 func GetLicenseType(licenseType *string) int {
 	var cLicenseType = GetCArray()
 	status := C.GetLicenseType(&cLicenseType[0], MaxCArrayLength)
-	*licenseType = C.GoStringN(&cLicenseType[0], MaxGoArrayLength)
+	*licenseType = CtoGoString(&cLicenseType[0])
 	return int(status)
 }
 
 // GetActivationMetadata function as declared in lexactivator/LexActivator.h:428
 func GetActivationMetadata(key string, value *string) int {
-	cKey := ToCString(key)
+	cKey := GoToCString(key)
 	var cValue = GetCArray()
 	status := C.GetActivationMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = C.GoStringN(&cValue[0], MaxGoArrayLength)
+	*value = CtoGoString(&cValue[0])
 	defer C.free(unsafe.Pointer(cKey))
 	return int(status)
 }
 
 // GetActivationMeterAttributeUses function as declared in lexactivator/LexActivator.h:441
 func GetActivationMeterAttributeUses(name string, uses *uint) int {
-	cName := ToCString(name)
+	cName := GoToCString(name)
 	var cUses C.uint
 	status := C.GetActivationMeterAttributeUses(cName, &cUses)
 	*uses = uint(cUses)
@@ -261,10 +261,10 @@ func GetServerSyncGracePeriodExpiryDate(expiryDate *uint) int {
 
 // GetTrialActivationMetadata function as declared in lexactivator/LexActivator.h:468
 func GetTrialActivationMetadata(key string, value *string) int {
-	cKey := ToCString(key)
+	cKey := GoToCString(key)
 	var cValue = GetCArray()
 	status := C.GetTrialActivationMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = C.GoStringN(&cValue[0], MaxGoArrayLength)
+	*value = CtoGoString(&cValue[0])
 	defer C.free(unsafe.Pointer(cKey))
 	return int(status)
 }
@@ -281,7 +281,7 @@ func GetTrialExpiryDate(trialExpiryDate *uint) int {
 func GetTrialId(trialId *string) int {
 	var cTrialId = GetCArray()
 	status := C.GetTrialId(&cTrialId[0], MaxCArrayLength)
-	*trialId = C.GoStringN(&cTrialId[0], MaxGoArrayLength)
+	*trialId = CtoGoString(&cTrialId[0])
 	return int(status)
 }
 
@@ -295,9 +295,9 @@ func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 
 // CheckForReleaseUpdate function as declared in lexactivator/LexActivator.h:524
 func CheckForReleaseUpdate(platform string, version string, channel string, callbackFunction CallbackType) int {
-	cPlatform := ToCString(platform)
-	cVersion := ToCString(version)
-	cChannel := ToCString(channel)
+	cPlatform := GoToCString(platform)
+	cVersion := GoToCString(version)
+	cChannel := GoToCString(channel)
 	status := C.CheckForReleaseUpdate(cPlatform, cVersion, cChannel, (C.CallbackType)(unsafe.Pointer(C.releaseUpdateCallbackCgoGateway)))
 	releaseUpdateCallbackFuncion = callbackFunction
 	defer C.free(unsafe.Pointer(cPlatform))
@@ -314,7 +314,7 @@ func ActivateLicense() int {
 
 // ActivateLicenseOffline function as declared in lexactivator/LexActivator.h:553
 func ActivateLicenseOffline(filePath string) int {
-	cFilePath := ToCString(filePath)
+	cFilePath := GoToCString(filePath)
 	status := C.ActivateLicenseOffline(cFilePath)
 	defer C.free(unsafe.Pointer(cFilePath))
 	return int(status)
@@ -322,7 +322,7 @@ func ActivateLicenseOffline(filePath string) int {
 
 // GenerateOfflineActivationRequest function as declared in lexactivator/LexActivator.h:566
 func GenerateOfflineActivationRequest(filePath string) int {
-	cFilePath := ToCString(filePath)
+	cFilePath := GoToCString(filePath)
 	status := C.GenerateOfflineActivationRequest(cFilePath)
 	defer C.free(unsafe.Pointer(cFilePath))
 	return int(status)
@@ -336,7 +336,7 @@ func DeactivateLicense() int {
 
 // GenerateOfflineDeactivationRequest function as declared in lexactivator/LexActivator.h:597
 func GenerateOfflineDeactivationRequest(filePath string) int {
-	cFilePath := ToCString(filePath)
+	cFilePath := GoToCString(filePath)
 	status := C.GenerateOfflineDeactivationRequest(cFilePath)
 	defer C.free(unsafe.Pointer(cFilePath))
 	return int(status)
@@ -362,7 +362,7 @@ func ActivateTrial() int {
 
 // ActivateTrialOffline function as declared in lexactivator/LexActivator.h:665
 func ActivateTrialOffline(filePath string) int {
-	cFilePath := ToCString(filePath)
+	cFilePath := GoToCString(filePath)
 	status := C.ActivateTrialOffline(cFilePath)
 	defer C.free(unsafe.Pointer(cFilePath))
 	return int(status)
@@ -370,7 +370,7 @@ func ActivateTrialOffline(filePath string) int {
 
 // GenerateOfflineTrialActivationRequest function as declared in lexactivator/LexActivator.h:678
 func GenerateOfflineTrialActivationRequest(filePath string) int {
-	cFilePath := ToCString(filePath)
+	cFilePath := GoToCString(filePath)
 	status := C.GenerateOfflineTrialActivationRequest(cFilePath)
 	defer C.free(unsafe.Pointer(cFilePath))
 	return int(status)
@@ -404,7 +404,7 @@ func ExtendLocalTrial(trialExtensionLength uint) int {
 
 // IncrementActivationMeterAttributeUses function as declared in lexactivator/LexActivator.h:754
 func IncrementActivationMeterAttributeUses(name string, increment uint) int {
-	cName := ToCString(name)
+	cName := GoToCString(name)
 	cIncrement := (C.uint)(increment)
 	status := C.IncrementActivationMeterAttributeUses(cName, cIncrement)
 	defer C.free(unsafe.Pointer(cName))
@@ -413,7 +413,7 @@ func IncrementActivationMeterAttributeUses(name string, increment uint) int {
 
 // DecrementActivationMeterAttributeUses function as declared in lexactivator/LexActivator.h:771
 func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
-	cName := ToCString(name)
+	cName := GoToCString(name)
 	cDecrement := (C.uint)(decrement)
 	status := C.DecrementActivationMeterAttributeUses(cName, cDecrement)
 	defer C.free(unsafe.Pointer(cName))
@@ -422,7 +422,7 @@ func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
 
 // ResetActivationMeterAttributeUses function as declared in lexactivator/LexActivator.h:786
 func ResetActivationMeterAttributeUses(name string) int {
-	cName := ToCString(name)
+	cName := GoToCString(name)
 	status := C.ResetActivationMeterAttributeUses(cName)
 	defer C.free(unsafe.Pointer(cName))
 	return int(status)
