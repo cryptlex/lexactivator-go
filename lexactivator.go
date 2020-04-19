@@ -14,17 +14,17 @@ import (
 	"unsafe"
 )
 
-type CallbackType func(int)
-
-var licenseCallbackFuncion CallbackType
-
-var releaseUpdateCallbackFuncion CallbackType
+type callbackType func(int)
 
 const (
 	LA_USER      uint = 0
 	LA_SYSTEM    uint = 1
 	LA_IN_MEMORY uint = 2
 )
+
+var licenseCallbackFuncion callbackType
+
+var releaseUpdateCallbackFuncion callbackType
 
 //export licenseCallbackWrapper
 func licenseCallbackWrapper(status int) {
@@ -58,9 +58,9 @@ func releaseUpdateCallbackWrapper(status int) {
     other functions will work.
 */
 func SetProductFile(filePath string) int {
-	cFilePath := GoToCString(filePath)
+	cFilePath := goToCString(filePath)
 	status := C.SetProductFile(cFilePath)
-	FreeCString(cFilePath)
+	freeCString(cFilePath)
 	return int(status)
 }
 
@@ -84,9 +84,9 @@ func SetProductFile(filePath string) int {
     other functions will work.
 */
 func SetProductData(productData string) int {
-	cProductData := GoToCString(productData)
+	cProductData := goToCString(productData)
 	status := C.SetProductData(cProductData)
-	FreeCString(cProductData)
+	freeCString(cProductData)
 	return int(status)
 }
 
@@ -114,10 +114,10 @@ func SetProductData(productData string) int {
     functions will work.
 */
 func SetProductId(productId string, flags uint) int {
-	cProductId := GoToCString(productId)
+	cProductId := goToCString(productId)
 	cFlags := (C.uint)(flags)
 	status := C.SetProductId(cProductId, cFlags)
-	FreeCString(cProductId)
+	freeCString(cProductId)
 	return int(status)
 }
 
@@ -132,9 +132,9 @@ func SetProductId(productId string, flags uint) int {
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 */
 func SetLicenseKey(licenseKey string) int {
-	cLicenseKey := GoToCString(licenseKey)
+	cLicenseKey := goToCString(licenseKey)
 	status := C.SetLicenseKey(cLicenseKey)
-	FreeCString(cLicenseKey)
+	freeCString(cLicenseKey)
 	return int(status)
 }
 
@@ -153,11 +153,11 @@ func SetLicenseKey(licenseKey string) int {
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 */
 func SetLicenseUserCredential(email string, password string) int {
-	cEmail := GoToCString(email)
-	cPassword := GoToCString(password)
+	cEmail := goToCString(email)
+	cPassword := goToCString(password)
 	status := C.SetLicenseUserCredential(cEmail, cPassword)
-	FreeCString(cEmail)
-	FreeCString(cPassword)
+	freeCString(cEmail)
+	freeCString(cPassword)
 	return int(status)
 }
 
@@ -178,7 +178,7 @@ func SetLicenseUserCredential(email string, password string) int {
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 */
-func SetLicenseCallback(callbackFunction CallbackType) int {
+func SetLicenseCallback(callbackFunction func(int)) int {
 	status := C.SetLicenseCallback((C.CallbackType)(unsafe.Pointer(C.licenseCallbackCgoGateway)))
 	licenseCallbackFuncion = callbackFunction
 	return int(status)
@@ -200,11 +200,11 @@ func SetLicenseCallback(callbackFunction CallbackType) int {
     LA_E_METADATA_VALUE_LENGTH, LA_E_ACTIVATION_METADATA_LIMIT
 */
 func SetActivationMetadata(key string, value string) int {
-	cKey := GoToCString(key)
-	cValue := GoToCString(value)
+	cKey := goToCString(key)
+	cValue := goToCString(value)
 	status := C.SetActivationMetadata(cKey, cValue)
-	FreeCString(cKey)
-	FreeCString(cValue)
+	freeCString(cKey)
+	freeCString(cValue)
 	return int(status)
 }
 
@@ -224,11 +224,11 @@ func SetActivationMetadata(key string, value string) int {
     LA_E_METADATA_VALUE_LENGTH, LA_E_TRIAL_ACTIVATION_METADATA_LIMIT
 */
 func SetTrialActivationMetadata(key string, value string) int {
-	cKey := GoToCString(key)
-	cValue := GoToCString(value)
+	cKey := goToCString(key)
+	cValue := goToCString(value)
 	status := C.SetTrialActivationMetadata(cKey, cValue)
-	FreeCString(cKey)
-	FreeCString(cValue)
+	freeCString(cKey)
+	freeCString(cValue)
 	return int(status)
 }
 
@@ -246,9 +246,9 @@ func SetTrialActivationMetadata(key string, value string) int {
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_APP_VERSION_LENGTH
 */
 func SetAppVersion(appVersion string) int {
-	cAppVersion := GoToCString(appVersion)
+	cAppVersion := goToCString(appVersion)
 	status := C.SetAppVersion(cAppVersion)
-	FreeCString(cAppVersion)
+	freeCString(cAppVersion)
 	return int(status)
 }
 
@@ -268,10 +268,10 @@ func SetAppVersion(appVersion string) int {
 
 */
 func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
-	cName := GoToCString(name)
+	cName := goToCString(name)
 	cUses := (C.uint)(uses)
 	status := C.SetOfflineActivationRequestMeterAttributeUses(cName, cUses)
-	FreeCString(cName)
+	freeCString(cName)
 	return int(status)
 }
 
@@ -296,9 +296,9 @@ func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
     cases you don't need to care whether your user is behind a proxy server or not.
 */
 func SetNetworkProxy(proxy string) int {
-	cProxy := GoToCString(proxy)
+	cProxy := goToCString(proxy)
 	status := C.SetNetworkProxy(cProxy)
-	FreeCString(cProxy)
+	freeCString(cProxy)
 	return int(status)
 }
 
@@ -314,9 +314,9 @@ func SetNetworkProxy(proxy string) int {
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_HOST_URL
 */
 func SetCryptlexHost(host string) int {
-	cHost := GoToCString(host)
+	cHost := goToCString(host)
 	status := C.SetCryptlexHost(cHost)
-	FreeCString(cHost)
+	freeCString(cHost)
 	return int(status)
 }
 
@@ -334,11 +334,11 @@ func SetCryptlexHost(host string) int {
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 */
 func GetProductMetadata(key string, value *string) int {
-	cKey := GoToCString(key)
-	var cValue = GetCArray()
-	status := C.GetProductMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = CtoGoString(&cValue[0])
-	FreeCString(cKey)
+	cKey := goToCString(key)
+	var cValue = getCArray()
+	status := C.GetProductMetadata(cKey, &cValue[0], maxCArrayLength)
+	*value = ctoGoString(&cValue[0])
+	freeCString(cKey)
 	return int(status)
 }
 
@@ -354,11 +354,11 @@ func GetProductMetadata(key string, value *string) int {
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 */
 func GetLicenseMetadata(key string, value *string) int {
-	cKey := GoToCString(key)
-	var cValue = GetCArray()
-	status := C.GetLicenseMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = CtoGoString(&cValue[0])
-	FreeCString(cKey)
+	cKey := goToCString(key)
+	var cValue = getCArray()
+	status := C.GetLicenseMetadata(cKey, &cValue[0], maxCArrayLength)
+	*value = ctoGoString(&cValue[0])
+	freeCString(cKey)
 	return int(status)
 }
 
@@ -375,13 +375,13 @@ func GetLicenseMetadata(key string, value *string) int {
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
 */
 func GetLicenseMeterAttribute(name string, allowedUses *uint, totalUses *uint) int {
-	cName := GoToCString(name)
+	cName := goToCString(name)
 	var cAllowedUses C.uint
 	var cTotalUses C.uint
 	status := C.GetLicenseMeterAttribute(cName, &cAllowedUses, &cTotalUses)
 	*allowedUses = uint(cAllowedUses)
 	*totalUses = uint(cTotalUses)
-	FreeCString(cName)
+	freeCString(cName)
 	return int(status)
 }
 
@@ -396,9 +396,9 @@ func GetLicenseMeterAttribute(name string, allowedUses *uint, totalUses *uint) i
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_BUFFER_SIZE
 */
 func GetLicenseKey(licenseKey *string) int {
-	var cLicenseKey = GetCArray()
-	status := C.GetLicenseKey(&cLicenseKey[0], MaxCArrayLength)
-	*licenseKey = CtoGoString(&cLicenseKey[0])
+	var cLicenseKey = getCArray()
+	status := C.GetLicenseKey(&cLicenseKey[0], maxCArrayLength)
+	*licenseKey = ctoGoString(&cLicenseKey[0])
 	return int(status)
 }
 
@@ -431,9 +431,9 @@ func GetLicenseExpiryDate(expiryDate *uint) int {
     LA_E_BUFFER_SIZE
 */
 func GetLicenseUserEmail(email *string) int {
-	var cEmail = GetCArray()
-	status := C.GetLicenseUserEmail(&cEmail[0], MaxCArrayLength)
-	*email = CtoGoString(&cEmail[0])
+	var cEmail = getCArray()
+	status := C.GetLicenseUserEmail(&cEmail[0], maxCArrayLength)
+	*email = ctoGoString(&cEmail[0])
 	return int(status)
 }
 
@@ -449,9 +449,9 @@ func GetLicenseUserEmail(email *string) int {
     LA_E_BUFFER_SIZE
 */
 func GetLicenseUserName(name *string) int {
-	var cName = GetCArray()
-	status := C.GetLicenseUserName(&cName[0], MaxCArrayLength)
-	*name = CtoGoString(&cName[0])
+	var cName = getCArray()
+	status := C.GetLicenseUserName(&cName[0], maxCArrayLength)
+	*name = ctoGoString(&cName[0])
 	return int(status)
 }
 
@@ -467,9 +467,9 @@ func GetLicenseUserName(name *string) int {
     LA_E_BUFFER_SIZE
 */
 func GetLicenseUserCompany(company *string) int {
-	var cCompany = GetCArray()
-	status := C.GetLicenseUserCompany(&cCompany[0], MaxCArrayLength)
-	*company = CtoGoString(&cCompany[0])
+	var cCompany = getCArray()
+	status := C.GetLicenseUserCompany(&cCompany[0], maxCArrayLength)
+	*company = ctoGoString(&cCompany[0])
 	return int(status)
 }
 
@@ -485,11 +485,11 @@ func GetLicenseUserCompany(company *string) int {
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 */
 func GetLicenseUserMetadata(key string, value *string) int {
-	cKey := GoToCString(key)
-	var cValue = GetCArray()
-	status := C.GetLicenseUserMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = CtoGoString(&cValue[0])
-	FreeCString(cKey)
+	cKey := goToCString(key)
+	var cValue = getCArray()
+	status := C.GetLicenseUserMetadata(cKey, &cValue[0], maxCArrayLength)
+	*value = ctoGoString(&cValue[0])
+	freeCString(cKey)
 	return int(status)
 }
 
@@ -505,9 +505,9 @@ func GetLicenseUserMetadata(key string, value *string) int {
     LA_E_BUFFER_SIZE
 */
 func GetLicenseType(licenseType *string) int {
-	var cLicenseType = GetCArray()
-	status := C.GetLicenseType(&cLicenseType[0], MaxCArrayLength)
-	*licenseType = CtoGoString(&cLicenseType[0])
+	var cLicenseType = getCArray()
+	status := C.GetLicenseType(&cLicenseType[0], maxCArrayLength)
+	*licenseType = ctoGoString(&cLicenseType[0])
 	return int(status)
 }
 
@@ -523,11 +523,11 @@ func GetLicenseType(licenseType *string) int {
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 */
 func GetActivationMetadata(key string, value *string) int {
-	cKey := GoToCString(key)
-	var cValue = GetCArray()
-	status := C.GetActivationMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = CtoGoString(&cValue[0])
-	FreeCString(cKey)
+	cKey := goToCString(key)
+	var cValue = getCArray()
+	status := C.GetActivationMetadata(cKey, &cValue[0], maxCArrayLength)
+	*value = ctoGoString(&cValue[0])
+	freeCString(cKey)
 	return int(status)
 }
 
@@ -543,11 +543,11 @@ func GetActivationMetadata(key string, value *string) int {
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
 */
 func GetActivationMeterAttributeUses(name string, uses *uint) int {
-	cName := GoToCString(name)
+	cName := goToCString(name)
 	var cUses C.uint
 	status := C.GetActivationMeterAttributeUses(cName, &cUses)
 	*uses = uint(cUses)
-	FreeCString(cName)
+	freeCString(cName)
 	return int(status)
 }
 
@@ -580,11 +580,11 @@ func GetServerSyncGracePeriodExpiryDate(expiryDate *uint) int {
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 */
 func GetTrialActivationMetadata(key string, value *string) int {
-	cKey := GoToCString(key)
-	var cValue = GetCArray()
-	status := C.GetTrialActivationMetadata(cKey, &cValue[0], MaxCArrayLength)
-	*value = CtoGoString(&cValue[0])
-	FreeCString(cKey)
+	cKey := goToCString(key)
+	var cValue = getCArray()
+	status := C.GetTrialActivationMetadata(cKey, &cValue[0], maxCArrayLength)
+	*value = ctoGoString(&cValue[0])
+	freeCString(cKey)
 	return int(status)
 }
 
@@ -617,9 +617,9 @@ func GetTrialExpiryDate(trialExpiryDate *uint) int {
     LA_E_BUFFER_SIZE
 */
 func GetTrialId(trialId *string) int {
-	var cTrialId = GetCArray()
-	status := C.GetTrialId(&cTrialId[0], MaxCArrayLength)
-	*trialId = CtoGoString(&cTrialId[0])
+	var cTrialId = getCArray()
+	status := C.GetTrialId(&cTrialId[0], maxCArrayLength)
+	*trialId = ctoGoString(&cTrialId[0])
 	return int(status)
 }
 
@@ -656,15 +656,15 @@ func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT
 */
-func CheckForReleaseUpdate(platform string, version string, channel string, callbackFunction CallbackType) int {
-	cPlatform := GoToCString(platform)
-	cVersion := GoToCString(version)
-	cChannel := GoToCString(channel)
+func CheckForReleaseUpdate(platform string, version string, channel string, callbackFunction func(int)) int {
+	cPlatform := goToCString(platform)
+	cVersion := goToCString(version)
+	cChannel := goToCString(channel)
 	status := C.CheckForReleaseUpdate(cPlatform, cVersion, cChannel, (C.CallbackType)(unsafe.Pointer(C.releaseUpdateCallbackCgoGateway)))
 	releaseUpdateCallbackFuncion = callbackFunction
-	FreeCString(cPlatform)
-	FreeCString(cVersion)
-	FreeCString(cChannel)
+	freeCString(cPlatform)
+	freeCString(cVersion)
+	freeCString(cChannel)
 	return int(status)
 }
 
@@ -699,9 +699,9 @@ func ActivateLicense() int {
     LA_E_VM, LA_E_TIME, LA_E_FILE_PATH, LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
 */
 func ActivateLicenseOffline(filePath string) int {
-	cFilePath := GoToCString(filePath)
+	cFilePath := goToCString(filePath)
 	status := C.ActivateLicenseOffline(cFilePath)
-	FreeCString(cFilePath)
+	freeCString(cFilePath)
 	return int(status)
 }
 
@@ -717,9 +717,9 @@ func ActivateLicenseOffline(filePath string) int {
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_FILE_PERMISSION
 */
 func GenerateOfflineActivationRequest(filePath string) int {
-	cFilePath := GoToCString(filePath)
+	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineActivationRequest(cFilePath)
-	FreeCString(cFilePath)
+	freeCString(cFilePath)
 	return int(status)
 }
 
@@ -756,9 +756,9 @@ func DeactivateLicense() int {
     LA_E_TIME, LA_E_TIME_MODIFIED
 */
 func GenerateOfflineDeactivationRequest(filePath string) int {
-	cFilePath := GoToCString(filePath)
+	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineDeactivationRequest(cFilePath)
-	FreeCString(cFilePath)
+	freeCString(cFilePath)
 	return int(status)
 }
 
@@ -838,9 +838,9 @@ func ActivateTrial() int {
     LA_E_VM, LA_E_TIME, LA_E_FILE_PATH, LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
 */
 func ActivateTrialOffline(filePath string) int {
-	cFilePath := GoToCString(filePath)
+	cFilePath := goToCString(filePath)
 	status := C.ActivateTrialOffline(cFilePath)
-	FreeCString(cFilePath)
+	freeCString(cFilePath)
 	return int(status)
 }
 
@@ -856,9 +856,9 @@ func ActivateTrialOffline(filePath string) int {
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_FILE_PERMISSION
 */
 func GenerateOfflineTrialActivationRequest(filePath string) int {
-	cFilePath := GoToCString(filePath)
+	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineTrialActivationRequest(cFilePath)
-	FreeCString(cFilePath)
+	freeCString(cFilePath)
 	return int(status)
 }
 
@@ -951,10 +951,10 @@ func ExtendLocalTrial(trialExtensionLength uint) int {
 
 */
 func IncrementActivationMeterAttributeUses(name string, increment uint) int {
-	cName := GoToCString(name)
+	cName := goToCString(name)
 	cIncrement := (C.uint)(increment)
 	status := C.IncrementActivationMeterAttributeUses(cName, cIncrement)
-	FreeCString(cName)
+	freeCString(cName)
 	return int(status)
 }
 
@@ -974,10 +974,10 @@ func IncrementActivationMeterAttributeUses(name string, increment uint) int {
     NOTE: If the decrement is more than the current uses, it resets the uses to 0.
 */
 func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
-	cName := GoToCString(name)
+	cName := goToCString(name)
 	cDecrement := (C.uint)(decrement)
 	status := C.DecrementActivationMeterAttributeUses(cName, cDecrement)
-	FreeCString(cName)
+	freeCString(cName)
 	return int(status)
 }
 
@@ -995,9 +995,9 @@ func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
     LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_IP, LA_E_ACTIVATION_NOT_FOUND
 */
 func ResetActivationMeterAttributeUses(name string) int {
-	cName := GoToCString(name)
+	cName := goToCString(name)
 	status := C.ResetActivationMeterAttributeUses(cName)
-	FreeCString(cName)
+	freeCString(cName)
 	return int(status)
 }
 

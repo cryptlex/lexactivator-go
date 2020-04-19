@@ -7,25 +7,25 @@ import "C"
 import "unsafe"
 
 const (
-	MaxCArrayLength  C.uint = 256
-	MaxGoArrayLength C.int  = 256
+	maxCArrayLength  C.uint = 256
+	maxGoArrayLength C.int  = 256
 )
 
-func GoToCString(data string) *C.char {
+func goToCString(data string) *C.char {
 	cString := C.CString(data)
 	return cString
 }
 
-func CtoGoString(cString *C.char) string {
-	goString := C.GoStringN(cString, MaxGoArrayLength)
+func ctoGoString(cString *C.char) string {
+	goString := C.GoStringN(cString, maxGoArrayLength)
 	return goString
 }
 
-func GetCArray() [MaxCArrayLength]C.char {
-	var cArray [MaxCArrayLength]C.char
+func getCArray() [maxCArrayLength]C.char {
+	var cArray [maxCArrayLength]C.char
 	return cArray
 }
 
-func FreeCString(cString *C.char) {
+func freeCString(cString *C.char) {
 	defer C.free(unsafe.Pointer(cString))
 }
