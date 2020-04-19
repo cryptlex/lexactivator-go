@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-
 	"github.com/cryptlex/lexactivator-go"
 )
 
@@ -23,7 +22,7 @@ func licenseCallback(status int) {
 
 func initData() {
 	var status int
-	status = SetProductFile("ABSOLUTE_PATH_OF_PRODUCT.DAT_FILE"))
+	status = lexactivator.SetProductFile("ABSOLUTE_PATH_OF_PRODUCT.DAT_FILE")
 	if lexactivator.LA_OK != status {
 		fmt.Println("Error Code:", status)
 		os.Exit(1)
