@@ -42,7 +42,7 @@ func releaseUpdateCallbackWrapper(status int) {
 func SetProductFile(filePath string) int {
 	cFilePath := GoToCString(filePath)
 	status := C.SetProductFile(cFilePath)
-	defer C.free(unsafe.Pointer(cFilePath))
+	FreeCString(cFilePath)
 	return int(status)
 }
 
@@ -50,7 +50,7 @@ func SetProductFile(filePath string) int {
 func SetProductData(productData string) int {
 	cProductData := GoToCString(productData)
 	status := C.SetProductData(cProductData)
-	defer C.free(unsafe.Pointer(cProductData))
+	FreeCString(cProductData)
 	return int(status)
 }
 
@@ -59,7 +59,7 @@ func SetProductId(productId string, flags uint) int {
 	cProductId := GoToCString(productId)
 	cFlags := (C.uint)(flags)
 	status := C.SetProductId(cProductId, cFlags)
-	defer C.free(unsafe.Pointer(cProductId))
+	FreeCString(cProductId)
 	return int(status)
 }
 
@@ -67,7 +67,7 @@ func SetProductId(productId string, flags uint) int {
 func SetLicenseKey(licenseKey string) int {
 	cLicenseKey := GoToCString(licenseKey)
 	status := C.SetLicenseKey(cLicenseKey)
-	defer C.free(unsafe.Pointer(cLicenseKey))
+	FreeCString(cLicenseKey)
 	return int(status)
 }
 
@@ -76,8 +76,8 @@ func SetLicenseUserCredential(email string, password string) int {
 	cEmail := GoToCString(email)
 	cPassword := GoToCString(password)
 	status := C.SetLicenseUserCredential(cEmail, cPassword)
-	defer C.free(unsafe.Pointer(cEmail))
-	defer C.free(unsafe.Pointer(cPassword))
+	FreeCString(cEmail)
+	FreeCString(cPassword)
 	return int(status)
 }
 
@@ -93,8 +93,8 @@ func SetActivationMetadata(key string, value string) int {
 	cKey := GoToCString(key)
 	cValue := GoToCString(value)
 	status := C.SetActivationMetadata(cKey, cValue)
-	defer C.free(unsafe.Pointer(cKey))
-	defer C.free(unsafe.Pointer(cValue))
+	FreeCString(cKey)
+	FreeCString(cValue)
 	return int(status)
 }
 
@@ -103,8 +103,8 @@ func SetTrialActivationMetadata(key string, value string) int {
 	cKey := GoToCString(key)
 	cValue := GoToCString(value)
 	status := C.SetTrialActivationMetadata(cKey, cValue)
-	defer C.free(unsafe.Pointer(cKey))
-	defer C.free(unsafe.Pointer(cValue))
+	FreeCString(cKey)
+	FreeCString(cValue)
 	return int(status)
 }
 
@@ -112,7 +112,7 @@ func SetTrialActivationMetadata(key string, value string) int {
 func SetAppVersion(appVersion string) int {
 	cAppVersion := GoToCString(appVersion)
 	status := C.SetAppVersion(cAppVersion)
-	defer C.free(unsafe.Pointer(cAppVersion))
+	FreeCString(cAppVersion)
 	return int(status)
 }
 
@@ -121,7 +121,7 @@ func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
 	cName := GoToCString(name)
 	cUses := (C.uint)(uses)
 	status := C.SetOfflineActivationRequestMeterAttributeUses(cName, cUses)
-	defer C.free(unsafe.Pointer(cName))
+	FreeCString(cName)
 	return int(status)
 }
 
@@ -129,7 +129,7 @@ func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
 func SetNetworkProxy(proxy string) int {
 	cProxy := GoToCString(proxy)
 	status := C.SetNetworkProxy(cProxy)
-	defer C.free(unsafe.Pointer(cProxy))
+	FreeCString(cProxy)
 	return int(status)
 }
 
@@ -137,7 +137,7 @@ func SetNetworkProxy(proxy string) int {
 func SetCryptlexHost(host string) int {
 	cHost := GoToCString(host)
 	status := C.SetCryptlexHost(cHost)
-	defer C.free(unsafe.Pointer(cHost))
+	FreeCString(cHost)
 	return int(status)
 }
 
@@ -147,7 +147,7 @@ func GetProductMetadata(key string, value *string) int {
 	var cValue = GetCArray()
 	status := C.GetProductMetadata(cKey, &cValue[0], MaxCArrayLength)
 	*value = CtoGoString(&cValue[0])
-	defer C.free(unsafe.Pointer(cKey))
+	FreeCString(cKey)
 	return int(status)
 }
 
@@ -157,7 +157,7 @@ func GetLicenseMetadata(key string, value *string) int {
 	var cValue = GetCArray()
 	status := C.GetLicenseMetadata(cKey, &cValue[0], MaxCArrayLength)
 	*value = CtoGoString(&cValue[0])
-	defer C.free(unsafe.Pointer(cKey))
+	FreeCString(cKey)
 	return int(status)
 }
 
@@ -169,7 +169,7 @@ func GetLicenseMeterAttribute(name string, allowedUses *uint, totalUses *uint) i
 	status := C.GetLicenseMeterAttribute(cName, &cAllowedUses, &cTotalUses)
 	*allowedUses = uint(cAllowedUses)
 	*totalUses = uint(cTotalUses)
-	defer C.free(unsafe.Pointer(cName))
+	FreeCString(cName)
 	return int(status)
 }
 
@@ -219,7 +219,7 @@ func GetLicenseUserMetadata(key string, value *string) int {
 	var cValue = GetCArray()
 	status := C.GetLicenseUserMetadata(cKey, &cValue[0], MaxCArrayLength)
 	*value = CtoGoString(&cValue[0])
-	defer C.free(unsafe.Pointer(cKey))
+	FreeCString(cKey)
 	return int(status)
 }
 
@@ -237,7 +237,7 @@ func GetActivationMetadata(key string, value *string) int {
 	var cValue = GetCArray()
 	status := C.GetActivationMetadata(cKey, &cValue[0], MaxCArrayLength)
 	*value = CtoGoString(&cValue[0])
-	defer C.free(unsafe.Pointer(cKey))
+	FreeCString(cKey)
 	return int(status)
 }
 
@@ -247,7 +247,7 @@ func GetActivationMeterAttributeUses(name string, uses *uint) int {
 	var cUses C.uint
 	status := C.GetActivationMeterAttributeUses(cName, &cUses)
 	*uses = uint(cUses)
-	defer C.free(unsafe.Pointer(cName))
+	FreeCString(cName)
 	return int(status)
 }
 
@@ -265,7 +265,7 @@ func GetTrialActivationMetadata(key string, value *string) int {
 	var cValue = GetCArray()
 	status := C.GetTrialActivationMetadata(cKey, &cValue[0], MaxCArrayLength)
 	*value = CtoGoString(&cValue[0])
-	defer C.free(unsafe.Pointer(cKey))
+	FreeCString(cKey)
 	return int(status)
 }
 
@@ -300,9 +300,9 @@ func CheckForReleaseUpdate(platform string, version string, channel string, call
 	cChannel := GoToCString(channel)
 	status := C.CheckForReleaseUpdate(cPlatform, cVersion, cChannel, (C.CallbackType)(unsafe.Pointer(C.releaseUpdateCallbackCgoGateway)))
 	releaseUpdateCallbackFuncion = callbackFunction
-	defer C.free(unsafe.Pointer(cPlatform))
-	defer C.free(unsafe.Pointer(cVersion))
-	defer C.free(unsafe.Pointer(cChannel))
+	FreeCString(cPlatform)
+	FreeCString(cVersion)
+	FreeCString(cChannel)
 	return int(status)
 }
 
@@ -316,7 +316,7 @@ func ActivateLicense() int {
 func ActivateLicenseOffline(filePath string) int {
 	cFilePath := GoToCString(filePath)
 	status := C.ActivateLicenseOffline(cFilePath)
-	defer C.free(unsafe.Pointer(cFilePath))
+	FreeCString(cFilePath)
 	return int(status)
 }
 
@@ -324,7 +324,7 @@ func ActivateLicenseOffline(filePath string) int {
 func GenerateOfflineActivationRequest(filePath string) int {
 	cFilePath := GoToCString(filePath)
 	status := C.GenerateOfflineActivationRequest(cFilePath)
-	defer C.free(unsafe.Pointer(cFilePath))
+	FreeCString(cFilePath)
 	return int(status)
 }
 
@@ -338,7 +338,7 @@ func DeactivateLicense() int {
 func GenerateOfflineDeactivationRequest(filePath string) int {
 	cFilePath := GoToCString(filePath)
 	status := C.GenerateOfflineDeactivationRequest(cFilePath)
-	defer C.free(unsafe.Pointer(cFilePath))
+	FreeCString(cFilePath)
 	return int(status)
 }
 
@@ -364,7 +364,7 @@ func ActivateTrial() int {
 func ActivateTrialOffline(filePath string) int {
 	cFilePath := GoToCString(filePath)
 	status := C.ActivateTrialOffline(cFilePath)
-	defer C.free(unsafe.Pointer(cFilePath))
+	FreeCString(cFilePath)
 	return int(status)
 }
 
@@ -372,7 +372,7 @@ func ActivateTrialOffline(filePath string) int {
 func GenerateOfflineTrialActivationRequest(filePath string) int {
 	cFilePath := GoToCString(filePath)
 	status := C.GenerateOfflineTrialActivationRequest(cFilePath)
-	defer C.free(unsafe.Pointer(cFilePath))
+	FreeCString(cFilePath)
 	return int(status)
 }
 
@@ -407,7 +407,7 @@ func IncrementActivationMeterAttributeUses(name string, increment uint) int {
 	cName := GoToCString(name)
 	cIncrement := (C.uint)(increment)
 	status := C.IncrementActivationMeterAttributeUses(cName, cIncrement)
-	defer C.free(unsafe.Pointer(cName))
+	FreeCString(cName)
 	return int(status)
 }
 
@@ -416,7 +416,7 @@ func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
 	cName := GoToCString(name)
 	cDecrement := (C.uint)(decrement)
 	status := C.DecrementActivationMeterAttributeUses(cName, cDecrement)
-	defer C.free(unsafe.Pointer(cName))
+	FreeCString(cName)
 	return int(status)
 }
 
@@ -424,7 +424,7 @@ func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
 func ResetActivationMeterAttributeUses(name string) int {
 	cName := GoToCString(name)
 	status := C.ResetActivationMeterAttributeUses(cName)
-	defer C.free(unsafe.Pointer(cName))
+	FreeCString(cName)
 	return int(status)
 }
 

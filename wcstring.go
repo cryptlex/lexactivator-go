@@ -4,10 +4,10 @@ package lexactivator
 
 import "C"
 import (
-	"unicode/utf16"
-	"unsafe"
 	"bytes"
 	"encoding/binary"
+	"unicode/utf16"
+	"unsafe"
 )
 
 const (
@@ -24,13 +24,17 @@ func GoToCString(goString string) *C.ushort {
 
 func CtoGoString(cString *C.ushort) string {
 	encodedBytes := C.GoBytes(unsafe.Pointer(cString), MaxGoArrayLength)
-	goString,_ := decodeUtf16(encodedBytes, binary.LittleEndian)
+	goString, _ := decodeUtf16(encodedBytes, binary.LittleEndian)
 	return goString
 }
 
 func GetCArray() [MaxCArrayLength]C.ushort {
 	var cArray [MaxCArrayLength]C.ushort
 	return cArray
+}
+
+func FreeCString(cString *C.ushort) {
+	// do nothing
 }
 
 func decodeUtf16(b []byte, order binary.ByteOrder) (string, error) {

@@ -2,7 +2,9 @@
 
 package lexactivator
 
+//#include <stdlib.h>
 import "C"
+import "unsafe"
 
 const (
 	MaxCArrayLength  C.uint = 256
@@ -22,4 +24,8 @@ func CtoGoString(cString *C.char) string {
 func GetCArray() [MaxCArrayLength]C.char {
 	var cArray [MaxCArrayLength]C.char
 	return cArray
+}
+
+func FreeCString(cString *C.char) {
+	defer C.free(unsafe.Pointer(cString))
 }
