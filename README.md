@@ -5,7 +5,7 @@ Refer to following for documentation:
 
 https://docs.cryptlex.com/node-locked-licenses/using-lexactivator
 
-## To run execute following command:
+## To run the sample execute following command:
 
 `go run examples/sample.go`
 
