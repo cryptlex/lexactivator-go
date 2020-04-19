@@ -1,7 +1,8 @@
+// Copyright 2020 Cryptlex, LLC. All rights reserved.
+
 package lexactivator
 
 /*
-
 #include <stdio.h>
 
 // The gateway functions
