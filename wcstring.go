@@ -29,7 +29,7 @@ func ctoGoString(cString *C.ushort) string {
 }
 
 func getCArray() [maxCArrayLength]C.ushort {
-	var cArray [MaxCArrayLength]C.ushort
+	var cArray [maxCArrayLength]C.ushort
 	return cArray
 }
 
