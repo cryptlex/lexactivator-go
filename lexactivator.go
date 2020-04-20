@@ -3,7 +3,8 @@
 package lexactivator
 
 /*
-#cgo LDFLAGS: -L./libs -lLexActivator -Wl,-rpath,./libs -Wl,-rpath,./
+#cgo linux LDFLAGS: -L./libs -lLexActivator -Wl,-rpath,./libs -Wl,-rpath,./
+#cgo darwin LDFLAGS: -L./libs -lLexActivator -Wl,-rpath,./libs -Wl,-rpath,./
 #include "lexactivator/LexActivator.h"
 #include <stdlib.h>
 void licenseCallbackCgoGateway(int status);
