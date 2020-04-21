@@ -14,6 +14,10 @@ Additionally, you can offer trials, subscriptions, floating licenses and much mo
 
     cp $GOROOT/src/github.com/cryptlex/lexactivator-go/libs/windows_amd64/LexActivator.dll ./
 
+Then you can include it in your code:
+
+	import "github.com/cryptlex/lexactivator-go"
+
 ## Usage
 Refer to following for documentation:
 
