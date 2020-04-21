@@ -5,7 +5,7 @@ package lexactivator
 /*
 #cgo linux LDFLAGS: -Wl,-Bstatic -L${SRCDIR}/libs/linux_amd64 -lLexActivator -Wl,-Bdynamic -lm -lstdc++ -lpthread -lssl3 -lnss3 -lnspr4
 #cgo darwin LDFLAGS: -L${SRCDIR}/libs/darwin_amd64 -lLexActivator -lc++ -framework CoreFoundation -framework SystemConfiguration -framework Security
-#cgo windows LDFLAGS: -L${SRCDIR}/libs -lLexActivator
+#cgo windows LDFLAGS: -L${SRCDIR}/libs/windows_amd64 -lLexActivator
 #include "lexactivator/LexActivator.h"
 #include <stdlib.h>
 void licenseCallbackCgoGateway(int status);
