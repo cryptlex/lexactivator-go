@@ -12,7 +12,7 @@ Additionally, you can offer trials, subscriptions, floating licenses and much mo
 
 **Note:** In case you are using Windows, execute the following command after installation:
 
-    cp $GOROOT/src/github.com/cryptlex/lexactivator-go/libs/windows_amd64/LexActivator.dll ./
+    xcopy %USERPROFILE%\\go\src\github.com\cryptlex\lexactivator-go\libs\windows_amd64\LexActivator.dll
 
 Then you can include it in your code:
 
