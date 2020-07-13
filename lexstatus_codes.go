@@ -138,6 +138,10 @@ const (
 	// The meter attribute has reached it's usage limit.
 	LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED int = 73
 
+	// Custom device fingerprint length is less than 64 characters
+	// or more than 256 characters..
+	LA_E_CUSTOM_FINGERPRINT_LENGTH int = 74
+
 	// Application is being run inside a virtual machine / hypervisor,
 	// and activation has been disallowed in the VM.
 	LA_E_VM int = 80
