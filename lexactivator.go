@@ -123,6 +123,31 @@ func SetProductId(productId string, flags uint) int {
 }
 
 /*
+   FUNCTION: SetCustomDeviceFingerprint()
+
+   PURPOSE: In case you don't want to use the LexActivator's advanced
+   device fingerprinting algorithm, this function can be used to set a custom
+   device fingerprint.
+
+   If you decide to use your own custom device fingerprint then this function must be
+   called on every start of your program immediately after calling SetProductFile()
+   or SetProductData() function.
+
+   The license fingerprint matching strategy is ignored if this function is used.
+
+   PARAMETERS:
+   * fingerprint - string of minimum length 64 characters and maximum length 256 characters.
+
+   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_CUSTOM_FINGERPRINT_LENGTH
+*/
+func SetCustomDeviceFingerprint(fingerprint string) int {
+	cFingerprint := goToCString(fingerprint)
+	status := C.SetCustomDeviceFingerprint(cFingerprint)
+	freeCString(cFingerprint)
+	return int(status)
+}
+
+/*
    FUNCTION: SetLicenseKey()
 
    PURPOSE: Sets the license key required to activate the license.
@@ -366,22 +391,25 @@ func GetLicenseMetadata(key string, value *string) int {
 /*
    FUNCTION: GetLicenseMeterAttribute()
 
-   PURPOSE: Gets the license meter attribute allowed uses and total uses.
+   PURPOSE: Gets the license meter attribute allowed uses, total and gross uses.
 
    PARAMETERS:
    * name - name of the meter attribute
    * allowedUses - pointer to the integer that receives the value
    * totalUses - pointer to the integer that receives the value
+   * grossUses - pointer to the integer that receives the value
 
    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
 */
-func GetLicenseMeterAttribute(name string, allowedUses *uint, totalUses *uint) int {
+func GetLicenseMeterAttribute(name string, allowedUses *uint, totalUses *uint, grossUses *uint) int {
 	cName := goToCString(name)
 	var cAllowedUses C.uint
 	var cTotalUses C.uint
-	status := C.GetLicenseMeterAttribute(cName, &cAllowedUses, &cTotalUses)
+	var cGrossUses C.uint
+	status := C.GetLicenseMeterAttribute(cName, &cAllowedUses, &cTotalUses, &cGrossUses)
 	*allowedUses = uint(cAllowedUses)
 	*totalUses = uint(cTotalUses)
+	*grossUses = uint(cGrossUses)
 	freeCString(cName)
 	return int(status)
 }
@@ -400,6 +428,40 @@ func GetLicenseKey(licenseKey *string) int {
 	var cLicenseKey = getCArray()
 	status := C.GetLicenseKey(&cLicenseKey[0], maxCArrayLength)
 	*licenseKey = ctoGoString(&cLicenseKey[0])
+	return int(status)
+}
+
+/*
+   FUNCTION: GetLicenseAllowedActivations()
+
+   PURPOSE: Gets the allowed activations of the license.
+
+   PARAMETERS:
+   * allowedActivations - pointer to the integer that receives the value
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
+*/
+func GetLicenseAllowedActivations(allowedActivations *uint) int {
+	var cAllowedActivations C.uint
+	status := C.GetLicenseAllowedActivations(&cAllowedActivations)
+	*allowedActivations = uint(cAllowedActivations)
+	return int(status)
+}
+
+/*
+   FUNCTION: GetLicenseTotalActivations()
+
+   PURPOSE: Gets the total activations of the license.
+
+   PARAMETERS:
+   * totalActivations - pointer to the integer that receives the value
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
+*/
+func GetLicenseTotalActivations(totalActivations *uint) int {
+	var cTotalActivations C.uint
+	status := C.GetLicenseTotalActivations(&cTotalActivations)
+	*totalActivations = uint(cTotalActivations)
 	return int(status)
 }
 
@@ -638,6 +700,24 @@ func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 	var cTrialExpiryDate C.uint
 	status := C.GetLocalTrialExpiryDate(&cTrialExpiryDate)
 	*trialExpiryDate = uint(cTrialExpiryDate)
+	return int(status)
+}
+
+/*
+   FUNCTION: GetLibraryVersion()
+
+   PURPOSE: Gets the version of this library.
+
+   PARAMETERS:
+   * libraryVersion - pointer to a buffer that receives the value of the string
+   * length - size of the buffer pointed to by the libraryVersion parameter
+
+   RETURN CODES: LA_OK, LA_E_BUFFER_SIZE
+*/
+func GetLibraryVersion(libraryVersion *string) int {
+	var cLibraryVersion = getCArray()
+	status := C.GetLibraryVersion(&cLibraryVersion[0], maxCArrayLength)
+	*libraryVersion = ctoGoString(&cLibraryVersion[0])
 	return int(status)
 }
 
