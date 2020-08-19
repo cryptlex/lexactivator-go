@@ -1,4 +1,4 @@
-package main
+package lexactivator
 
 import (
 	"archive/zip"
