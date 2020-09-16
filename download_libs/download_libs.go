@@ -1,4 +1,4 @@
-package lexactivator
+package main
 
 import (
 	"archive/zip"
@@ -12,11 +12,10 @@ import (
 )
 
 func main() {
-	fmt.Println("Downloading LexActivator libs ...")
 	baseURL := "https://dl.cryptlex.com/downloads/"
-	libVersion := "v3.11.1"
+	libVersion := "v3.12.0"
 	basePath := "./libs/"
-
+	fmt.Println("Downloading LexActivator libs " + libVersion + " ...")
 	url := baseURL + libVersion + "/LexActivator-Static-Mac.zip"
 	err := downloadFile(url, "libs/clang/x86_64/libLexActivator.a", basePath+"darwin_amd64/libLexActivator.a")
 	if err != nil {
