@@ -18,19 +18,8 @@ jobs:
         go-version: '^1.15.0'
     - name: Download Native Libs
       run: go run download_libs/download_libs.go
-    # - name: Commit and push updates
-    #   uses: test-room-7/action-update-file@v1
-    #   with:
-    #     file-path: |
-    #         libs/linux_amd64/libLexActivator.a
-    #         libs/linux_arm64/libLexActivator.a
-    #         libs/darwin_amd64/libLexActivator.a
-    #         libs/windows_amd64/LexActivator.dll
-    #     commit-msg: Updated native libs
-    #     github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Commit files
       run: |
-        echo ${{ github.ref }}
         git add ./libs
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
