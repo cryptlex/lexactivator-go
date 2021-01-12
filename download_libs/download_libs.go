@@ -17,7 +17,7 @@ func main() {
 	basePath := "./libs/"
 	fmt.Println("Downloading LexActivator libs " + libVersion + " ...")
 	url := baseURL + libVersion + "/LexActivator-Static-Mac.zip"
-	err := downloadFile(url, "libs/clang/x86_64/libLexActivator.a", basePath+"darwin_amd64/libLexActivator.a")
+	err := downloadFile(url, "libs/clang/universal/libLexActivator.a", basePath+"darwin_amd64/libLexActivator.a")
 	if err != nil {
 		panic(err)
 	}
