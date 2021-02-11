@@ -1,9 +1,16 @@
 name: Update package libs
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      libraryVersion:
+        description: 'Library Version'
+        required: true
+        default: ''
+      packageVersion:
+        description: 'Package Version'
+        required: true
+        default: ''
 
 jobs:
   deploy:
@@ -16,15 +23,17 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: '^1.15.0'
+    - name: Update Library Version
+      run: |
+          sed -i '/libVersion :=/!b;c \ \ \ \ \ \ \ \libVersion :=  \"v${{ github.event.inputs.libraryVersion }}";' download_libs/download_libs.go  
     - name: Download Native Libs
       run: go run download_libs/download_libs.go
     - name: Commit files
       run: |
         git add ./libs
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git commit -m "Updated native libs" -a | exit 0
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        git add ./download_libs/download_libs.go
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git commit -m "updated native libs" -a | exit 0
+        git tag ${{ github.event.inputs.packageVersion }}
+        git push & git push --tags
