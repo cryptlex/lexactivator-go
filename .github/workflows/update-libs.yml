@@ -35,5 +35,5 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         git commit -m "updated native libs" -a | exit 0
-        git tag ${{ github.event.inputs.packageVersion }}
+        git tag v${{ github.event.inputs.packageVersion }}
         git push & git push --tags
