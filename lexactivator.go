@@ -149,7 +149,6 @@ func SetDataDirectory(directoryPath string) int {
 	return int(status)
 }
 
-
 /*
    FUNCTION: SetCustomDeviceFingerprint()
 
