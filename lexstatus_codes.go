@@ -152,6 +152,10 @@ const (
 	// IP address is not allowed.
 	LA_E_IP int = 82
 
+	// Application is being run inside a container 
+	// and activation has been disallowed in the container.
+	LA_E_CONTAINER = 83
+
 	// Rate limit for API has reached, try again later.
 	LA_E_RATE_LIMIT int = 90
 
