@@ -5,60 +5,60 @@
 #include <stddef.h>
 #include "LexStatusCodes.h"
 #ifdef _WIN32
-    /*
+/*
     Make sure you're using the MSVC or Intel compilers on Windows.
     */
-    #include <windows.h>
+#include <windows.h>
 
-    #ifdef LEXACTIVATOR_EXPORTS
-        #ifdef LEXACTIVATOR_STATIC
-            #define LEXACTIVATOR_API extern "C"
-        #else
-            #define LEXACTIVATOR_API extern "C" __declspec(dllexport)
-        #endif
-    #else
-        #ifdef __cplusplus
-            #ifdef LEXACTIVATOR_STATIC
-                #define LEXACTIVATOR_API extern "C"
-            #else
-                #define LEXACTIVATOR_API extern "C" __declspec(dllimport)
-            #endif
-        #else
-            #ifdef LEXACTIVATOR_STATIC
-                #define LEXACTIVATOR_API
-            #else
-                #define LEXACTIVATOR_API __declspec(dllimport)
-            #endif
-        #endif
-    #endif
-
-    #if defined(USE_STDCALL_DLL) && !defined(LEXACTIVATOR_STATIC)
-        #define LA_CC __stdcall
-    #else
-        #define LA_CC __cdecl
-    #endif
-    typedef const wchar_t* CSTRTYPE;
-    typedef wchar_t* STRTYPE;
+#ifdef LEXACTIVATOR_EXPORTS
+#ifdef LEXACTIVATOR_STATIC
+#define LEXACTIVATOR_API extern "C"
 #else
-    #define LA_CC
-    #if __GNUC__ >= 4
-        #ifdef __cplusplus
-            #define LEXACTIVATOR_API extern "C" __attribute__((visibility("default")))
-        #else
-            #define LEXACTIVATOR_API __attribute__((visibility("default")))
-        #endif
-    #else
-        #ifdef __cplusplus
-            #define LEXACTIVATOR_API extern "C"
-        #else
-            #define LEXACTIVATOR_API
-        #endif
-    #endif
-    typedef const char* CSTRTYPE;
-    typedef char* STRTYPE;
+#define LEXACTIVATOR_API extern "C" __declspec(dllexport)
+#endif
+#else
+#ifdef __cplusplus
+#ifdef LEXACTIVATOR_STATIC
+#define LEXACTIVATOR_API extern "C"
+#else
+#define LEXACTIVATOR_API extern "C" __declspec(dllimport)
+#endif
+#else
+#ifdef LEXACTIVATOR_STATIC
+#define LEXACTIVATOR_API
+#else
+#define LEXACTIVATOR_API __declspec(dllimport)
+#endif
+#endif
 #endif
 
-typedef void (LA_CC *CallbackType)(uint32_t);
+#if defined(USE_STDCALL_DLL) && !defined(LEXACTIVATOR_STATIC)
+#define LA_CC __stdcall
+#else
+#define LA_CC __cdecl
+#endif
+typedef const wchar_t *CSTRTYPE;
+typedef wchar_t *STRTYPE;
+#else
+#define LA_CC
+#if __GNUC__ >= 4
+#ifdef __cplusplus
+#define LEXACTIVATOR_API extern "C" __attribute__((visibility("default")))
+#else
+#define LEXACTIVATOR_API __attribute__((visibility("default")))
+#endif
+#else
+#ifdef __cplusplus
+#define LEXACTIVATOR_API extern "C"
+#else
+#define LEXACTIVATOR_API
+#endif
+#endif
+typedef const char *CSTRTYPE;
+typedef char *STRTYPE;
+#endif
+
+typedef void(LA_CC *CallbackType)(uint32_t);
 
 #define LA_USER ((uint32_t)1)
 #define LA_SYSTEM ((uint32_t)2)
@@ -331,6 +331,50 @@ LEXACTIVATOR_API int LA_CC SetCryptlexHost(CSTRTYPE host);
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 */
 LEXACTIVATOR_API int LA_CC GetProductMetadata(CSTRTYPE key, STRTYPE value, uint32_t length);
+
+/*
+    FUNCTION: GetProductVersionName()
+
+    PURPOSE: Gets the product version name.
+
+    PARAMETERS:
+    * name - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the name parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
+    LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetProductVersionName(STRTYPE name, uint32_t length);
+
+/*
+    FUNCTION: GetProductVersionDisplayName()
+
+    PURPOSE: Gets the product version display name.
+
+    PARAMETERS:
+    * displayName - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the displayName parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
+    LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetProductVersionDisplayName(STRTYPE displayName, uint32_t length);
+
+/*
+    FUNCTION: GetProductVersionFeatureFlag()
+
+    PURPOSE: Gets the product version feature flag.
+
+    PARAMETERS:
+    * name - name of the feature flag
+    * enabled - pointer to the integer that receives the value - 0 or 1
+    * data - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the data parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
+    LA_E_FEATURE_FLAG_NOT_FOUND, LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetProductVersionFeatureFlag(CSTRTYPE name, uint32_t *enabled, STRTYPE data, uint32_t length);
 
 /*
     FUNCTION: GetLicenseMetadata()

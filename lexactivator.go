@@ -396,6 +396,70 @@ func GetProductMetadata(key string, value *string) int {
 }
 
 /*
+   FUNCTION: GetProductVersionName()
+
+   PURPOSE: Gets the product version name.
+
+   PARAMETERS:
+   * name - pointer to a buffer that receives the value of the string
+   * length - size of the buffer pointed to by the name parameter
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
+   LA_E_BUFFER_SIZE
+*/
+
+func GetProductVersionName(name *string) int {
+	var cName = getCArray()
+	status := C.GetProductVersionName(&cName[0], maxCArrayLength)
+	*name = ctoGoString(&cName[0])
+	return int(status)
+}
+
+/*
+   FUNCTION: GetProductVersionDisplayName()
+
+   PURPOSE: Gets the product version display name.
+
+   PARAMETERS:
+   * displayName - pointer to a buffer that receives the value of the string
+   * length - size of the buffer pointed to by the displayName parameter
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
+   LA_E_BUFFER_SIZE
+*/
+func GetProductVersionDisplayName(displayName *string) int {
+	var cDisplayName = getCArray()
+	status := C.GetProductVersionDisplayName(&cDisplayName[0], maxCArrayLength)
+	*displayName = ctoGoString(&cDisplayName[0])
+	return int(status)
+}
+
+/*
+   FUNCTION: GetProductVersionFeatureFlag()
+
+   PURPOSE: Gets the product version feature flag.
+
+   PARAMETERS:
+   * name - name of the feature flag
+   * enabled - pointer to the integer that receives the value - 0 or 1
+   * data - pointer to a buffer that receives the value of the string
+   * length - size of the buffer pointed to by the data parameter
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
+   LA_E_FEATURE_FLAG_NOT_FOUND, LA_E_BUFFER_SIZE
+*/
+func GetProductVersionFeatureFlag(name string, enabled *uint, data *string) int {
+   cName := goToCString(name)
+   var cEnabled C.uint
+   var cData = getCArray()
+   status := C.GetProductVersionFeatureFlag(cName, &cEnabled,&cData, maxCArrayLength)
+   freeCString(cName)
+   *enabled = uint(cEnabled)
+   *data = ctoGoString(&cData[0])
+   return int(status)
+}
+
+/*
    FUNCTION: GetLicenseMetadata()
 
    PURPOSE: Gets the license metadata as set in the dashboard.
