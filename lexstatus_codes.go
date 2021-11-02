@@ -142,6 +142,12 @@ const (
 	// or more than 256 characters..
 	LA_E_CUSTOM_FINGERPRINT_LENGTH int = 74
 
+	// No product version is linked with the license.
+	LA_E_PRODUCT_VERSION_NOT_LINKED int = 75
+
+	// The product version feature flag does not exist.
+	LA_E_FEATURE_FLAG_NOT_FOUND int = 76
+
 	// Application is being run inside a virtual machine / hypervisor,
 	// and activation has been disallowed in the VM.
 	LA_E_VM int = 80
