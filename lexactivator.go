@@ -452,7 +452,7 @@ func GetProductVersionFeatureFlag(name string, enabled *bool, data *string) int 
    cName := goToCString(name)
    var cEnabled C.uint
    var cData = getCArray()
-   status := C.GetProductVersionFeatureFlag(cName, &cEnabled, &cData, maxCArrayLength)
+   status := C.GetProductVersionFeatureFlag(cName, &cEnabled, &cData[0], maxCArrayLength)
    freeCString(cName)
    *enabled = cEnabled > 0
    *data = ctoGoString(&cData[0])
