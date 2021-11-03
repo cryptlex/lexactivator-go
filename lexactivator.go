@@ -448,7 +448,7 @@ func GetProductVersionDisplayName(displayName *string) int {
    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
    LA_E_FEATURE_FLAG_NOT_FOUND, LA_E_BUFFER_SIZE
 */
-func GetProductVersionFeatureFlag(name string, enabled *uint, data *string) int {
+func GetProductVersionFeatureFlag(name string, enabled *bool, data *string) int {
    cName := goToCString(name)
    var cEnabled C.uint
    var cData = getCArray()
