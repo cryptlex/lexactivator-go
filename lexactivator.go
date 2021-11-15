@@ -306,6 +306,25 @@ func SetAppVersion(appVersion string) int {
 }
 
 /*
+    FUNCTION: SetActivationLeaseDuration()
+
+    PURPOSE: Sets the lease duration for the activation.
+
+    The activation lease duration is honoured when the allow client
+    lease duration property is enabled.
+
+    PARAMETERS:
+    * leaseDuration - value of the lease duration.
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
+*/
+func SetActivationLeaseDuration(leaseDuration uint) int {
+   cLeaseDuration := (C.uint)(leaseDuration)
+   status := C.SetActivationLeaseDuration(cLeaseDuration)
+   return int(status)
+}
+
+/*
    FUNCTION: SetOfflineActivationRequestMeterAttributeUses()
 
    PURPOSE: Sets the meter attribute uses for the offline activation request.
