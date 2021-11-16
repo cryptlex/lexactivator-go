@@ -238,6 +238,25 @@ func SetLicenseCallback(callbackFunction func(int)) int {
 }
 
 /*
+    FUNCTION: SetActivationLeaseDuration()
+
+    PURPOSE: Sets the lease duration for the activation.
+
+    The activation lease duration is honoured when the allow client
+    lease duration property is enabled.
+
+    PARAMETERS:
+    * leaseDuration - value of the lease duration.
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
+*/
+func SetActivationLeaseDuration(leaseDuration uint) int {
+   cLeaseDuration := (C.uint)(leaseDuration)
+   status := C.SetActivationLeaseDuration(cLeaseDuration)
+   return int(status)
+}
+
+/*
    FUNCTION: SetActivationMetadata()
 
    PURPOSE: Sets the activation metadata.
@@ -303,25 +322,6 @@ func SetAppVersion(appVersion string) int {
 	status := C.SetAppVersion(cAppVersion)
 	freeCString(cAppVersion)
 	return int(status)
-}
-
-/*
-    FUNCTION: SetActivationLeaseDuration()
-
-    PURPOSE: Sets the lease duration for the activation.
-
-    The activation lease duration is honoured when the allow client
-    lease duration property is enabled.
-
-    PARAMETERS:
-    * leaseDuration - value of the lease duration.
-
-    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
-*/
-func SetActivationLeaseDuration(leaseDuration uint) int {
-   cLeaseDuration := (C.uint)(leaseDuration)
-   status := C.SetActivationLeaseDuration(cLeaseDuration)
-   return int(status)
 }
 
 /*
