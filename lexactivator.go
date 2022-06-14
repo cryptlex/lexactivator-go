@@ -325,6 +325,26 @@ func SetAppVersion(appVersion string) int {
 }
 
 /*
+   FUNCTION: SetReleaseVersion()
+
+   PURPOSE: Sets the current release version of your application.
+
+   The app version appears along with the activation details in dashboard.
+
+   PARAMETERS:
+   * releaseVersion - string in following allowed formats: x.x, x.x.x, x.x.x.x
+
+   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_VERSION_FORMAT
+*/
+func SetReleaseVersion(releaseVersion string) int {
+	cReleaseVersion := goToCString(releaseVersion)
+	status := C.SetReleaseVersion(cReleaseVersion)
+	freeCString(cReleaseVersion)
+	return int(status)
+}
+
+
+/*
    FUNCTION: SetOfflineActivationRequestMeterAttributeUses()
 
    PURPOSE: Sets the meter attribute uses for the offline activation request.
@@ -593,6 +613,23 @@ func GetLicenseExpiryDate(expiryDate *uint) int {
 }
 
 /*
+    FUNCTION: GetLicenseMaintenanceExpiryDate()
+
+    PURPOSE: Gets the license maintenance expiry date timestamp.
+
+    PARAMETERS:
+    * maintenanceExpiryDate - pointer to the integer that receives the value
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
+*/
+func GetLicenseMaintenanceExpiryDate(maintenanceExpiryDate *uint) int {
+   var cMaintenanceExpiryDate C.uint
+	status := C.GetLicenseMaintenanceExpiryDate(&cMaintenanceExpiryDate)
+	*maintenanceExpiryDate = uint(cMaintenanceExpiryDate)
+	return int(status)
+}
+
+/*
    FUNCTION: GetLicenseUserEmail()
 
    PURPOSE: Gets the email associated with license user.
@@ -702,6 +739,29 @@ func GetActivationMetadata(key string, value *string) int {
 	*value = ctoGoString(&cValue[0])
 	freeCString(cKey)
 	return int(status)
+}
+
+/*
+    FUNCTION: GetActivationMode()
+
+    PURPOSE: Gets the mode of activation (online or offline).
+
+    PARAMETERS:
+    * initialMode - pointer to a buffer that receives the initial mode of activation
+    * initialModeLength - size of the buffer pointed to by the initialMode parameter
+    * currentMode - pointer to a buffer that receives the current mode of activation
+    * currentModeLength - size of the buffer pointed to by the currentMode parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME_MODIFIED,
+    LA_E_BUFFER_SIZE
+*/
+func GetActivationMode(initialMode *string, currentMode *string) int {
+   var cInitialMode = getCArray()
+   var cCurrentMode = getCArray()
+   status := C.GetActivationMode(&cInitialMode[0],maxCArrayLength, &cCurrentMode[0], maxCArrayLength)
+   *initialMode = ctoGoString(&cInitialMode[0])
+   *currentMode = ctoGoString(&cCurrentMode[0])
+   return int(status)
 }
 
 /*
