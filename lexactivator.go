@@ -329,7 +329,7 @@ func SetAppVersion(appVersion string) int {
 
    PURPOSE: Sets the current release version of your application.
 
-   The app version appears along with the activation details in dashboard.
+   The release version appears along with the activation details in dashboard.
 
    PARAMETERS:
    * releaseVersion - string in following allowed formats: x.x, x.x.x, x.x.x.x
