@@ -148,6 +148,9 @@ const (
 	// The product version feature flag does not exist.
 	LA_E_FEATURE_FLAG_NOT_FOUND int = 76
 
+	// The release version is not allowed.
+    LA_E_RELEASE_VERSION_NOT_ALLOWED int = 77
+
 	// Application is being run inside a virtual machine / hypervisor,
 	// and activation has been disallowed in the VM.
 	LA_E_VM int = 80
