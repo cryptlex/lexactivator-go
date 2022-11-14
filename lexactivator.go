@@ -343,6 +343,60 @@ func SetReleaseVersion(releaseVersion string) int {
 	return int(status)
 }
 
+/*
+
+   FUNCTION: SetReleasePublishedDate()
+
+   PURPOSE: Sets the release published date of your application.
+
+   PARAMETERS:
+   * releasePublishedDate - unix timestamp of release published date.
+
+   RETURN CODES: LA_OK, LA_E_PRODUCT_ID
+*/
+func SetReleasePublishedDate(releasePublishedDate uint) int {
+   cReleasePublishedDate := (C.uint)(releasePublishedDate)
+   status := C.SetReleasePublishedDate(cReleasePublishedDate)
+   return int(status)
+}
+
+/*
+   FUNCTION: SetReleasePlatform()
+
+   PURPOSE: Sets the release platform e.g. windows, macos, linux
+
+   The release platform appears along with the activation details in dashboard.
+
+   PARAMETERS:
+   * releasePlatform - release platform e.g. windows, macos, linux
+
+   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_PLATFORM_LENGTH
+*/
+func SetReleasePlatform(releasePlatform string) int {
+	cReleasePlatform := goToCString(releasePlatform)
+	status := C.SetReleasePlatform(cReleasePlatform)
+	freeCString(cReleasePlatform)
+	return int(status)
+}
+
+/*
+   FUNCTION: SetReleaseChannel()
+
+   PURPOSE: Sets the release channel e.g. stable, beta
+
+   The release channel appears along with the activation details in dashboard.
+
+   PARAMETERS:
+   * channel - release channel e.g. stable
+
+   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_CHANNEL_LENGTH
+*/
+func SetReleaseChannel(releaseChannel string) int {
+	cReleaseChannel := goToCString(releaseChannel)
+	status := C.SetReleaseChannel(cReleaseChannel)
+	freeCString(cReleaseChannel)
+	return int(status)
+}
 
 /*
    FUNCTION: SetOfflineActivationRequestMeterAttributeUses()
@@ -626,6 +680,24 @@ func GetLicenseMaintenanceExpiryDate(maintenanceExpiryDate *uint) int {
    var cMaintenanceExpiryDate C.uint
 	status := C.GetLicenseMaintenanceExpiryDate(&cMaintenanceExpiryDate)
 	*maintenanceExpiryDate = uint(cMaintenanceExpiryDate)
+	return int(status)
+}
+
+/*
+   FUNCTION: GetLicenseMaxAllowedReleaseVersion()
+
+   PURPOSE: Gets the maximum allowed release version of the license.
+
+   PARAMETERS:
+   * maxAllowedReleaseVersion - pointer to a buffer that receives the value of the string.
+   * length - size of the buffer pointed to by the maxAllowedReleaseVersion parameter.
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY,  LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
+*/
+func GetLicenseMaxAllowedReleaseVersion(maxAllowedReleaseVersion *string) int {
+	var cMaxAllowedReleaseVersion = getCArray()
+	status := C.GetLicenseMaxAllowedReleaseVersion(&cMaxAllowedReleaseVersion[0], maxCArrayLength)
+	*maxAllowedReleaseVersion = ctoGoString(&cMaxAllowedReleaseVersion[0])
 	return int(status)
 }
 
