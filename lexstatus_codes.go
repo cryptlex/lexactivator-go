@@ -151,6 +151,12 @@ const (
 	// The release version is not allowed.
     LA_E_RELEASE_VERSION_NOT_ALLOWED int = 77
 
+	// Release platform length is more than 256 characters.
+	LA_E_RELEASE_PLATFORM_LENGTH int = 78
+
+	// Release channel length is more than 256 characters.
+	LA_E_RELEASE_CHANNEL_LENGTH int = 79
+
 	// Application is being run inside a virtual machine / hypervisor,
 	// and activation has been disallowed in the VM.
 	LA_E_VM int = 80
