@@ -11,6 +11,7 @@ package lexactivator
 #include <stdlib.h>
 void licenseCallbackCgoGateway(int status);
 void releaseUpdateCallbackCgoGateway(int status);
+void newReleaseUpdateCallbackCgoGateway(int status, char* releaseJson);
 */
 import "C"
 import (
@@ -18,6 +19,7 @@ import (
 )
 
 type callbackType func(int)
+type releaseCallbackType func(int, string)
 
 const (
 	LA_USER      uint = 1
@@ -25,9 +27,16 @@ const (
 	LA_IN_MEMORY uint = 4
 )
 
+const (
+   LA_RELEASES_ALL     uint = 1
+   LA_RELEASES_ALLOWED uint = 2
+)
+
 var licenseCallbackFuncion callbackType
 
 var releaseUpdateCallbackFuncion callbackType
+
+var newReleaseUpdateCallbackFunction releaseCallbackType
 
 //export licenseCallbackWrapper
 func licenseCallbackWrapper(status int) {
@@ -41,6 +50,14 @@ func releaseUpdateCallbackWrapper(status int) {
 	if releaseUpdateCallbackFuncion != nil {
 		releaseUpdateCallbackFuncion(status)
 	}
+}
+
+//export newReleaseUpdateCallbackWrapper
+func newReleaseUpdateCallbackWrapper(status int, releaseJson *C.char) {
+   releaseJsonStr := ctoGoString(releaseJson)
+   if newReleaseUpdateCallbackFunction != nil {
+      newReleaseUpdateCallbackFunction(status, releaseJsonStr)
+   }
 }
 
 /*
@@ -991,6 +1008,39 @@ func CheckForReleaseUpdate(platform string, version string, channel string, call
 	return int(status)
 }
 
+/*
+   FUNCTION: CheckReleaseUpdate()
+
+   PURPOSE: Checks whether a new release is available for the product.
+
+   This function should only be used if you manage your releases through
+   Cryptlex release management API.
+
+   When this function is called the release update callback function gets invoked 
+   which returns the following parameters:
+
+   * status - determines if any update is available or not. It also determines whether 
+     an update is allowed or not. Expected values are LA_RELEASE_UPDATE_AVAILABLE,
+     LA_RELEASE_UPDATE_NOT_AVAILABLE, LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED.
+
+   * releaseJson- returns json string of the latest available release, depending on the 
+     flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
+
+   PARAMETERS:
+   * releaseUpdateCallback - name of the callback function.
+   * releaseFlags - If an update only related to the allowed release is required, 
+     then use LA_RELEASES_ALLOWED. Otherwise, if an update for all the releases is
+     required, then use LA_RELEASES_ALL.
+
+   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT, LA_E_RELEASE_VERSION,
+   LA_E_RELEASE_PLATFORM, LA_E_RELEASE_CHANNEL
+*/
+func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, string), releaseFlags uint) int {
+   cReleaseFlags := (C.uint)(releaseFlags)
+	status := C.CheckReleaseUpdate((C.ReleaseCallbackType)(unsafe.Pointer(C.newReleaseUpdateCallbackCgoGateway)), cReleaseFlags)
+	newReleaseUpdateCallbackFunction = releaseUpdateCallbackFunction
+	return int(status)
+}
 /*
    FUNCTION: ActivateLicense()
 

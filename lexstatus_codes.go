@@ -31,7 +31,13 @@ const (
 	LA_RELEASE_UPDATE_AVAILABLE int = 30
 
 	// No new update is available for the product. The current version is latest.
-	LA_RELEASE_NO_UPDATE_AVAILABLE int = 31
+	LA_RELEASE_NO_UPDATE_AVAILABLE int = 31 // deprecated
+
+	// No new update is available for the product. The current version is latest.
+	LA_RELEASE_UPDATE_NOT_AVAILABLE int = 31 
+
+	// The update available is not allowed for this license.
+	LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED int = 32
 
 	// Invalid file path.
 	LA_E_FILE_PATH int = 40
@@ -169,7 +175,17 @@ const (
 
 	// Application is being run inside a container 
 	// and activation has been disallowed in the container.
-	LA_E_CONTAINER = 83
+	LA_E_CONTAINER int = 83
+
+	// Invalid release version. Make sure the release version
+	// uses the following formats: x.x, x.x.x, x.x.x.x (where x is a number).
+	LA_E_RELEASE_VERSION int = 84
+
+	// Release platform not set.
+	LA_E_RELEASE_PLATFORM int = 85
+
+	// Release channel not set.
+	LA_E_RELEASE_CHANNEL int = 86
 
 	// Rate limit for API has reached, try again later.
 	LA_E_RATE_LIMIT int = 90

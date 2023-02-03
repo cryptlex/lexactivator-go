@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	maxCArrayLength  C.uint = 256
-	maxGoArrayLength C.int  = 256
+	maxCArrayLength  C.uint = 1024
+	maxGoArrayLength C.int  = 1024
 )
 
 func goToCString(goString string) *C.ushort {
