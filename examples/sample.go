@@ -34,7 +34,7 @@ func initData() {
 		os.Exit(1)
 	}
 
-	status = lexactivator.SetAppVersion("PASTE_YOUR_APP_VERION")
+	status = lexactivator.SetReleaseVersion("PASTE_YOUR_RELEASE_VERSION")
 	if lexactivator.LA_OK != status {
 		fmt.Println("Error Code:", status)
 		os.Exit(1)
