@@ -769,7 +769,7 @@ LEXACTIVATOR_API int LA_CC GetLibraryVersion(STRTYPE libraryVersion, uint32_t le
     Cryptlex release management API.
 
     When this function is called the release update callback function gets invoked 
-    which returns the following parameters:
+    which passes the following parameters:
 
     * status - determines if any update is available or not. It also determines whether 
       an update is allowed or not. Expected values are LA_RELEASE_UPDATE_AVAILABLE,
