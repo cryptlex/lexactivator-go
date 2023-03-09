@@ -354,7 +354,7 @@ enum LexStatusCodes
 
         MESSAGE: The release version is not allowed.
     */
-    LA_E_RELEASE_VERSION_NOT_ALLOWED = 77,  
+    LA_E_RELEASE_VERSION_NOT_ALLOWED = 77,
 
     /*
         CODE: LA_E_RELEASE_PLATFORM_LENGTH
