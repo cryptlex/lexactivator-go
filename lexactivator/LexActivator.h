@@ -593,6 +593,20 @@ LEXACTIVATOR_API int LA_CC GetLicenseUserName(STRTYPE name, uint32_t length);
 LEXACTIVATOR_API int LA_CC GetLicenseUserCompany(STRTYPE company, uint32_t length);
 
 /*
+    FUNCTION: GetLicenseUserMetadata()
+
+    PURPOSE: Gets the metadata associated with the license user.
+
+    PARAMETERS:
+    * key - key to retrieve the value
+    * value - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the value parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetLicenseUserMetadata(CSTRTYPE key, STRTYPE value, uint32_t length);
+
+/*
    FUNCTION: GetLicenseOrganizationName()
 
    PURPOSE: Gets the organization name associated with the license.
@@ -617,20 +631,6 @@ LEXACTIVATOR_API int LA_CC GetLicenseOrganizationName(STRTYPE organizationName, 
    LA_E_BUFFER_SIZE
 */
 LEXACTIVATOR_API int LA_CC GetLicenseOrganizationAddressInternal(STRTYPE organisationAddress, uint32_t length);
-
-/*
-    FUNCTION: GetLicenseUserMetadata()
-
-    PURPOSE: Gets the metadata associated with the license user.
-
-    PARAMETERS:
-    * key - key to retrieve the value
-    * value - pointer to a buffer that receives the value of the string
-    * length - size of the buffer pointed to by the value parameter
-
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
-*/
-LEXACTIVATOR_API int LA_CC GetLicenseUserMetadata(CSTRTYPE key, STRTYPE value, uint32_t length);
 
 /*
     FUNCTION: GetLicenseType()

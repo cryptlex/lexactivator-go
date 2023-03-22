@@ -757,6 +757,26 @@ func GetLicenseUserCompany(company *string) int {
 }
 
 /*
+   FUNCTION: GetLicenseUserMetadata()
+
+   PURPOSE: Gets the metadata associated with the license user.
+
+   PARAMETERS:
+   * key - metadata key to retrieve the value
+   * value - pointer to a string that receives the value
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
+*/
+func GetLicenseUserMetadata(key string, value *string) int {
+	cKey := goToCString(key)
+	var cValue = getCArray()
+	status := C.GetLicenseUserMetadata(cKey, &cValue[0], maxCArrayLength)
+	*value = ctoGoString(&cValue[0])
+	freeCString(cKey)
+	return int(status)
+}
+
+/*
    FUNCTION: GetLicenseOrganizationName()
 
    PURPOSE: Gets the organization name associated with the license.
@@ -797,26 +817,6 @@ func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int
       organizationAddress = &OrganizationAddress{}
    }
    return int(status)
-}
-
-/*
-   FUNCTION: GetLicenseUserMetadata()
-
-   PURPOSE: Gets the metadata associated with the license user.
-
-   PARAMETERS:
-   * key - metadata key to retrieve the value
-   * value - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
-*/
-func GetLicenseUserMetadata(key string, value *string) int {
-	cKey := goToCString(key)
-	var cValue = getCArray()
-	status := C.GetLicenseUserMetadata(cKey, &cValue[0], maxCArrayLength)
-	*value = ctoGoString(&cValue[0])
-	freeCString(cKey)
-	return int(status)
 }
 
 /*
