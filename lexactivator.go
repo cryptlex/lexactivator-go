@@ -15,6 +15,7 @@ void releaseUpdateCallbackCgoGateway(int status);
 import "C"
 import (
 	"unsafe"
+   "encoding/json"  
 )
 
 type callbackType func(int)
@@ -773,6 +774,49 @@ func GetLicenseUserMetadata(key string, value *string) int {
 	*value = ctoGoString(&cValue[0])
 	freeCString(cKey)
 	return int(status)
+}
+
+/*
+   FUNCTION: GetLicenseOrganizationName()
+
+   PURPOSE: Gets the organization name associated with the license.
+
+   PARAMETERS:
+   * organizationName - pointer to the string that receives the value
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+   LA_E_BUFFER_SIZE
+*/
+func GetLicenseOrganizationName(organizationName *string) int {
+   var cOrganizationName = getCArray()
+   status := C.GetLicenseOrganizationName(&cOrganizationName[0], maxCArrayLength)
+   *organizationName = ctoGoString(&cOrganizationName[0])
+   return int(status)
+}
+
+/*
+   FUNCTION: GetLicenseOrganizationAddress()
+
+   PURPOSE: Gets the organization address associated with the license.
+
+   PARAMETERS:
+   * organizationAddress - pointer to the OrganizationAddress struct that receives the value
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+   LA_E_BUFFER_SIZE
+*/
+func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int {
+   var cOrganizationAddress = getCArray()
+   organizationAddressJson := ""
+   status := C.GetLicenseOrganizationAddressInternal(&cOrganizationAddress[0], maxCArrayLength)
+   organizationAddressJson = ctoGoString(&cOrganizationAddress[0])
+   if organizationAddressJson != "" {
+      address := []byte(organizationAddressJson)
+      json.Unmarshal(address, &organizationAddress)
+   } else {
+      organizationAddress = &OrganizationAddress{}
+   }
+   return int(status)
 }
 
 /*
