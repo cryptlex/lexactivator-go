@@ -16,7 +16,6 @@ void newReleaseUpdateCallbackCgoGateway(int status, char* releaseJson);
 import "C"
 import (
 	"unsafe"
-   "encoding/json"
 )
 
 type callbackType func(int)
