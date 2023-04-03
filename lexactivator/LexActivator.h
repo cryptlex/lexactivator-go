@@ -746,7 +746,7 @@ LEXACTIVATOR_API int LA_CC GetLocalTrialExpiryDate(uint32_t *trialExpiryDate);
 LEXACTIVATOR_API int LA_CC GetLibraryVersion(STRTYPE libraryVersion, uint32_t length);
 
 /*
-    FUNCTION: CheckReleaseUpdate()
+    FUNCTION: CheckReleaseUpdateInternal()
 
     PURPOSE: Checks whether a new release is available for the product.
 
@@ -764,7 +764,7 @@ LEXACTIVATOR_API int LA_CC GetLibraryVersion(STRTYPE libraryVersion, uint32_t le
       flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
 
     PARAMETERS:
-    * releaseUpdateCallback - name of the callback function.
+    * releaseUpdateCallbackInternal - name of the callback function.
     * releaseFlags - If an update only related to the allowed release is required, 
       then use LA_RELEASES_ALLOWED. Otherwise, if an update for all the releases is
       required, then use LA_RELEASES_ALL.
@@ -772,7 +772,7 @@ LEXACTIVATOR_API int LA_CC GetLibraryVersion(STRTYPE libraryVersion, uint32_t le
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT, LA_E_RELEASE_VERSION,
     LA_E_RELEASE_PLATFORM, LA_E_RELEASE_CHANNEL
 */
-LEXACTIVATOR_API int LA_CC CheckReleaseUpdateInternal(ReleaseCallbackTypeInternal releaseUpdateCallbackInternal, uint32_t releaseFlag);
+LEXACTIVATOR_API int LA_CC CheckReleaseUpdateInternal(ReleaseCallbackTypeInternal releaseUpdateCallbackInternal, uint32_t releaseFlags);
 
 /*
     FUNCTION: CheckForReleaseUpdate()
