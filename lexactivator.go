@@ -811,8 +811,8 @@ func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int
    status := C.GetLicenseOrganizationAddressInternal(&cOrganizationAddress[0], maxCArrayLength)
    organizationAddressJson = ctoGoString(&cOrganizationAddress[0])
    if organizationAddressJson != "" {
-      add := []byte(organizationAddressJson)
-      json.Unmarshal(add, &organizationAddress)
+      address := []byte(organizationAddressJson)
+      json.Unmarshal(address, &organizationAddress)
    } else {
       organizationAddress = &OrganizationAddress{}
    }
