@@ -6,10 +6,7 @@ package lexactivator
 import "C"
 import "unsafe"
 
-const (
-	maxCArrayLength  C.uint = 256
-	maxGoArrayLength C.int  = 256
-)
+const maxCArrayLength  C.uint = 1024
 
 func goToCString(data string) *C.char {
 	cString := C.CString(data)
@@ -17,7 +14,7 @@ func goToCString(data string) *C.char {
 }
 
 func ctoGoString(cString *C.char) string {
-	goString := C.GoStringN(cString, maxGoArrayLength)
+	goString := C.GoString(cString)
 	return goString
 }
 
