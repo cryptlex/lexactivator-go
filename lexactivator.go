@@ -20,7 +20,7 @@ import (
 )
 
 type callbackType func(int)
-type releaseCallbackType func(int, Release)
+type releaseCallbackType func(int, *Release)
 
 const (
 	LA_USER      uint = 1
@@ -57,12 +57,12 @@ func releaseUpdateCallbackWrapper(status int) {
 func newReleaseUpdateCallbackWrapper(status int, releaseJson *C.char) {
    releaseJsonStr := ctoGoString(releaseJson)
    if releaseCallbackFunction != nil {
+      var release *Release = nil
       if releaseJsonStr != "" {
-         var release Release
          json.Unmarshal([]byte(releaseJsonStr), &release)
          releaseCallbackFunction(status, release)
       } else {
-         releaseCallbackFunction(status, Release{})
+         releaseCallbackFunction(status, release)
       }
    }
 }
@@ -1085,7 +1085,7 @@ func CheckForReleaseUpdate(platform string, version string, channel string, call
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT, LA_E_RELEASE_VERSION,
    LA_E_RELEASE_PLATFORM, LA_E_RELEASE_CHANNEL
 */
-func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, Release), releaseFlags uint) int {
+func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release), releaseFlags uint) int {
    cReleaseFlags := (C.uint)(releaseFlags)
 	status := C.CheckReleaseUpdateInternal((C.ReleaseCallbackTypeInternal)(unsafe.Pointer(C.newReleaseUpdateCallbackCgoGateway)), cReleaseFlags)
 	releaseCallbackFunction = releaseUpdateCallbackFunction
