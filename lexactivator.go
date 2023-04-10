@@ -57,12 +57,12 @@ func releaseUpdateCallbackWrapper(status int) {
 func newReleaseUpdateCallbackWrapper(status int, releaseJson *C.char) {
    releaseJsonStr := ctoGoString(releaseJson)
    if releaseCallbackFunction != nil {
-      var release *Release = nil
       if releaseJsonStr != "" {
-         json.Unmarshal([]byte(releaseJsonStr), &release)
+         release := &Release{}
+         json.Unmarshal([]byte(releaseJsonStr), release)
          releaseCallbackFunction(status, release)
       } else {
-         releaseCallbackFunction(status, release)
+         releaseCallbackFunction(status, nil)
       }
    }
 }
