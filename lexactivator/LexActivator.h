@@ -790,7 +790,7 @@ LEXACTIVATOR_API int LA_CC GetLibraryVersion(STRTYPE libraryVersion, uint32_t le
       flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
 
     * userData - data that is passed to the callback function when it is registered
-	  using the CheckReleaseUpdateInternal function.
+      using the CheckReleaseUpdateInternal function.
 
     PARAMETERS:
     * releaseUpdateCallbackInternal - name of the callback function.

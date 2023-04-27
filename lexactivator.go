@@ -1077,8 +1077,8 @@ func CheckForReleaseUpdate(platform string, version string, channel string, call
      flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
 
    * userData - data that is passed to the callback function when it is registered
-	  using the CheckReleaseUpdate function. This parameter is optional and can be nil if no user data
-	  is passed to the CheckReleaseUpdate function.
+     using the CheckReleaseUpdate function. This parameter is optional and can be nil if no user data
+     is passed to the CheckReleaseUpdate function.
 
    PARAMETERS:
    * releaseUpdateCallback - name of the callback function.
@@ -1086,7 +1086,7 @@ func CheckForReleaseUpdate(platform string, version string, channel string, call
      then use LA_RELEASES_ALLOWED. Otherwise, if an update for all the releases is
      required, then use LA_RELEASES_ALL.
    * userData - data that can be passed to the callback function. This parameter has
-	  to be nil if no user data needs to be passed to the callback.
+     to be nil if no user data needs to be passed to the callback.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT, LA_E_RELEASE_VERSION,
    LA_E_RELEASE_PLATFORM, LA_E_RELEASE_CHANNEL
