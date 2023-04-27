@@ -18,7 +18,7 @@ void releaseUpdateCallbackCgoGateway(int status)
 	releaseUpdateCallbackWrapper(status);
 }
 
-void newReleaseUpdateCallbackCgoGateway(int status, char *releaseJson)
+void newReleaseUpdateCallbackCgoGateway(int status, char *releaseJson, void* unused)
 {
 	void newReleaseUpdateCallbackWrapper(int, char *);
 	newReleaseUpdateCallbackWrapper(status, releaseJson);

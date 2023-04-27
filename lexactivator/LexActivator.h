@@ -789,16 +789,20 @@ LEXACTIVATOR_API int LA_CC GetLibraryVersion(STRTYPE libraryVersion, uint32_t le
     * releaseJson- returns json string of the latest available release, depending on the 
       flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
 
+    * userData - data that is passed to the callback function when it is registered
+      using the CheckReleaseUpdateInternal function.
+
     PARAMETERS:
     * releaseUpdateCallbackInternal - name of the callback function.
     * releaseFlags - If an update only related to the allowed release is required, 
       then use LA_RELEASES_ALLOWED. Otherwise, if an update for all the releases is
       required, then use LA_RELEASES_ALL.
+    * userData - data that can be passed to the callback function.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT, LA_E_RELEASE_VERSION,
     LA_E_RELEASE_PLATFORM, LA_E_RELEASE_CHANNEL
 */
-LEXACTIVATOR_API int LA_CC CheckReleaseUpdateInternal(ReleaseCallbackTypeInternal releaseUpdateCallbackInternal, uint32_t releaseFlags);
+LEXACTIVATOR_API int LA_CC CheckReleaseUpdateInternal(ReleaseCallbackTypeInternal releaseUpdateCallbackInternal, uint32_t releaseFlags, void* userData);
 
 /*
     FUNCTION: CheckForReleaseUpdate()

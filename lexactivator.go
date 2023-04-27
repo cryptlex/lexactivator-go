@@ -11,16 +11,16 @@ package lexactivator
 #include <stdlib.h>
 void licenseCallbackCgoGateway(int status);
 void releaseUpdateCallbackCgoGateway(int status);
-void newReleaseUpdateCallbackCgoGateway(int status, char* releaseJson);
+void newReleaseUpdateCallbackCgoGateway(int status, char* releaseJson, void* unused);
 */
 import "C"
 import (
+	"encoding/json"
 	"unsafe"
-   "encoding/json"  
 )
 
 type callbackType func(int)
-type releaseCallbackType func(int, *Release)
+type releaseCallbackType func(int, *Release, interface{})
 
 const (
 	LA_USER      uint = 1
@@ -38,6 +38,8 @@ var licenseCallbackFuncion callbackType
 var legacyReleaseCallbackFunction callbackType
 
 var releaseCallbackFunction releaseCallbackType
+
+var releaseCallbackFunctionUserData interface {}
 
 //export licenseCallbackWrapper
 func licenseCallbackWrapper(status int) {
@@ -60,9 +62,9 @@ func newReleaseUpdateCallbackWrapper(status int, releaseJson *C.char) {
       if releaseJsonStr != "" {
          release := &Release{}
          json.Unmarshal([]byte(releaseJsonStr), release)
-         releaseCallbackFunction(status, release)
+         releaseCallbackFunction(status, release, releaseCallbackFunctionUserData)
       } else {
-         releaseCallbackFunction(status, nil)
+         releaseCallbackFunction(status, nil, releaseCallbackFunctionUserData)
       }
    }
 }
@@ -1074,19 +1076,26 @@ func CheckForReleaseUpdate(platform string, version string, channel string, call
    * release- returns release struct of the latest available release, depending on the 
      flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
 
+   * userData - data that is passed to the callback function when it is registered
+     using the CheckReleaseUpdate function. This parameter is optional and can be nil if no user data
+     is passed to the CheckReleaseUpdate function.
+
    PARAMETERS:
    * releaseUpdateCallback - name of the callback function.
-   * releaseFlags - If an update only related to the allowed release is required, 
+   * releaseFlags - if an update only related to the allowed release is required, 
      then use LA_RELEASES_ALLOWED. Otherwise, if an update for all the releases is
      required, then use LA_RELEASES_ALL.
+   * userData - data that can be passed to the callback function. This parameter has
+     to be nil if no user data needs to be passed to the callback.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT, LA_E_RELEASE_VERSION,
    LA_E_RELEASE_PLATFORM, LA_E_RELEASE_CHANNEL
 */
-func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release), releaseFlags uint) int {
+func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release, interface{}), releaseFlags uint, userData interface{}) int {
    cReleaseFlags := (C.uint)(releaseFlags)
-	status := C.CheckReleaseUpdateInternal((C.ReleaseCallbackTypeInternal)(unsafe.Pointer(C.newReleaseUpdateCallbackCgoGateway)), cReleaseFlags)
+	status := C.CheckReleaseUpdateInternal((C.ReleaseCallbackTypeInternal)(unsafe.Pointer(C.newReleaseUpdateCallbackCgoGateway)), cReleaseFlags, nil)
 	releaseCallbackFunction = releaseUpdateCallbackFunction
+   releaseCallbackFunctionUserData = userData
 	return int(status)
 }
 /*
