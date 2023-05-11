@@ -21,6 +21,7 @@ import "C"
 import (
 	"encoding/json"
 	"unsafe"
+   "strings"
 )
 
 type callbackType func(int)
@@ -824,7 +825,7 @@ func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int
    var cOrganizationAddress = getCArray()
    organizationAddressJson := ""
    status := C.GetLicenseOrganizationAddressInternal(&cOrganizationAddress[0], maxCArrayLength)
-   organizationAddressJson = ctoGoString(&cOrganizationAddress[0])
+   organizationAddressJson = strings.TrimRight(ctoGoString(&cOrganizationAddress[0]), "\x00")
    if organizationAddressJson != "" {
       address := []byte(organizationAddressJson)
       json.Unmarshal(address, organizationAddress)
