@@ -18,10 +18,18 @@ void releaseUpdateCallbackCgoGateway(int status)
 	releaseUpdateCallbackWrapper(status);
 }
 
-void newReleaseUpdateCallbackCgoGateway(int status, char *releaseJson, void* unused)
+#ifdef _WIN32
+void newReleaseUpdateCallbackCgoGateway(int status, unsigned short* releaseJson, void* unused)
 {
-	void newReleaseUpdateCallbackWrapper(int, char *);
+	void newReleaseUpdateCallbackWrapper(int, unsigned short*);
 	newReleaseUpdateCallbackWrapper(status, releaseJson);
 }
+#else
+void newReleaseUpdateCallbackCgoGateway(int status, const char* releaseJson, void* unused)
+{
+	void newReleaseUpdateCallbackWrapper(int, const char*);
+	newReleaseUpdateCallbackWrapper(status, releaseJson);
+}
+#endif
 */
 import "C"

@@ -11,12 +11,17 @@ package lexactivator
 #include <stdlib.h>
 void licenseCallbackCgoGateway(int status);
 void releaseUpdateCallbackCgoGateway(int status);
-void newReleaseUpdateCallbackCgoGateway(int status, char* releaseJson, void* unused);
+#ifdef _WIN32
+void newReleaseUpdateCallbackCgoGateway(int status, unsigned short* releaseJson, void* unused);
+#else
+void newReleaseUpdateCallbackCgoGateway(int status, const char* releaseJson, void* unused);
+#endif
 */
 import "C"
 import (
 	"encoding/json"
 	"unsafe"
+   "strings"
 )
 
 type callbackType func(int)
@@ -53,20 +58,6 @@ func releaseUpdateCallbackWrapper(status int) {
 	if legacyReleaseCallbackFunction != nil {
 		legacyReleaseCallbackFunction(status)
 	}
-}
-
-//export newReleaseUpdateCallbackWrapper
-func newReleaseUpdateCallbackWrapper(status int, releaseJson *C.char) {
-   releaseJsonStr := ctoGoString(releaseJson)
-   if releaseCallbackFunction != nil {
-      if releaseJsonStr != "" {
-         release := &Release{}
-         json.Unmarshal([]byte(releaseJsonStr), release)
-         releaseCallbackFunction(status, release, releaseCallbackFunctionUserData)
-      } else {
-         releaseCallbackFunction(status, nil, releaseCallbackFunctionUserData)
-      }
-   }
 }
 
 /*
@@ -834,7 +825,7 @@ func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int
    var cOrganizationAddress = getCArray()
    organizationAddressJson := ""
    status := C.GetLicenseOrganizationAddressInternal(&cOrganizationAddress[0], maxCArrayLength)
-   organizationAddressJson = ctoGoString(&cOrganizationAddress[0])
+   organizationAddressJson = strings.TrimRight(ctoGoString(&cOrganizationAddress[0]), "\x00")
    if organizationAddressJson != "" {
       address := []byte(organizationAddressJson)
       json.Unmarshal(address, organizationAddress)
