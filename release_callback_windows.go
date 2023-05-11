@@ -4,11 +4,10 @@ package lexactivator
 import "C"
 import (
 	"encoding/json"
-	
 )
 //export newReleaseUpdateCallbackWrapper
 func newReleaseUpdateCallbackWrapper(status int, releaseJson *C.ushort) {
-	releaseJsonStr := ctoGoString(releaseJson)
+	releaseJsonStr := wideCtoGoString(releaseJson)
 	if releaseCallbackFunction != nil {
 	   if releaseJsonStr != "" {
 		  release := &Release{}

@@ -28,6 +28,20 @@ func ctoGoString(cString *C.ushort) string {
 	return goString
 }
 
+func wideCtoGoString(cString *C.ushort) string {
+	var encodedRunes []rune
+	i := 0
+	for ; ; i++ {
+		runeVal := rune(*(*uint16)(unsafe.Pointer(uintptr(unsafe.Pointer(cString)) + uintptr(i)*unsafe.Sizeof(*cString))))
+		if runeVal == 0 {
+			break
+		}
+		encodedRunes = append(encodedRunes, runeVal)
+	}
+	goString := string(encodedRunes)
+	return goString
+}
+
 func getCArray() [maxCArrayLength]C.ushort {
 	var cArray [maxCArrayLength]C.ushort
 	return cArray
