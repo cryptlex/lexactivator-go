@@ -39,3 +39,10 @@ type OrganizationAddress struct {
 	Country 	 string `json:"country"`
 	PostalCode 	 string `json:"postalCode"`
 }
+
+type UserLicense struct {
+    AllowedActivations int   `json:"allowedActivations"`
+    AllowedDeactivations int `json:"allowedDeactivations"`
+    Key string               `json:"key"`
+    Type string              `json:"type"`
+}

@@ -834,6 +834,34 @@ func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int
 }
 
 /*
+   FUNCTION: GetUserLicenses()
+
+   PURPOSE: Gets the user licenses for the product. 
+   
+   This function sends a network request to Cryptlex servers to get the licenses.
+
+   Make sure AuthenticateUser() function is called before calling this function.
+
+   PARAMETERS:
+   * userLicenses - pointer to the array of structs that receives the values of the users' licenses.
+
+   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT
+   LA_E_USER_NOT_AUTHENTICATED, LA_E_BUFFER_SIZE
+*/
+
+func GetUserLicenses(userLicenses *[]UserLicense) int {
+   var cUserLicenses = getCArray()
+   userLicensesJson := ""
+   status := C.GetUserLicensesInternal(&cUserLicenses[0], maxCArrayLength)
+   userLicensesJson = strings.TrimRight(ctoGoString(&cUserLicenses[0]), "\x00")
+   if userLicensesJson != "" {
+      licenses := []byte(userLicensesJson)
+      json.Unmarshal(licenses, userLicenses)
+   }
+   return int(status)
+}
+
+/*
    FUNCTION: GetLicenseType()
 
    PURPOSE: Gets the license type (node-locked or hosted-floating).
@@ -1089,6 +1117,24 @@ func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release, interf
    releaseCallbackFunctionUserData = userData
 	return int(status)
 }
+
+/*
+   FUNCTION: AuthenticateUser()
+
+   PURPOSE: It sends the request to the Cryptlex servers to authenticate the user.
+
+   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT
+   LA_E_AUTHENTICATION_FAILED
+*/
+func AuthenticateUser(email string, password string) int {
+   cEmail := goToCString(email)
+	cPassword := goToCString(password)
+   status := C.AuthenticateUser(cEmail, cPassword)
+   freeCString(cEmail)
+	freeCString(cPassword)
+   return int(status)
+}
+
 /*
    FUNCTION: ActivateLicense()
 
