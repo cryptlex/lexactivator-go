@@ -53,18 +53,6 @@ func initData() {
 		fmt.Println("Error Code:", status)
 		os.Exit(1)
 	}
-	// set the actual channel of the release e.g stable
-	status = lexactivator.SetReleaseChannel("RELEASE_CHANNEL")
-	if lexactivator.LA_OK != status {
-		fmt.Println("Error Code:", status)
-		os.Exit(1)
-	}
-	// set the actual platform of the release e.g windows, macos, linux
-	status = lexactivator.SetReleasePlatform("RELEASE_PLATFORM")
-	if lexactivator.LA_OK != status {
-		fmt.Println("Error Code:", status)
-		os.Exit(1)
-	}
 
 }
 
