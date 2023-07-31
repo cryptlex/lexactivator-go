@@ -20,6 +20,20 @@ func licenseCallback(status int) {
 	}
 }
 
+func softwareReleaseUpdateCallback(status int, release *lexactivator.Release, userData interface{} ) {
+	if status == lexactivator.LA_RELEASE_UPDATE_AVAILABLE {
+		fmt.Println("A new update is available for the app!")
+		fmt.Println("Release notes: ", release.Notes)
+	} else if status == lexactivator.LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED {
+		fmt.Println("A new update is available for the app but it's not allowed!")
+		fmt.Println("Release notes: ", release.Notes)
+	} else if status == lexactivator.LA_RELEASE_UPDATE_NOT_AVAILABLE {
+		fmt.Println("Current version is already latest!")
+	} else {
+		fmt.Println("Error code: ", status)
+	}
+}
+
 func initData() {
 	var status int
 	status = lexactivator.SetProductData("PASTE_CONTENT_OF_PRODUCT.DAT_FILE")
@@ -39,6 +53,7 @@ func initData() {
 		fmt.Println("Error Code:", status)
 		os.Exit(1)
 	}
+
 }
 
 func activate() {
@@ -118,6 +133,13 @@ func main() {
 			activateTrial()
 		}
 	}
+	// Checking for software release update
+	// status = lexactivator.CheckReleaseUpdate(softwareReleaseUpdateCallback, lexactivator.LA_RELEASES_ALL, nil);
+	// if lexactivator.LA_OK != status {
+	// 	fmt.Println("Error Code:", status)
+	// 	os.Exit(1)
+	// }
+
 	fmt.Println("Press any key to exit...")
 	bufio.NewReader(os.Stdin).ReadByte()
 }
