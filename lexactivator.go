@@ -843,7 +843,7 @@ func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int
    Make sure AuthenticateUser() function is called before calling this function.
 
    PARAMETERS:
-   * userLicenses - pointer to the array of structs that receives the values of the users' licenses.
+   * userLicenses - pointer to the array of UserLicense struct that receives the values of the user's licenses.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT
    LA_E_USER_NOT_AUTHENTICATED, LA_E_BUFFER_SIZE
@@ -1122,6 +1122,10 @@ func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release, interf
    FUNCTION: AuthenticateUser()
 
    PURPOSE: It sends the request to the Cryptlex servers to authenticate the user.
+
+   PARAMETERS:
+   * email - user email address.
+   * password - user password.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT
    LA_E_AUTHENTICATION_FAILED
