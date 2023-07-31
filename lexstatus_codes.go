@@ -187,6 +187,9 @@ const (
 	// Release channel not set.
 	LA_E_RELEASE_CHANNEL int = 86
 
+	// The user is not authenticated.
+	LA_E_USER_NOT_AUTHENTICATED int = 87
+
 	// Rate limit for API has reached, try again later.
 	LA_E_RATE_LIMIT int = 90
 
