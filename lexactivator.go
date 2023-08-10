@@ -484,6 +484,23 @@ func SetCryptlexHost(host string) int {
 }
 
 /*
+    FUNCTION: SetTwoFactorAuthenticationCode()
+
+    PURPOSE: Sets the two-factor authentication code for the user authentication.
+
+    PARAMETERS:
+    * twoFactorAuthenticationCode - the 2FA code
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID
+*/
+func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
+   cTwoFactorAuthenticationCode := goToCString(twoFactorAuthenticationCode)
+   status := C.SetTwoFactorAuthenticationCode(cTwoFactorAuthenticationCode)
+   freeCString(cTwoFactorAuthenticationCode)
+   return int(status)
+}
+
+/*
    FUNCTION: GetProductMetadata()
 
    PURPOSE: Gets the product metadata as set in the dashboard.
