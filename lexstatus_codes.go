@@ -190,6 +190,12 @@ const (
 	// The user is not authenticated.
 	LA_E_USER_NOT_AUTHENTICATED int = 87
 
+	// The two-factor authentication code for the user authentication is missing.
+	LA_E_TWO_FACTOR_AUTHENTICATION_CODE_MISSING int = 88
+
+	// The two-factor authentication code provided by the user is invalid.
+	LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID int = 89
+
 	// Rate limit for API has reached, try again later.
 	LA_E_RATE_LIMIT int = 90
 
@@ -198,4 +204,7 @@ const (
 
 	// Client error.
 	LA_E_CLIENT int = 92
+
+	// The user account has been temporarily locked for 5 mins due to 5 failed attempts.
+	LA_E_LOGIN_TEMPORARILY_LOCKED int = 100
 )
