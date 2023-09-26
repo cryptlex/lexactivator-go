@@ -167,6 +167,33 @@ func SetDataDirectory(directoryPath string) int {
 }
 
 /*
+    FUNCTION: SetDebugMode()
+
+    PURPOSE: Enables network logs.
+
+    This function should be used for network testing only in case of network errors.
+    By default logging is disabled.
+
+    This function generates the lexactivator-logs.log file in the same directory
+    where the application is running.
+
+    PARAMETERS :
+    *enable - true or false to enable or disable logging.
+
+    RETURN CODES : LA_OK
+*/
+func SetDebugMode(enable bool) int {
+   var cEnable C.uint
+   if enable {
+       cEnable = 1
+   } else {
+       cEnable = 0
+   }
+   status := C.SetDebugMode(cEnable)
+   return int(status)
+}
+
+/*
    FUNCTION: SetCustomDeviceFingerprint()
 
    PURPOSE: In case you don't want to use the LexActivator's advanced
