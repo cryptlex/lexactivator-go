@@ -207,4 +207,13 @@ const (
 
 	// The user account has been temporarily locked for 5 mins due to 5 failed attempts.
 	LA_E_LOGIN_TEMPORARILY_LOCKED int = 100
+
+	// Invalid authentication ID token.
+	LA_E_AUTHENTICATION_ID_TOKEN int = 101
+
+	// OIDC SSO is not enabled.
+	LA_E_OIDC_SSO_NOT_ENABLED int = 102
+
+	// The allowed users for this account has reached its limit.
+	LA_E_USERS_LIMIT_REACHED int = 103
 )
