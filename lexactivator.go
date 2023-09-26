@@ -167,6 +167,33 @@ func SetDataDirectory(directoryPath string) int {
 }
 
 /*
+    FUNCTION: SetDebugMode()
+
+    PURPOSE: Enables network logs.
+
+    This function should be used for network testing only in case of network errors.
+    By default logging is disabled.
+
+    This function generates the lexactivator-logs.log file in the same directory
+    where the application is running.
+
+    PARAMETERS :
+    *enable - true or false to enable or disable logging.
+
+    RETURN CODES : LA_OK
+*/
+func SetDebugMode(enable bool) int {
+   var cEnable C.uint
+   if enable {
+       cEnable = 1
+   } else {
+       cEnable = 0
+   }
+   status := C.SetDebugMode(cEnable)
+   return int(status)
+}
+
+/*
    FUNCTION: SetCustomDeviceFingerprint()
 
    PURPOSE: In case you don't want to use the LexActivator's advanced
@@ -1187,6 +1214,25 @@ func AuthenticateUser(email string, password string) int {
    status := C.AuthenticateUser(cEmail, cPassword)
    freeCString(cEmail)
 	freeCString(cPassword)
+   return int(status)
+}
+
+/*
+    FUNCTION: AuthenticateUserWithIdToken()
+
+    PURPOSE: Authenticates the user via OIDC Id token.
+
+    PARAMETER:
+    * idToken - The id token obtained from the OIDC provider.
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, 
+    LA_E_AUTHENTICATION_FAILED, LA_E_LOGIN_TEMPORARILY_LOCKED, LA_E_AUTHENTICATION_ID_TOKEN,
+    LA_E_OIDC_SSO_NOT_ENABLED, LA_E_USERS_LIMIT_REACHED
+*/
+func AuthenticateUserWithIdToken(idToken string) int {
+   cIdToken := goToCString(idToken)
+   status := C.AuthenticateUserWithIdToken(cIdToken)
+   freeCString(cIdToken)
    return int(status)
 }
 
