@@ -178,7 +178,7 @@ func SetDataDirectory(directoryPath string) int {
    where the application is running.
 
    PARAMETERS :
-   *enable - 0 or 1 to enable or disable logging.
+   *enable - 0 or 1 to disable or enable logging.
 
    RETURN CODES : LA_OK
 */
