@@ -953,6 +953,25 @@ func GetLicenseType(licenseType *string) int {
 }
 
 /*
+   FUNCTION: GetActivationId()
+
+   PURPOSE: Gets the activation id.
+
+   PARAMETERS:
+   * id - pointer to a buffer that receives the value of the string
+   * length - size of the buffer pointed to by the id parameter
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+   LA_E_BUFFER_SIZE
+*/
+func GetActivationId(id *string) int {
+   var cActivationId = getCArray()
+   status := C.GetActivationId(&cActivationId[0], maxCArrayLength)
+   *id = ctoGoString(&cActivationId[0])
+   return int(status)
+}
+
+/*
    FUNCTION: GetActivationMetadata()
 
    PURPOSE: Gets the activation metadata.
