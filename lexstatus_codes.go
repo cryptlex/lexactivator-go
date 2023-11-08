@@ -216,4 +216,7 @@ const (
 
 	// The allowed users for this account has reached its limit.
 	LA_E_USERS_LIMIT_REACHED int = 103
+
+	// OS user has changed since activation and the license is user-locked.
+	LA_E_OS_USER int = 104
 )
