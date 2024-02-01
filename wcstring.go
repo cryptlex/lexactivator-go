@@ -18,6 +18,8 @@ const (
 func goToCString(goString string) *C.ushort {
 	bytes := []rune(goString)
 	encodedBytes := utf16.Encode(bytes)
+	// Ensure the slice is null-terminated
+	encodedBytes = append(encodedBytes, 0)
 	cString := (*C.ushort)(unsafe.Pointer(&encodedBytes[0]))
 	return cString
 }
