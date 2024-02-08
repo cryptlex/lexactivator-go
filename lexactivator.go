@@ -20,8 +20,8 @@ void newReleaseUpdateCallbackCgoGateway(int status, const char* releaseJson, voi
 import "C"
 import (
 	"encoding/json"
+	"strings"
 	"unsafe"
-   "strings"
 )
 
 type callbackType func(int)
@@ -704,6 +704,41 @@ func GetLicenseTotalActivations(totalActivations *uint) int {
 	*totalActivations = uint(cTotalActivations)
 	return int(status)
 }
+
+/*
+   FUNCTION: GetLicenseAllowedDeactivations()
+
+   PURPOSE: Gets the allowed deactivations of the license.
+
+   PARAMETERS:
+   * allowedDeactivations - pointer to the integer that receives the value
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
+*/
+func GetLicenseAllowedDeactivations(allowedDeactivations *uint) int {
+	var cAllowedDeactivations C.uint
+	status := C.GetLicenseAllowedDeactivations(&cAllowedDeactivations)
+	*allowedDeactivations = uint(cAllowedDeactivations)
+	return int(status)
+}
+
+/*
+   FUNCTION: GetLicenseTotalDeactivations()
+
+   PURPOSE: Gets the total deactivations of the license.
+
+   PARAMETERS:
+   * totalDeactivations - pointer to the integer that receives the value
+
+   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
+*/
+func GetLicenseTotalDeactivations(totalDeactivations *uint) int {
+	var cTotalDeactivations C.uint
+	status := C.GetLicenseTotalDeactivations(&cTotalDeactivations)
+	*totalDeactivations = uint(cTotalDeactivations)
+	return int(status)
+}
+
 
 /*
    FUNCTION: GetLicenseCreationDate()
