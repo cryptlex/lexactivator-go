@@ -13,7 +13,7 @@ import (
 
 func main() {
 	baseURL := "https://dl.cryptlex.com/downloads/"
-      libVersion :=  "v3.25.2";
+      libVersion :=  "v3.26.0";
 	basePath := "./libs/"
 	fmt.Println("Downloading LexActivator libs " + libVersion + " ...")
 	url := baseURL + libVersion + "/LexActivator-Static-Mac.zip"
