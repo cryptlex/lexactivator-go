@@ -305,7 +305,7 @@ func SetActivationLeaseDuration(leaseDuration uint) int {
 
    PARAMETERS:
    * key - string of maximum length 256 characters with utf-8 encoding.
-   * value - string of maximum length 256 characters with utf-8 encoding.
+   * value - string of maximum length 4096 characters with utf-8 encoding.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_METADATA_KEY_LENGTH,
    LA_E_METADATA_VALUE_LENGTH, LA_E_ACTIVATION_METADATA_LIMIT
@@ -329,7 +329,7 @@ func SetActivationMetadata(key string, value string) int {
 
    PARAMETERS:
    * key - string of maximum length 256 characters with utf-8 encoding.
-   * value - string of maximum length 256 characters with utf-8 encoding.
+   * value - string of maximum length 4096 characters with utf-8 encoding.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_LENGTH,
    LA_E_METADATA_VALUE_LENGTH, LA_E_TRIAL_ACTIVATION_METADATA_LIMIT
