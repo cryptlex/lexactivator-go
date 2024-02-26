@@ -117,7 +117,7 @@ const (
 	// Metadata key length is more than 256 characters.
 	LA_E_METADATA_KEY_LENGTH int = 64
 
-	// Metadata value length is more than 256 characters.
+	// Metadata value length is more than 4096 characters.
 	LA_E_METADATA_VALUE_LENGTH int = 65
 
 	// The license has reached it's metadata fields limit.
