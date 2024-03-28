@@ -30,6 +30,7 @@ type releaseCallbackType func(int, *Release, interface{})
 const (
 	LA_USER      uint = 1
 	LA_SYSTEM    uint = 2
+   LA_ALL_USERS uint = 3
 	LA_IN_MEMORY uint = 4
 )
 
@@ -122,9 +123,21 @@ func SetProductData(productData string) int {
    * productId - the unique product id of your application as mentioned
      on the product page in the dashboard.
 
-   * flags - depending upon whether your application requires admin/root
-     permissions to run or not, this parameter can have one of the following
-     values: LA_SYSTEM, LA_USER, LA_IN_MEMORY
+   * flags - depending on your application's requirements, choose one of 
+     the following values: LA_USER, LA_SYSTEM, LA_IN_MEMORY, LA_ALL_USERS.
+
+     LA_USER: This flag indicates that the application does not require
+     admin or root permissions to run.
+
+     LA_SYSTEM: This flag indicates that the application must be run with admin or 
+     root permissions.
+
+     LA_IN_MEMORY: This flag will store activation data in memory. Thus, requires 
+     re-activation on every start of the application and should only be used in floating
+     licenses.
+
+     LA_ALL_USERS: This flag is specifically designed for Windows and should be used 
+     for system-wide activations.
 
    RETURN CODES: LA_OK, LA_E_WMIC, LA_E_PRODUCT_FILE, LA_E_PRODUCT_DATA, LA_E_PRODUCT_ID,
    LA_E_SYSTEM_PERMISSION
