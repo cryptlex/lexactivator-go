@@ -200,6 +200,32 @@ func SetDebugMode(enable uint) int {
    status := C.SetDebugMode(cEnable)
    return int(status)
 }
+/*
+FUNCTION: SetCacheMode()
+
+PURPOSE: Enables or disables in-memory caching for LexActivator.
+
+This function is designed to control caching
+behavior to suit specific application requirements. Caching is enabled by default to enhance performance.
+
+Disabling caching is recommended in environments where multiple processes access the same license on a
+single machine and require real-time updates to the license state.
+
+PARAMETERS :
+* enable - 0 or 1 to disable or enable in-memory caching.
+
+RETURN CODES: LA_OK, LA_E_PRODUCT_ID
+*/
+func SetCacheMode(enable bool) int {
+	var cEnable C.uint
+	if enable {
+		cEnable = 1
+	} else {
+		cEnable = 0
+	}
+	status := C.SetCacheMode(cEnable)
+	return int(status)
+}
 
 /*
    FUNCTION: SetCustomDeviceFingerprint()
