@@ -212,7 +212,7 @@ Disabling caching is recommended in environments where multiple processes access
 single machine and require real-time updates to the license state.
 
 PARAMETERS :
-* enable - 0 or 1 to disable or enable in-memory caching.
+* enable - false or true to disable or enable in-memory caching.
 
 RETURN CODES: LA_OK, LA_E_PRODUCT_ID
 */
