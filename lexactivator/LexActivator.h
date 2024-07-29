@@ -533,13 +533,13 @@ LEXACTIVATOR_API int LA_CC GetLicenseMetadata(CSTRTYPE key, STRTYPE value, uint3
 
     PARAMETERS:
     * name - name of the meter attribute
-    * allowedUses - pointer to the integer that receives the value
+    * allowedUses - pointer to the integer that receives the value. A value of -1 indicates unlimited allowed uses.
     * totalUses - pointer to the integer that receives the value
     * grossUses - pointer to the integer that receives the value
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
 */
-LEXACTIVATOR_API int LA_CC GetLicenseMeterAttribute(CSTRTYPE name, uint32_t *allowedUses, uint32_t *totalUses, uint32_t *grossUses);
+LEXACTIVATOR_API int LA_CC GetLicenseMeterAttribute(CSTRTYPE name, int64_t *allowedUses, uint64_t *totalUses, uint64_t *grossUses);
 
 /*
     FUNCTION: GetLicenseKey()
@@ -560,11 +560,12 @@ LEXACTIVATOR_API int LA_CC GetLicenseKey(STRTYPE licenseKey, uint32_t length);
     PURPOSE: Gets the allowed activations of the license.
 
     PARAMETERS:
-    * allowedActivations - pointer to the integer that receives the value
+    * allowedActivations - pointer to the integer that receives the value.
+      A value of -1 indicates unlimited number of activations.
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 */
-LEXACTIVATOR_API int LA_CC GetLicenseAllowedActivations(uint32_t *allowedActivations);
+LEXACTIVATOR_API int LA_CC GetLicenseAllowedActivations(int64_t *allowedActivations);
 
 /*
     FUNCTION: GetLicenseTotalActivations()
@@ -584,11 +585,12 @@ LEXACTIVATOR_API int LA_CC GetLicenseTotalActivations(uint32_t *totalActivations
     PURPOSE: Gets the allowed deactivations of the license.
 
     PARAMETERS:
-    * allowedDeactivations - pointer to the integer that receives the value
+    * allowedDeactivations - pointer to the integer that receives the value.
+      A value of -1 indicates unlimited number of deactivations.
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 */
-LEXACTIVATOR_API int LA_CC GetLicenseAllowedDeactivations(uint32_t *allowedDeactivations);
+LEXACTIVATOR_API int LA_CC GetLicenseAllowedDeactivations(int64_t *allowedDeactivations);
 
 /*
     FUNCTION: GetLicenseTotalDeactivations()
