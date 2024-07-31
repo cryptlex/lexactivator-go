@@ -324,12 +324,13 @@ func SetLicenseCallback(callbackFunction func(int)) int {
     lease duration property is enabled.
 
     PARAMETERS:
-    * leaseDuration - value of the lease duration.
+    * leaseDuration - value of the lease duration. A value of -1 indicates unlimited 
+      lease duration.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 */
-func SetActivationLeaseDuration(leaseDuration uint) int {
-   cLeaseDuration := (C.uint)(leaseDuration)
+func SetActivationLeaseDuration(leaseDuration int64) int {
+   cLeaseDuration := (C.int64_t)(leaseDuration)
    status := C.SetActivationLeaseDuration(cLeaseDuration)
    return int(status)
 }
