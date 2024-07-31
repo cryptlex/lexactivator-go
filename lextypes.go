@@ -41,8 +41,8 @@ type OrganizationAddress struct {
 }
 
 type UserLicense struct {
-    AllowedActivations int   `json:"allowedActivations"`
-    AllowedDeactivations int `json:"allowedDeactivations"`
-    Key string               `json:"key"`
-    Type string              `json:"type"`
+    AllowedActivations int64   `json:"allowedActivations"`
+    AllowedDeactivations int64 `json:"allowedDeactivations"`
+    Key string                 `json:"key"`
+    Type string                `json:"type"`
 }
