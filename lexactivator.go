@@ -324,12 +324,13 @@ func SetLicenseCallback(callbackFunction func(int)) int {
     lease duration property is enabled.
 
     PARAMETERS:
-    * leaseDuration - value of the lease duration.
+    * leaseDuration - value of the lease duration. A value of -1 indicates unlimited 
+      lease duration.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 */
-func SetActivationLeaseDuration(leaseDuration uint) int {
-   cLeaseDuration := (C.uint)(leaseDuration)
+func SetActivationLeaseDuration(leaseDuration int64) int {
+   cLeaseDuration := (C.int64_t)(leaseDuration)
    status := C.SetActivationLeaseDuration(cLeaseDuration)
    return int(status)
 }
@@ -674,21 +675,21 @@ func GetLicenseMetadata(key string, value *string) int {
 
    PARAMETERS:
    * name - name of the meter attribute
-   * allowedUses - pointer to the integer that receives the value
+   * allowedUses - pointer to the integer that receives the value. A value of -1 indicates unlimited allowed uses.
    * totalUses - pointer to the integer that receives the value
    * grossUses - pointer to the integer that receives the value
 
    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
 */
-func GetLicenseMeterAttribute(name string, allowedUses *uint, totalUses *uint, grossUses *uint) int {
+func GetLicenseMeterAttribute(name string, allowedUses *int64, totalUses *uint64, grossUses *uint64) int {
 	cName := goToCString(name)
-	var cAllowedUses C.uint
-	var cTotalUses C.uint
-	var cGrossUses C.uint
+	var cAllowedUses C.int64_t
+	var cTotalUses C.uint64_t
+	var cGrossUses C.uint64_t
 	status := C.GetLicenseMeterAttribute(cName, &cAllowedUses, &cTotalUses, &cGrossUses)
-	*allowedUses = uint(cAllowedUses)
-	*totalUses = uint(cTotalUses)
-	*grossUses = uint(cGrossUses)
+	*allowedUses = int64(cAllowedUses)
+	*totalUses = uint64(cTotalUses)
+	*grossUses = uint64(cGrossUses)
 	freeCString(cName)
 	return int(status)
 }
@@ -716,14 +717,15 @@ func GetLicenseKey(licenseKey *string) int {
    PURPOSE: Gets the allowed activations of the license.
 
    PARAMETERS:
-   * allowedActivations - pointer to the integer that receives the value
+   * allowedActivations - pointer to the integer that receives the value.
+     A value of -1 indicates unlimited number of activations.
 
    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 */
-func GetLicenseAllowedActivations(allowedActivations *uint) int {
-	var cAllowedActivations C.uint
+func GetLicenseAllowedActivations(allowedActivations *int64) int {
+	var cAllowedActivations C.int64_t
 	status := C.GetLicenseAllowedActivations(&cAllowedActivations)
-	*allowedActivations = uint(cAllowedActivations)
+	*allowedActivations = int64(cAllowedActivations)
 	return int(status)
 }
 
@@ -750,14 +752,15 @@ func GetLicenseTotalActivations(totalActivations *uint) int {
    PURPOSE: Gets the allowed deactivations of the license.
 
    PARAMETERS:
-   * allowedDeactivations - pointer to the integer that receives the value
+   * allowedDeactivations - pointer to the integer that receives the value.
+     A value of -1 indicates unlimited number of deactivations.
 
    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 */
-func GetLicenseAllowedDeactivations(allowedDeactivations *uint) int {
-	var cAllowedDeactivations C.uint
+func GetLicenseAllowedDeactivations(allowedDeactivations *int64) int {
+	var cAllowedDeactivations C.int64_t
 	status := C.GetLicenseAllowedDeactivations(&cAllowedDeactivations)
-	*allowedDeactivations = uint(cAllowedDeactivations)
+	*allowedDeactivations = int64(cAllowedDeactivations)
 	return int(status)
 }
 
