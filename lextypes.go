@@ -14,6 +14,11 @@ type ReleaseFile struct {
 	UpdatedAt  string `json:"updatedAt"`
 }
 
+type Metadata struct {
+    Key   string `json:"key"`
+    Value string `json:"value"`
+}
+
 type Release struct {
     TotalFiles  int       	  `json:"totalFiles"`
     IsPrivate   bool          `json:"isPrivate"`
@@ -41,15 +46,9 @@ type OrganizationAddress struct {
 }
 
 type UserLicense struct {
-    // The allowed activations of the license. A value of -1 indicates unlimited number of activations.
-    AllowedActivations int64   `json:"allowedActivations"`
-
-    // The allowed activations of the license. A value of -1 indicates unlimited number of deactivations.
-    AllowedDeactivations int64 `json:"allowedDeactivations"`
-
-    // The license key.
-    Key string                 `json:"key"`
-
-    // The license type (node-locked or hosted-floating).
-    Type string                `json:"type"`
+    AllowedActivations      int64       `json:"allowedActivations"`
+    AllowedDeactivations    int64       `json:"allowedDeactivations"`
+    Key                     string      `json:"key"`
+    Type                    string      `json:"type"`
+    Metadata                []Metadata  `json:"metadata"`
 }
