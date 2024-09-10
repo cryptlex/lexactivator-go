@@ -58,6 +58,6 @@ type UserLicense struct {
     //The license type (node-locked or hosted-floating).
     Type                    string      `json:"type"`
     
-    //Metadata linked to license
+    //License metadata with view_permission set to "user".
     Metadata                []Metadata  `json:"metadata"`
 }
