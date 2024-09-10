@@ -46,9 +46,18 @@ type OrganizationAddress struct {
 }
 
 type UserLicense struct {
+     // The allowed activations of the license. A value of -1 indicates unlimited number of activations.
     AllowedActivations      int64       `json:"allowedActivations"`
+    
+     // The allowed activations of the license. A value of -1 indicates unlimited number of deactivations.
     AllowedDeactivations    int64       `json:"allowedDeactivations"`
+    
+    // The license key.
     Key                     string      `json:"key"`
+    
+    //The license type (node-locked or hosted-floating).
     Type                    string      `json:"type"`
+    
+    //Metadata linked to license
     Metadata                []Metadata  `json:"metadata"`
 }
