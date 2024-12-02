@@ -26,6 +26,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	err = downloadFile(url, "libs/vc17/arm64/LexActivator.dll", basePath+"windows_arm64/LexActivator.dll")
+	if err != nil {
+		panic(err)
+	}
 	url = baseURL + libVersion + "/LexActivator-Static-Linux.zip"
 	err = downloadFile(url, "libs/gcc/amd64/libLexActivator.a", basePath+"linux_amd64/libLexActivator.a")
 	if err != nil {
