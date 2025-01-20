@@ -223,6 +223,6 @@ const (
 	// Invalid permission flag.
 	LA_E_INVALID_PERMISSION_FLAG int = 105
 
-	// The free plan has reached it's activation limit.
+	// The free plan has reached its activation limit.
 	LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED int = 106
 )
