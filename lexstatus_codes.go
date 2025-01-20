@@ -219,4 +219,10 @@ const (
 
 	// OS user has changed since activation and the license is user-locked.
 	LA_E_OS_USER int = 104
+
+	// Invalid permission flag.
+	LA_E_INVALID_PERMISSION_FLAG int = 105
+
+	// The free plan has reached it's activation limit.
+	LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED int = 106
 )
