@@ -817,6 +817,23 @@ func GetLicenseActivationDate(activationDate *uint) int {
 }
 
 /*
+    FUNCTION: GetActivationCreationDate()
+    
+    PURPOSE: Gets the activation creation date timestamp for the current activation.
+    
+    PARAMETERS:
+    * activationCreationDate - pointer to the integer that receives the value
+    
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
+*/
+func GetActivationCreationDate(activationCreationDate *uint) int {
+   var cActivationCreationDate C.uint
+   status := C.GetActivationCreationDate(&cActivationCreationDate)
+   *activationCreationDate = uint(cActivationCreationDate)
+   return int(status)
+}
+
+/*
    FUNCTION: GetLicenseExpiryDate()
 
    PURPOSE: Gets the license expiry date timestamp.
