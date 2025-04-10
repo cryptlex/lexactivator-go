@@ -1236,6 +1236,99 @@ func GetLibraryVersion(libraryVersion *string) int {
 }
 
 /*
+    FUNCTION: GetLicenseEntitlementSetName()
+    
+    PURPOSE: Gets the license entitlement set name.
+    
+    PARAMETERS:
+    * name - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the name parameter
+    
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
+*/
+func GetLicenseEntitlementSetName(name *string) int {
+	var cName = getCArray()
+	status := C.GetLicenseEntitlementSetName(&cName[0], maxCArrayLength)
+	*name = ctoGoString(&cName[0])
+	return int(status)
+}
+
+/*
+    FUNCTION: GetEntitlementSetDisplayName()
+
+    PURPOSE: Gets the entitlement set display name.
+
+    PARAMETERS:
+    * displayName - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the displayName parameter
+    
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE,
+    LA_E_ENTITLEMENT_SET_NOT_LINKED
+*/
+func GetLicenseEntitlementSetDisplayName(displayName *string) int {
+	var cDisplayName = getCArray()
+	status := C.GetLicenseEntitlementSetDisplayName(&cDisplayName[0], maxCArrayLength)
+	*displayName = ctoGoString(&cDisplayName[0])
+	return int(status)
+}
+
+/*
+    FUNCTION: GetFeatureEntitlements()
+
+    PURPOSE: Gets the feature entitlements associated with the license.
+
+    Feature entitlements can be linked directly to a license (license feature entitlements) 
+    or via entitlement sets. If a feature entitlement is defined in both, the value from 
+    the license feature entitlement takes precedence, overriding the entitlement set value.
+    
+    PARAMETERS:
+    * featureEntitlements - pointer to the struct that receives the values of the feature entitlements.
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+    LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENTS_INVALID
+*/
+func GetFeatureEntitlements(featureEntitlements *[]FeatureEntitlement) int {
+   var cFeatureEntitlements = getCArray()
+   featureEntitlementsJson := ""
+   status := C.GetFeatureEntitlementsInternal(&cFeatureEntitlements[0], maxCArrayLength)
+   featureEntitlementsJson = strings.TrimRight(ctoGoString(&cFeatureEntitlements[0]), "\x00")
+   if featureEntitlementsJson != "" {
+      entitlements := []byte(featureEntitlementsJson)
+      json.Unmarshal(entitlements, featureEntitlements)
+   }
+   return int(status)
+}
+
+/*
+    FUNCTION: GetFeatureEntitlement()
+
+    PURPOSE: Gets the feature entitlement associated with the license.
+
+    Feature entitlements can be linked directly to a license (license feature entitlements) 
+    or via entitlement sets. If a feature entitlement is defined in both, the value from 
+    the license feature entitlement takes precedence, overriding the entitlement set value.
+
+    PARAMETERS:
+    * featureName - name of the feature
+    * featureEntitlement - pointer to the struct that receives the values of the feature entitlement
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+    LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENT_NOT_FOUND, LA_E_FEATURE_ENTITLEMENTS_INVALID
+*/
+func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitlement) int {
+   cFeatureName := goToCString(featureName)
+   var cFeatureEntitlement = getCArray()
+   status := C.GetFeatureEntitlementInternal(cFeatureName, &cFeatureEntitlement[0])
+   featureEntitlementJson := strings.TrimRight(ctoGoString(&cFeatureEntitlement[0]), "\x00")
+   if featureEntitlementJson != "" {
+      entitlement := []byte(featureEntitlementJson)
+      json.Unmarshal(entitlement, featureEntitlement)
+   }
+   freeCString(cFeatureName)
+   return int(status)
+}
+
+/*
    FUNCTION: CheckForReleaseUpdate()
 
    PURPOSE: Checks whether a new release is available for the product.
