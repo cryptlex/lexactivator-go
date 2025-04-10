@@ -282,6 +282,8 @@ func SetLicenseKey(licenseKey string) int {
    * password - user password.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
+   
+    NOTE: This function is deprecated. Use AuthenticateUser() instead.
 */
 func SetLicenseUserCredential(email string, password string) int {
 	cEmail := goToCString(email)
@@ -395,6 +397,8 @@ func SetTrialActivationMetadata(key string, value string) int {
    * appVersion - string of maximum length 256 characters with utf-8 encoding.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_APP_VERSION_LENGTH
+
+   NOTE: This function is deprecated. Use SetReleaseVersion() instead.
 */
 func SetAppVersion(appVersion string) int {
 	cAppVersion := goToCString(appVersion)
@@ -595,6 +599,8 @@ func GetProductMetadata(key string, value *string) int {
 
    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
    LA_E_BUFFER_SIZE
+
+    NOTE: This function is deprecated. Use GetLicenseEntitlementSetName() instead.
 */
 
 func GetProductVersionName(name *string) int {
@@ -615,6 +621,8 @@ func GetProductVersionName(name *string) int {
 
    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
    LA_E_BUFFER_SIZE
+
+   NOTE: This function is deprecated. Use GetLicenseEntitlementSetDisplayName() instead.
 */
 func GetProductVersionDisplayName(displayName *string) int {
 	var cDisplayName = getCArray()
@@ -1343,6 +1351,8 @@ func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitl
    * releaseUpdateCallback - name of the callback function.
 
    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT
+
+   NOTE: This function is deprecated. Use CheckForReleaseUpdate() instead.
 */
 func CheckForReleaseUpdate(platform string, version string, channel string, callbackFunction func(int)) int {
 	cPlatform := goToCString(platform)
