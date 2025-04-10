@@ -247,6 +247,8 @@ LEXACTIVATOR_API int LA_CC SetLicenseKey(CSTRTYPE licenseKey);
     * password - user password.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
+
+    NOTE: This function is deprecated. Use AuthenticateUser() instead.
 */
 LEXACTIVATOR_API int LA_CC SetLicenseUserCredential(CSTRTYPE email, CSTRTYPE password);
 
@@ -331,6 +333,8 @@ LEXACTIVATOR_API int LA_CC SetTrialActivationMetadata(CSTRTYPE key, CSTRTYPE val
     * appVersion - string of maximum length 256 characters.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_APP_VERSION_LENGTH
+    
+    NOTE: This function is deprecated. Use SetReleaseVersion() instead.
 */
 LEXACTIVATOR_API int LA_CC SetAppVersion(CSTRTYPE appVersion);
 
@@ -480,6 +484,8 @@ LEXACTIVATOR_API int LA_CC GetProductMetadata(CSTRTYPE key, STRTYPE value, uint3
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
     LA_E_BUFFER_SIZE
+
+    NOTE: This function is deprecated. Use GetLicenseEntitlementSetName() instead.
 */
 LEXACTIVATOR_API int LA_CC GetProductVersionName(STRTYPE name, uint32_t length);
 
@@ -494,6 +500,8 @@ LEXACTIVATOR_API int LA_CC GetProductVersionName(STRTYPE name, uint32_t length);
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
     LA_E_BUFFER_SIZE
+
+    NOTE: This function is deprecated. Use GetLicenseEntitlementSetDisplayName() instead.
 */
 LEXACTIVATOR_API int LA_CC GetProductVersionDisplayName(STRTYPE displayName, uint32_t length);
 
@@ -1040,6 +1048,8 @@ LEXACTIVATOR_API int LA_CC CheckReleaseUpdateInternal(ReleaseCallbackTypeInterna
     * releaseUpdateCallback - name of the callback function.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT
+    
+    NOTE: This function is deprecated. Use CheckReleaseUpdate() instead.
 */
 LEXACTIVATOR_API int LA_CC CheckForReleaseUpdate(CSTRTYPE platform, CSTRTYPE version, CSTRTYPE channel, CallbackType releaseUpdateCallback);
 
