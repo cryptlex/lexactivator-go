@@ -523,7 +523,7 @@ enum LexStatusCodes
     /*
         CODE: LA_E_FEATURE_ENTITLEMENTS_INVALID
 
-        MESSAGE: The feature entitlements are invalid.
+        MESSAGE: Invalid feature entitlements.
     */
     LA_E_FEATURE_ENTITLEMENTS_INVALID = 107,
 
@@ -537,7 +537,7 @@ enum LexStatusCodes
     /*
         CODE: LA_E_ENTITLEMENT_SET_NOT_LINKED
 
-        MESSAGE: The entitlement set is not linked.
+        MESSAGE: No entitlement set is linked to the license.
     */
     LA_E_ENTITLEMENT_SET_NOT_LINKED = 109,
 };

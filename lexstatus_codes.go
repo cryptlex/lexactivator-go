@@ -229,12 +229,12 @@ const (
 	// The free plan has reached its activation limit.
 	LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED int = 106
 
-	// The feature entitlements are invalid.
+	// Invalid feature entitlements.
     LA_E_FEATURE_ENTITLEMENTS_INVALID int = 107
 
     // The feature entitlement does not exist.
     LA_E_FEATURE_ENTITLEMENT_NOT_FOUND int = 108
 
-    // The entitlement set is not linked
+    // No entitlement set is linked to the license.
     LA_E_ENTITLEMENT_SET_NOT_LINKED int = 109
 )
