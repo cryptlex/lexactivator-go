@@ -259,9 +259,11 @@ func SetLicenseKey(licenseKey string) int {
 }
 
 // SetLicenseUserCredential sets the license user email and password for authentication.
-//
+
 // This function must be called before ActivateLicense() or IsLicenseGenuine()
 // function if 'requireAuthentication' property of the license is set to true.
+//
+// Deprecated: This function is deprecated. Use AuthenticateUser() instead.
 //
 // Parameters:
 //   - email: user email address.
@@ -271,8 +273,6 @@ func SetLicenseKey(licenseKey string) int {
 //   LA_OK
 //   LA_E_PRODUCT_ID
 //   LA_E_LICENSE_KEY
-//
-// Deprecated: This function is deprecated. Use AuthenticateUser() instead.
 func SetLicenseUserCredential(email string, password string) int {
 	cEmail := goToCString(email)
 	cPassword := goToCString(password)
@@ -377,6 +377,8 @@ func SetTrialActivationMetadata(key string, value string) int {
 // The app version appears along with the activation details in dashboard. It
 // is also used to generate app analytics.
 //
+// Deprecated: This function is deprecated. Use SetReleaseVersion() instead.
+//
 // Parameters:
 //   - appVersion: string of maximum length 256 characters with utf-8 encoding.
 //
@@ -384,8 +386,6 @@ func SetTrialActivationMetadata(key string, value string) int {
 //   LA_OK
 //   LA_E_PRODUCT_ID
 //   LA_E_APP_VERSION_LENGTH
-//
-// Deprecated: This function is deprecated. Use SetReleaseVersion() instead.
 func SetAppVersion(appVersion string) int {
 	cAppVersion := goToCString(appVersion)
 	status := C.SetAppVersion(cAppVersion)
@@ -564,6 +564,8 @@ func GetProductMetadata(key string, value *string) int {
 
 // GetProductVersionName gets the product version name.
 //
+// Deprecated: This function is deprecated. Use GetLicenseEntitlementSetName() instead.
+//
 // Parameters:
 //   - name: pointer to a buffer that receives the value of the string
 //   - length: size of the buffer pointed to by the name parameter
@@ -576,8 +578,6 @@ func GetProductMetadata(key string, value *string) int {
 //   LA_E_TIME_MODIFIED
 //   LA_E_PRODUCT_VERSION_NOT_LINKED
 //   LA_E_BUFFER_SIZE
-//
-// Deprecated: This function is deprecated. Use GetLicenseEntitlementSetName() instead.
 func GetProductVersionName(name *string) int {
 	var cName = getCArray()
 	status := C.GetProductVersionName(&cName[0], maxCArrayLength)
@@ -586,6 +586,8 @@ func GetProductVersionName(name *string) int {
 }
 
 // GetProductVersionDisplayName gets the product version display name.
+//
+// Deprecated: This function is deprecated. Use GetLicenseEntitlementSetDisplayName() instead.
 //
 // Parameters:
 //   - displayName: pointer to a string that receives the value.
@@ -599,8 +601,6 @@ func GetProductVersionName(name *string) int {
 //   LA_E_TIME_MODIFIED
 //   LA_E_PRODUCT_VERSION_NOT_LINKED
 //   LA_E_BUFFER_SIZE
-//
-// Deprecated: This function is deprecated. Use GetLicenseEntitlementSetDisplayName() instead.
 func GetProductVersionDisplayName(displayName *string) int {
 	var cDisplayName = getCArray()
 	status := C.GetProductVersionDisplayName(&cDisplayName[0], maxCArrayLength)
@@ -1357,6 +1357,8 @@ func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitl
 // This function should only be used if you manage your releases through
 // Cryptlex release management API.
 //
+// Deprecated: This function is deprecated. Use CheckForReleaseUpdate() instead.
+//
 // Parameters:
 //   - platform: release platform e.g. windows, macos, linux
 //   - version: current release version
@@ -1368,8 +1370,6 @@ func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitl
 //   LA_E_PRODUCT_ID
 //   LA_E_LICENSE_KEY
 //   LA_E_RELEASE_VERSION_FORMAT
-//
-// Deprecated: This function is deprecated. Use CheckForReleaseUpdate() instead.
 func CheckForReleaseUpdate(platform string, version string, channel string, callbackFunction func(int)) int {
 	cPlatform := goToCString(platform)
 	cVersion := goToCString(version)
