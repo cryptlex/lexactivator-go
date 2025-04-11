@@ -61,22 +61,21 @@ func releaseUpdateCallbackWrapper(status int) {
 	}
 }
 
-/*
-   FUNCTION: SetProductFile()
-
-   PURPOSE: Sets the absolute path of the Product.dat file.
-
-   This function must be called on every start of your program
-   before any other functions are called.
-
-   PARAMETERS:
-   * filePath - absolute path of the product file (Product.dat)
-
-   RETURN CODES: LA_OK, LA_E_FILE_PATH, LA_E_PRODUCT_FILE
-
-   NOTE: If this function fails to set the path of product file, none of the
-   other functions will work.
-*/
+// SetProductFile sets the absolute path of the Product.dat file.
+//
+// This function must be called on every start of your program
+// before any other functions are called.
+//
+// Parameters:
+//   - filePath: absolute path of the product file (Product.dat)
+//
+// Return Codes: 
+//   LA_OK
+//   LA_E_FILE_PATH
+//   LA_E_PRODUCT_FILE
+//
+// Note: If this function fails to set the path of product file, none of the
+// other functions will work.
 func SetProductFile(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.SetProductFile(cFilePath)
@@ -84,25 +83,23 @@ func SetProductFile(filePath string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetProductData()
-
-   PURPOSE: Embeds the Product.dat file in the application.
-
-   It can be used instead of SetProductFile() in case you want
-   to embed the Product.dat file in your application.
-
-   This function must be called on every start of your program
-   before any other functions are called.
-
-   PARAMETERS:
-   * productData - content of the Product.dat file
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_DATA
-
-   NOTE: If this function fails to set the product data, none of the
-   other functions will work.
-*/
+// SetProductData embeds the Product.dat file in the application.
+//
+// It can be used instead of SetProductFile() in case you want
+// to embed the Product.dat file in your application.
+//
+// This function must be called on every start of your program
+// before any other functions are called.
+//
+// Parameters:
+//   - productData: content of the Product.dat file
+//
+// Return Codes: 
+//   LA_OK
+//   LA_E_PRODUCT_DATA
+//
+// NOTE: If this function fails to set the product data, none of the
+// other functions will work.
 func SetProductData(productData string) int {
 	cProductData := goToCString(productData)
 	status := C.SetProductData(cProductData)
@@ -110,41 +107,42 @@ func SetProductData(productData string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetProductId()
-
-   PURPOSE: Sets the product id of your application.
-
-   This function must be called on every start of your program before
-   any other functions are called, with the exception of SetProductFile()
-   or SetProductData() function.
-
-   PARAMETERS:
-   * productId - the unique product id of your application as mentioned
-     on the product page in the dashboard.
-
-   * flags - depending on your application's requirements, choose one of 
-     the following values: LA_USER, LA_SYSTEM, LA_IN_MEMORY, LA_ALL_USERS.
-
-     LA_USER: This flag indicates that the application does not require
-     admin or root permissions to run.
-
-     LA_SYSTEM: This flag indicates that the application must be run with admin or 
-     root permissions.
-
-     LA_IN_MEMORY: This flag will store activation data in memory. Thus, requires 
-     re-activation on every start of the application and should only be used in floating
-     licenses.
-
-     LA_ALL_USERS: This flag is specifically designed for Windows and should be used 
-     for system-wide activations.
-
-   RETURN CODES: LA_OK, LA_E_WMIC, LA_E_PRODUCT_FILE, LA_E_PRODUCT_DATA, LA_E_PRODUCT_ID,
-   LA_E_SYSTEM_PERMISSION
-
-   NOTE: If this function fails to set the product id, none of the other
-   functions will work.
-*/
+// SetProductId sets the product id of your application.
+//
+// This function must be called on every start of your program before
+// any other functions are called, with the exception of SetProductFile()
+// or SetProductData() function.
+//
+// Parameters:
+//   - productId: the unique product id of your application as mentioned
+//     on the product page in the dashboard.
+//
+//   - flags: depending on your application's requirements, choose one of 
+//     the following values: LA_USER, LA_SYSTEM, LA_IN_MEMORY, LA_ALL_USERS.
+//
+//     LA_USER: This flag indicates that the application does not require
+//     admin or root permissions to run.
+//
+//     LA_SYSTEM: This flag indicates that the application must be run with admin or 
+//     root permissions.
+//
+//     LA_IN_MEMORY: This flag will store activation data in memory. Thus, requires 
+//     re-activation on every start of the application and should only be used in floating
+//     licenses.
+//
+//     LA_ALL_USERS: This flag is specifically designed for Windows and should be used 
+//     for system-wide activations.
+//
+// Return Codes: 
+//   LA_OK
+//   LA_E_WMIC
+//   LA_E_PRODUCT_FILE
+//   LA_E_PRODUCT_DATA
+//   LA_E_PRODUCT_ID
+//   LA_E_SYSTEM_PERMISSION
+//
+// NOTE: If this function fails to set the product id, none of the other
+// functions will work.
 func SetProductId(productId string, flags uint) int {
 	cProductId := goToCString(productId)
 	cFlags := (C.uint)(flags)
@@ -153,25 +151,22 @@ func SetProductId(productId string, flags uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetDataDirectory()
-
-   PURPOSE: In case you want to change the default directory used by LexActivator to
-   store the activation data on Linux and macOS, this function can be used to
-   set a different directory.
-
-   If you decide to use this function, then it must be called on every start of
-   your program before calling SetProductFile() or SetProductData() function.
-
-   Please ensure that the directory exists and your app has read and write
-   permissions in the directory.
-
-   PARAMETERS:
-   * directoryPath - absolute path of the directory.
-
-   RETURN CODES: LA_OK, LA_E_FILE_PERMISSION
-
-*/
+// SetDataDirectory In case you want to change the default directory used by LexActivator to
+// store the activation data on Linux and macOS, this function can be used to
+// set a different directory.
+//
+// If you decide to use this function, then it must be called on every start of
+// your program before calling SetProductFile() or SetProductData() function.
+//
+// Please ensure that the directory exists and your app has read and write
+// permissions in the directory.
+//
+// Parameters:
+//   - directoryPath: absolute path of the directory.
+//
+// Return Codes: 
+//   LA_OK
+//   LA_E_FILE_PERMISSION
 func SetDataDirectory(directoryPath string) int {
 	cDirectoryPath := goToCString(directoryPath)
 	status := C.SetDataDirectory(cDirectoryPath)
@@ -179,43 +174,39 @@ func SetDataDirectory(directoryPath string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetDebugMode()
-
-   PURPOSE: Enables network logs.
-
-   This function should be used for network testing only in case of network errors.
-   By default logging is disabled.
-
-   This function generates the lexactivator-logs.log file in the same directory
-   where the application is running.
-
-   PARAMETERS :
-   *enable - 0 or 1 to disable or enable logging.
-
-   RETURN CODES : LA_OK
-*/
+// SetDebugMode enables network logs.
+//
+// This function should be used for network testing only in case of network errors.
+// By default logging is disabled.
+//
+// This function generates the lexactivator-logs.log file in the same directory
+// where the application is running.
+//
+// Parameters :
+//   - enable: 0 or 1 to disable or enable logging.
+//
+// Return Codes: 
+//   LA_OK
 func SetDebugMode(enable uint) int {
    cEnable := (C.uint)(enable)
    status := C.SetDebugMode(cEnable)
    return int(status)
 }
-/*
-FUNCTION: SetCacheMode()
 
-PURPOSE: Enables or disables in-memory caching for LexActivator.
-
-This function is designed to control caching
-behavior to suit specific application requirements. Caching is enabled by default to enhance performance.
-
-Disabling caching is recommended in environments where multiple processes access the same license on a
-single machine and require real-time updates to the license state.
-
-PARAMETERS :
-* enable - false or true to disable or enable in-memory caching.
-
-RETURN CODES: LA_OK, LA_E_PRODUCT_ID
-*/
+// SetCacheMode enables or disables in-memory caching for LexActivator.
+//
+// This function is designed to control caching
+// behavior to suit specific application requirements. Caching is enabled by default to enhance performance.
+//
+// Disabling caching is recommended in environments where multiple processes access the same license on a
+// single machine and require real-time updates to the license state.
+//
+// Parameters :
+//   - enable: false or true to disable or enable in-memory caching.
+//
+// Return Codes: 
+//   LA_OK
+//   LA_E_PRODUCT_ID
 func SetCacheMode(enable bool) int {
 	var cEnable C.uint
 	if enable {
@@ -227,24 +218,23 @@ func SetCacheMode(enable bool) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetCustomDeviceFingerprint()
-
-   PURPOSE: In case you don't want to use the LexActivator's advanced
-   device fingerprinting algorithm, this function can be used to set a custom
-   device fingerprint.
-
-   If you decide to use your own custom device fingerprint then this function must be
-   called on every start of your program immediately after calling SetProductFile()
-   or SetProductData() function.
-
-   The license fingerprint matching strategy is ignored if this function is used.
-
-   PARAMETERS:
-   * fingerprint - string of minimum length 64 characters and maximum length 256 characters.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_CUSTOM_FINGERPRINT_LENGTH
-*/
+// SetCustomDeviceFingerprint In case you don't want to use the LexActivator's advanced
+// device fingerprinting algorithm, this function can be used to set a custom
+// device fingerprint.
+//
+// If you decide to use your own custom device fingerprint then this function must be
+// called on every start of your program immediately after calling SetProductFile()
+// or SetProductData() function.
+//
+// The license fingerprint matching strategy is ignored if this function is used.
+//
+// Parameters:
+//   - fingerprint: string of minimum length 64 characters and maximum length 256 characters.
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_CUSTOM_FINGERPRINT_LENGTH
 func SetCustomDeviceFingerprint(fingerprint string) int {
 	cFingerprint := goToCString(fingerprint)
 	status := C.SetCustomDeviceFingerprint(cFingerprint)
@@ -252,16 +242,15 @@ func SetCustomDeviceFingerprint(fingerprint string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetLicenseKey()
-
-   PURPOSE: Sets the license key required to activate the license.
-
-   PARAMETERS:
-   * licenseKey - a valid license key.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
-*/
+// SetLicenseKey sets the license key required to activate the license.
+//
+// Parameters:
+//   - licenseKey: a valid license key.
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
 func SetLicenseKey(licenseKey string) int {
 	cLicenseKey := goToCString(licenseKey)
 	status := C.SetLicenseKey(cLicenseKey)
@@ -269,22 +258,21 @@ func SetLicenseKey(licenseKey string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetLicenseUserCredential()
-
-   PURPOSE: Sets the license user email and password for authentication.
-
-   This function must be called before ActivateLicense() or IsLicenseGenuine()
-   function if 'requireAuthentication' property of the license is set to true.
-
-   PARAMETERS:
-   * email - user email address.
-   * password - user password.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
-   
-    NOTE: This function is deprecated. Use AuthenticateUser() instead.
-*/
+// SetLicenseUserCredential sets the license user email and password for authentication.
+//
+// This function must be called before ActivateLicense() or IsLicenseGenuine()
+// function if 'requireAuthentication' property of the license is set to true.
+//
+// Parameters:
+//   - email: user email address.
+//   - password: user password.
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//
+// Deprecated: This function is deprecated. Use AuthenticateUser() instead.
 func SetLicenseUserCredential(email string, password string) int {
 	cEmail := goToCString(email)
 	cPassword := goToCString(password)
@@ -294,64 +282,63 @@ func SetLicenseUserCredential(email string, password string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetLicenseCallback()
-
-   PURPOSE: Sets server sync callback function.
-
-   Whenever the server sync occurs in a separate thread, and server returns the response,
-   license callback function gets invoked with the following status codes:
-   LA_OK, LA_EXPIRED, LA_SUSPENDED,
-   LA_E_REVOKED, LA_E_ACTIVATION_NOT_FOUND, LA_E_MACHINE_FINGERPRINT
-   LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_INET, LA_E_SERVER,
-   LA_E_RATE_LIMIT, LA_E_IP
-
-   PARAMETERS:
-   * callback - name of the callback function
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
-*/
+// SetLicenseCallback sets the license callback.
+//
+// Whenever the server sync occurs in a separate thread, and server returns the response,
+// license callback function gets invoked with the following status codes:
+// LA_OK, LA_EXPIRED, LA_SUSPENDED,
+// LA_E_REVOKED, LA_E_ACTIVATION_NOT_FOUND, LA_E_MACHINE_FINGERPRINT
+// LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_INET, LA_E_SERVER,
+// LA_E_RATE_LIMIT, LA_E_IP
+//
+// Parameters:
+//   - callback: name of the callback function
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
 func SetLicenseCallback(callbackFunction func(int)) int {
 	status := C.SetLicenseCallback((C.CallbackType)(unsafe.Pointer(C.licenseCallbackCgoGateway)))
 	licenseCallbackFuncion = callbackFunction
 	return int(status)
 }
 
-/*
-    FUNCTION: SetActivationLeaseDuration()
-
-    PURPOSE: Sets the lease duration for the activation.
-
-    The activation lease duration is honoured when the allow client
-    lease duration property is enabled.
-
-    PARAMETERS:
-    * leaseDuration - value of the lease duration. A value of -1 indicates unlimited 
-      lease duration.
-
-    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
-*/
+// SetActivationLeaseDuration sets the lease duration for the activation.
+//
+// The activation lease duration is honoured when the allow client
+// lease duration property is enabled.
+//
+// Parameters:
+//   - leaseDuration: value of the lease duration. A value of -1 indicates unlimited
+//   lease duration.
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
 func SetActivationLeaseDuration(leaseDuration int64) int {
    cLeaseDuration := (C.int64_t)(leaseDuration)
    status := C.SetActivationLeaseDuration(cLeaseDuration)
    return int(status)
 }
 
-/*
-   FUNCTION: SetActivationMetadata()
-
-   PURPOSE: Sets the activation metadata.
-
-   The  metadata appears along with the activation details of the license
-   in dashboard.
-
-   PARAMETERS:
-   * key - string of maximum length 256 characters with utf-8 encoding.
-   * value - string of maximum length 4096 characters with utf-8 encoding.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_METADATA_KEY_LENGTH,
-   LA_E_METADATA_VALUE_LENGTH, LA_E_ACTIVATION_METADATA_LIMIT
-*/
+// SetActivationMetadata sets the activation metadata.
+//
+// The metadata appears along with the activation details of the license
+// in dashboard.
+//
+// Parameters:
+//   - key: string of maximum length 256 characters with utf-8 encoding.
+//   - value: string of maximum length 4096 characters with utf-8 encoding.
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_METADATA_KEY_LENGTH
+//   LA_E_METADATA_VALUE_LENGTH
+//   LA_E_ACTIVATION_METADATA_LIMIT
 func SetActivationMetadata(key string, value string) int {
 	cKey := goToCString(key)
 	cValue := goToCString(value)
@@ -361,21 +348,21 @@ func SetActivationMetadata(key string, value string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetTrialActivationMetadata()
-
-   PURPOSE: Sets the trial activation metadata.
-
-   The  metadata appears along with the trial activation details of the product
-   in dashboard.
-
-   PARAMETERS:
-   * key - string of maximum length 256 characters with utf-8 encoding.
-   * value - string of maximum length 4096 characters with utf-8 encoding.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_LENGTH,
-   LA_E_METADATA_VALUE_LENGTH, LA_E_TRIAL_ACTIVATION_METADATA_LIMIT
-*/
+// SetTrialActivationMetadata sets the trial activation metadata.
+//
+// The metadata appears along with the trial activation details of the product
+// in dashboard.
+//
+// Parameters:
+//   - key: string of maximum length 256 characters with utf-8 encoding.
+//   - value: string of maximum length 4096 characters with utf-8 encoding.
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_METADATA_KEY_LENGTH
+//   LA_E_METADATA_VALUE_LENGTH
+//   LA_E_TRIAL_ACTIVATION_METADATA_LIMIT
 func SetTrialActivationMetadata(key string, value string) int {
 	cKey := goToCString(key)
 	cValue := goToCString(value)
@@ -385,21 +372,20 @@ func SetTrialActivationMetadata(key string, value string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetAppVersion()
-
-   PURPOSE: Sets the current app version of your application.
-
-   The app version appears along with the activation details in dashboard. It
-   is also used to generate app analytics.
-
-   PARAMETERS:
-   * appVersion - string of maximum length 256 characters with utf-8 encoding.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_APP_VERSION_LENGTH
-
-   NOTE: This function is deprecated. Use SetReleaseVersion() instead.
-*/
+// SetAppVersion sets the current app version of your application.
+//
+// The app version appears along with the activation details in dashboard. It
+// is also used to generate app analytics.
+//
+// Parameters:
+//   - appVersion: string of maximum length 256 characters with utf-8 encoding.
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_APP_VERSION_LENGTH
+//
+// Deprecated: This function is deprecated. Use SetReleaseVersion() instead.
 func SetAppVersion(appVersion string) int {
 	cAppVersion := goToCString(appVersion)
 	status := C.SetAppVersion(cAppVersion)
@@ -407,18 +393,17 @@ func SetAppVersion(appVersion string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetReleaseVersion()
-
-   PURPOSE: Sets the current release version of your application.
-
-   The release version appears along with the activation details in dashboard.
-
-   PARAMETERS:
-   * releaseVersion - string in following allowed formats: x.x, x.x.x, x.x.x.x
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_VERSION_FORMAT
-*/
+// SetReleaseVersion sets the current release version of your application.
+//
+// The release version appears along with the activation details in dashboard.
+//
+// Parameters:
+//   - releaseVersion: string in following allowed formats: x.x, x.x.x, x.x.x.x
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_RELEASE_VERSION_FORMAT
 func SetReleaseVersion(releaseVersion string) int {
 	cReleaseVersion := goToCString(releaseVersion)
 	status := C.SetReleaseVersion(cReleaseVersion)
@@ -426,35 +411,31 @@ func SetReleaseVersion(releaseVersion string) int {
 	return int(status)
 }
 
-/*
-
-   FUNCTION: SetReleasePublishedDate()
-
-   PURPOSE: Sets the release published date of your application.
-
-   PARAMETERS:
-   * releasePublishedDate - unix timestamp of release published date.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID
-*/
+// SetReleasePublishedDate sets the release published date of your application.
+//
+// Parameters:
+//   - releasePublishedDate: unix timestamp of release published date.
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
 func SetReleasePublishedDate(releasePublishedDate uint) int {
    cReleasePublishedDate := (C.uint)(releasePublishedDate)
    status := C.SetReleasePublishedDate(cReleasePublishedDate)
    return int(status)
 }
 
-/*
-   FUNCTION: SetReleasePlatform()
-
-   PURPOSE: Sets the release platform e.g. windows, macos, linux
-
-   The release platform appears along with the activation details in dashboard.
-
-   PARAMETERS:
-   * releasePlatform - release platform e.g. windows, macos, linux
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_PLATFORM_LENGTH
-*/
+// SetReleasePlatform sets the release platform e.g. windows, macos, linux
+//
+// The release platform appears along with the activation details in dashboard.
+//
+// Parameters:
+//   - releasePlatform: release platform e.g. windows, macos, linux
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_RELEASE_PLATFORM_LENGTH
 func SetReleasePlatform(releasePlatform string) int {
 	cReleasePlatform := goToCString(releasePlatform)
 	status := C.SetReleasePlatform(cReleasePlatform)
@@ -462,18 +443,17 @@ func SetReleasePlatform(releasePlatform string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetReleaseChannel()
-
-   PURPOSE: Sets the release channel e.g. stable, beta
-
-   The release channel appears along with the activation details in dashboard.
-
-   PARAMETERS:
-   * channel - release channel e.g. stable
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_CHANNEL_LENGTH
-*/
+// SetReleaseChannel sets the release channel e.g. stable, beta
+//
+// The release channel appears along with the activation details in dashboard.
+//
+// Parameters:
+//   - releaseChannel: release channel e.g. stable
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_RELEASE_CHANNEL_LENGTH
 func SetReleaseChannel(releaseChannel string) int {
 	cReleaseChannel := goToCString(releaseChannel)
 	status := C.SetReleaseChannel(cReleaseChannel)
@@ -481,21 +461,18 @@ func SetReleaseChannel(releaseChannel string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetOfflineActivationRequestMeterAttributeUses()
-
-   PURPOSE: Sets the meter attribute uses for the offline activation request.
-
-   This function should only be called before GenerateOfflineActivationRequest()
-   function to set the meter attributes in case of offline activation.
-
-   PARAMETERS:
-   * name - name of the meter attribute
-   * uses - the uses value
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
-
-*/
+// SetOfflineActivationRequestMeterAttributeUses sets the meter attribute uses for the offline activation request.
+//
+// This function should only be called before GenerateOfflineActivationRequest() function to set the meter attributes in case of offline activation.
+//
+// Parameters:
+//   - name: name of the meter attribute
+//   - uses: the uses value
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
 func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
 	cName := goToCString(name)
 	cUses := (C.uint)(uses)
@@ -504,26 +481,25 @@ func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetNetworkProxy()
-
-   PURPOSE: Sets the network proxy to be used when contacting Cryptlex servers.
-
-   The proxy format should be: [protocol://][username:password@]machine[:port]
-
-   Following are some examples of the valid proxy strings:
-       - http://127.0.0.1:8000/
-       - http://user:pass@127.0.0.1:8000/
-       - socks5://127.0.0.1:8000/
-
-   PARAMETERS:
-   * proxy - proxy string having correct proxy format
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_NET_PROXY
-
-   NOTE: Proxy settings of the computer are automatically detected. So, in most of the
-   cases you don't need to care whether your user is behind a proxy server or not.
-*/
+// SetNetworkProxy sets the network proxy to be used when contacting Cryptlex servers.
+//
+// The proxy format should be: [protocol://][username:password@]machine[:port]
+//
+// Following are some examples of the valid proxy strings:
+//   - http://127.0.0.1:8000/
+//   - http://user:pass@127.0.0.1:8000/
+//   - socks5://127.0.0.1:8000/
+//
+// Parameters:
+//   - proxy: proxy string having correct proxy format
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_NET_PROXY
+//
+// NOTE: Proxy settings of the computer are automatically detected. So, in most of the
+// cases you don't need to care whether your user is behind a proxy server or not.
 func SetNetworkProxy(proxy string) int {
 	cProxy := goToCString(proxy)
 	status := C.SetNetworkProxy(cProxy)
@@ -531,17 +507,16 @@ func SetNetworkProxy(proxy string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: SetCryptlexHost()
-
-   PURPOSE: In case you are running Cryptlex on-premise, you can set the
-   host for your on-premise server.
-
-   PARAMETERS:
-   * host - the address of the Cryptlex on-premise server
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_HOST_URL
-*/
+// SetCryptlexHost in case you are running Cryptlex on-premise, you can set the
+// host for your on-premise server.
+//
+// Parameters:
+//   - host: the address of the Cryptlex on-premise server
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_HOST_URL
 func SetCryptlexHost(host string) int {
 	cHost := goToCString(host)
 	status := C.SetCryptlexHost(cHost)
@@ -549,16 +524,15 @@ func SetCryptlexHost(host string) int {
 	return int(status)
 }
 
-/*
-    FUNCTION: SetTwoFactorAuthenticationCode()
-
-    PURPOSE: Sets the two-factor authentication code for the user authentication.
-
-    PARAMETERS:
-    * twoFactorAuthenticationCode - the 2FA code
-
-    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID
-*/
+// SetTwoFactorAuthenticationCode sets the two-factor authentication code for the user authentication.
+//
+// Parameters:
+//   - twoFactorAuthenticationCode: the 2FA code
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID
 func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
    cTwoFactorAuthenticationCode := goToCString(twoFactorAuthenticationCode)
    status := C.SetTwoFactorAuthenticationCode(cTwoFactorAuthenticationCode)
@@ -566,19 +540,19 @@ func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
    return int(status)
 }
 
-/*
-   FUNCTION: GetProductMetadata()
-
-   PURPOSE: Gets the product metadata as set in the dashboard.
-
-   This is available for trial as well as license activations.
-
-   PARAMETERS:
-   * key - metadata key to retrieve the value
-   * value - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
-*/
+// GetProductMetadata gets the product metadata as set in the dashboard.
+//
+// This is available for trial as well as license activations.
+//
+// Parameters:
+//   - key: metadata key to retrieve the value
+//   - value: pointer to a string that receives the value
+//
+// Return Codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_METADATA_KEY_NOT_FOUND
+//   LA_E_BUFFER_SIZE
 func GetProductMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -588,21 +562,22 @@ func GetProductMetadata(key string, value *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetProductVersionName()
-
-   PURPOSE: Gets the product version name.
-
-   PARAMETERS:
-   * name - pointer to a buffer that receives the value of the string
-   * length - size of the buffer pointed to by the name parameter
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
-   LA_E_BUFFER_SIZE
-
-    NOTE: This function is deprecated. Use GetLicenseEntitlementSetName() instead.
-*/
-
+// GetProductVersionName gets the product version name.
+//
+// Parameters:
+//   - name: pointer to a buffer that receives the value of the string
+//   - length: size of the buffer pointed to by the name parameter
+//
+// Return Codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_PRODUCT_VERSION_NOT_LINKED
+//   LA_E_BUFFER_SIZE
+//
+// Deprecated: This function is deprecated. Use GetLicenseEntitlementSetName() instead.
 func GetProductVersionName(name *string) int {
 	var cName = getCArray()
 	status := C.GetProductVersionName(&cName[0], maxCArrayLength)
@@ -610,20 +585,22 @@ func GetProductVersionName(name *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetProductVersionDisplayName()
-
-   PURPOSE: Gets the product version display name.
-
-   PARAMETERS:
-   * displayName - pointer to a buffer that receives the value of the string
-   * length - size of the buffer pointed to by the displayName parameter
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
-   LA_E_BUFFER_SIZE
-
-   NOTE: This function is deprecated. Use GetLicenseEntitlementSetDisplayName() instead.
-*/
+// GetProductVersionDisplayName gets the product version display name.
+//
+// Parameters:
+//   - displayName: pointer to a string that receives the value.
+//   - length: size of the buffer pointed to by the displayName parameter
+//
+// Return Codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_PRODUCT_VERSION_NOT_LINKED
+//   LA_E_BUFFER_SIZE
+//
+// Deprecated: This function is deprecated. Use GetLicenseEntitlementSetDisplayName() instead.
 func GetProductVersionDisplayName(displayName *string) int {
 	var cDisplayName = getCArray()
 	status := C.GetProductVersionDisplayName(&cDisplayName[0], maxCArrayLength)
@@ -631,20 +608,23 @@ func GetProductVersionDisplayName(displayName *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetProductVersionFeatureFlag()
-
-   PURPOSE: Gets the product version feature flag.
-
-   PARAMETERS:
-   * name - name of the feature flag
-   * enabled - pointer to the integer that receives the value - 0 or 1
-   * data - pointer to a buffer that receives the value of the string
-   * length - size of the buffer pointed to by the data parameter
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
-   LA_E_FEATURE_FLAG_NOT_FOUND, LA_E_BUFFER_SIZE
-*/
+// GetProductVersionFeatureFlag gets the product version feature flag.
+//
+// Parameters:
+//   name - name of the feature flag
+//   enabled - pointer to the integer that receives the value - 0 or 1
+//   data - pointer to a buffer that receives the value of the string
+//   length - size of the buffer pointed to by the data parameter
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_PRODUCT_VERSION_NOT_LINKED
+//   LA_E_FEATURE_FLAG_NOT_FOUND
+//   LA_E_BUFFER_SIZE
 func GetProductVersionFeatureFlag(name string, enabled *bool, data *string) int {
    cName := goToCString(name)
    var cEnabled C.uint
@@ -656,17 +636,18 @@ func GetProductVersionFeatureFlag(name string, enabled *bool, data *string) int 
    return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseMetadata()
-
-   PURPOSE: Gets the license metadata as set in the dashboard.
-
-   PARAMETERS:
-   * key - metadata key to retrieve the value
-   * value - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
-*/
+// GetLicenseMetadata gets the license metadata as set in the dashboard.
+//
+// Parameters:
+//   - key: metadata key to retrieve the value
+//   - value: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_METADATA_KEY_NOT_FOUND
+//   LA_E_BUFFER_SIZE
 func GetLicenseMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -676,19 +657,19 @@ func GetLicenseMetadata(key string, value *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseMeterAttribute()
-
-   PURPOSE: Gets the license meter attribute allowed uses, total and gross uses.
-
-   PARAMETERS:
-   * name - name of the meter attribute
-   * allowedUses - pointer to the integer that receives the value. A value of -1 indicates unlimited allowed uses.
-   * totalUses - pointer to the integer that receives the value
-   * grossUses - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
-*/
+// GetLicenseMeterAttribute gets the license meter attribute allowed uses, total and gross uses.
+//
+// Parameters:
+//   - name: name of the meter attribute
+//   - allowedUses: pointer to the integer that receives the value. A value of -1 indicates unlimited allowed uses.
+//   - totalUses: pointer to the integer that receives the value
+//   - grossUses: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_METER_ATTRIBUTE_NOT_FOUND
 func GetLicenseMeterAttribute(name string, allowedUses *int64, totalUses *uint64, grossUses *uint64) int {
 	cName := goToCString(name)
 	var cAllowedUses C.int64_t
@@ -702,16 +683,16 @@ func GetLicenseMeterAttribute(name string, allowedUses *int64, totalUses *uint64
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseKey()
-
-   PURPOSE: Gets the license key used for activation.
-
-   PARAMETERS:
-   * licenseKey - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_BUFFER_SIZE
-*/
+// GetLicenseKey gets the license key used for activation.
+//
+// Parameters:
+//   licenseKey - pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_BUFFER_SIZE
 func GetLicenseKey(licenseKey *string) int {
 	var cLicenseKey = getCArray()
 	status := C.GetLicenseKey(&cLicenseKey[0], maxCArrayLength)
@@ -719,17 +700,18 @@ func GetLicenseKey(licenseKey *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseAllowedActivations()
-
-   PURPOSE: Gets the allowed activations of the license.
-
-   PARAMETERS:
-   * allowedActivations - pointer to the integer that receives the value.
-     A value of -1 indicates unlimited number of activations.
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetLicenseAllowedActivations gets the allowed activations of the license.
+//
+// Parameters:
+//   - allowedActivations: pointer to the integer that receives the value.
+//     A value of -1 indicates unlimited number of activations.
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetLicenseAllowedActivations(allowedActivations *int64) int {
 	var cAllowedActivations C.int64_t
 	status := C.GetLicenseAllowedActivations(&cAllowedActivations)
@@ -737,16 +719,17 @@ func GetLicenseAllowedActivations(allowedActivations *int64) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseTotalActivations()
-
-   PURPOSE: Gets the total activations of the license.
-
-   PARAMETERS:
-   * totalActivations - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetLicenseTotalActivations gets the total activations of the license.
+//
+// Parameters:
+//   - totalActivations: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetLicenseTotalActivations(totalActivations *uint) int {
 	var cTotalActivations C.uint
 	status := C.GetLicenseTotalActivations(&cTotalActivations)
@@ -754,17 +737,18 @@ func GetLicenseTotalActivations(totalActivations *uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseAllowedDeactivations()
-
-   PURPOSE: Gets the allowed deactivations of the license.
-
-   PARAMETERS:
-   * allowedDeactivations - pointer to the integer that receives the value.
-     A value of -1 indicates unlimited number of deactivations.
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetLicenseAllowedDeactivations gets the allowed deactivations of the license.
+//
+// Parameters:
+//   - allowedDeactivations: pointer to the integer that receives the value.
+//     A value of -1 indicates unlimited number of deactivations.
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetLicenseAllowedDeactivations(allowedDeactivations *int64) int {
 	var cAllowedDeactivations C.int64_t
 	status := C.GetLicenseAllowedDeactivations(&cAllowedDeactivations)
@@ -772,16 +756,17 @@ func GetLicenseAllowedDeactivations(allowedDeactivations *int64) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseTotalDeactivations()
-
-   PURPOSE: Gets the total deactivations of the license.
-
-   PARAMETERS:
-   * totalDeactivations - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetLicenseTotalDeactivations gets the total deactivations of the license.
+//
+// Parameters:
+//   - totalDeactivations: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetLicenseTotalDeactivations(totalDeactivations *uint) int {
 	var cTotalDeactivations C.uint
 	status := C.GetLicenseTotalDeactivations(&cTotalDeactivations)
@@ -789,17 +774,18 @@ func GetLicenseTotalDeactivations(totalDeactivations *uint) int {
 	return int(status)
 }
 
-
-/*
-   FUNCTION: GetLicenseCreationDate()
-
-   PURPOSE: Gets the license creation date timestamp.
-
-   PARAMETERS:
-   * creationDate - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetLicenseCreationDate gets the license creation date timestamp.
+//
+// Parameters:
+//   - creationDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetLicenseCreationDate(creationDate *uint) int {
    var cCreationDate C.uint
    status := C.GetLicenseCreationDate(&cCreationDate)
@@ -807,16 +793,18 @@ func GetLicenseCreationDate(creationDate *uint) int {
    return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseActivationDate()
-
-   PURPOSE: Gets the activation creation date timestamp.
-
-   PARAMETERS:
-   * activationDate - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetLicenseActivationDate gets the license activation date timestamp.
+//
+// Parameters:
+//   - activationDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetLicenseActivationDate(activationDate *uint) int {
    var cActivationDate C.uint
    status := C.GetLicenseActivationDate(&cActivationDate)
@@ -824,16 +812,18 @@ func GetLicenseActivationDate(activationDate *uint) int {
    return int(status)
 }
 
-/*
-    FUNCTION: GetActivationCreationDate()
-    
-    PURPOSE: Gets the activation creation date timestamp for the current activation.
-    
-    PARAMETERS:
-    * activationCreationDate - pointer to the integer that receives the value
-    
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetActivationCreationDate gets the activation creation date timestamp for the current activation.
+//
+// Parameters:
+//   - activationCreationDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetActivationCreationDate(activationCreationDate *uint) int {
    var cActivationCreationDate C.uint
    status := C.GetActivationCreationDate(&cActivationCreationDate)
@@ -841,16 +831,17 @@ func GetActivationCreationDate(activationCreationDate *uint) int {
    return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseExpiryDate()
-
-   PURPOSE: Gets the license expiry date timestamp.
-
-   PARAMETERS:
-   * expiryDate - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetLicenseExpiryDate gets the license expiry date timestamp.
+//
+// Parameters:
+//   - expiryDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetLicenseExpiryDate(expiryDate *uint) int {
 	var cExpiryDate C.uint
 	status := C.GetLicenseExpiryDate(&cExpiryDate)
@@ -858,16 +849,18 @@ func GetLicenseExpiryDate(expiryDate *uint) int {
 	return int(status)
 }
 
-/*
-    FUNCTION: GetLicenseMaintenanceExpiryDate()
-
-    PURPOSE: Gets the license maintenance expiry date timestamp.
-
-    PARAMETERS:
-    * maintenanceExpiryDate - pointer to the integer that receives the value
-
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetLicenseMaintenanceExpiryDate gets the license maintenance expiry date timestamp.
+//
+// Parameters:
+//   - maintenanceExpiryDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetLicenseMaintenanceExpiryDate(maintenanceExpiryDate *uint) int {
    var cMaintenanceExpiryDate C.uint
 	status := C.GetLicenseMaintenanceExpiryDate(&cMaintenanceExpiryDate)
@@ -875,17 +868,19 @@ func GetLicenseMaintenanceExpiryDate(maintenanceExpiryDate *uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseMaxAllowedReleaseVersion()
-
-   PURPOSE: Gets the maximum allowed release version of the license.
-
-   PARAMETERS:
-   * maxAllowedReleaseVersion - pointer to a buffer that receives the value of the string.
-   * length - size of the buffer pointed to by the maxAllowedReleaseVersion parameter.
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY,  LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
-*/
+// GetLicenseMaxAllowedReleaseVersion gets the maximum allowed release version of the license.
+//
+// Parameters:
+//   - maxAllowedReleaseVersion: pointer to a string that receives the value
+//   - length: size of the buffer pointed to by the maxAllowedReleaseVersion parameter
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetLicenseMaxAllowedReleaseVersion(maxAllowedReleaseVersion *string) int {
 	var cMaxAllowedReleaseVersion = getCArray()
 	status := C.GetLicenseMaxAllowedReleaseVersion(&cMaxAllowedReleaseVersion[0], maxCArrayLength)
@@ -893,17 +888,18 @@ func GetLicenseMaxAllowedReleaseVersion(maxAllowedReleaseVersion *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseUserEmail()
-
-   PURPOSE: Gets the email associated with license user.
-
-   PARAMETERS:
-   * email - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-   LA_E_BUFFER_SIZE
-*/
+// GetLicenseUserEmail gets the email associated with license user.
+//
+// Parameters:
+//   - email: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetLicenseUserEmail(email *string) int {
 	var cEmail = getCArray()
 	status := C.GetLicenseUserEmail(&cEmail[0], maxCArrayLength)
@@ -911,17 +907,18 @@ func GetLicenseUserEmail(email *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseUserName()
-
-   PURPOSE: Gets the name associated with the license user.
-
-   PARAMETERS:
-   * name - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-   LA_E_BUFFER_SIZE
-*/
+// GetLicenseUserName gets the name associated with the license user.
+//
+// Parameters:
+//   - name: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetLicenseUserName(name *string) int {
 	var cName = getCArray()
 	status := C.GetLicenseUserName(&cName[0], maxCArrayLength)
@@ -929,17 +926,18 @@ func GetLicenseUserName(name *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseUserCompany()
-
-   PURPOSE: Gets the company associated with the license user.
-
-   PARAMETERS:
-   * company - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-   LA_E_BUFFER_SIZE
-*/
+// GetLicenseUserCompany gets the company associated with the license user.
+//
+// Parameters:
+//   - company: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetLicenseUserCompany(company *string) int {
 	var cCompany = getCArray()
 	status := C.GetLicenseUserCompany(&cCompany[0], maxCArrayLength)
@@ -947,17 +945,18 @@ func GetLicenseUserCompany(company *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseUserMetadata()
-
-   PURPOSE: Gets the metadata associated with the license user.
-
-   PARAMETERS:
-   * key - metadata key to retrieve the value
-   * value - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
-*/
+// GetLicenseUserMetadata gets the metadata associated with the license user.
+//
+// Parameters:
+//   - key: metadata key to retrieve the value
+//   - value: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_METADATA_KEY_NOT_FOUND
+//   LA_E_BUFFER_SIZE
 func GetLicenseUserMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -967,17 +966,18 @@ func GetLicenseUserMetadata(key string, value *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseOrganizationName()
-
-   PURPOSE: Gets the organization name associated with the license.
-
-   PARAMETERS:
-   * organizationName - pointer to the string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-   LA_E_BUFFER_SIZE
-*/
+// GetLicenseOrganizationName gets the organization name associated with the license.
+//
+// Parameters:
+//   - organizationName: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetLicenseOrganizationName(organizationName *string) int {
    var cOrganizationName = getCArray()
    status := C.GetLicenseOrganizationName(&cOrganizationName[0], maxCArrayLength)
@@ -985,17 +985,18 @@ func GetLicenseOrganizationName(organizationName *string) int {
    return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseOrganizationAddress()
-
-   PURPOSE: Gets the organization address associated with the license.
-
-   PARAMETERS:
-   * organizationAddress - pointer to the OrganizationAddress struct that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-   LA_E_BUFFER_SIZE
-*/
+// GetLicenseOrganizationAddress gets the organization address associated with the license.
+//
+// Parameters:
+//   - organizationAddress: pointer to the OrganizationAddress struct that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int {
    var cOrganizationAddress = getCArray()
    organizationAddressJson := ""
@@ -1008,22 +1009,23 @@ func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int
    return int(status)
 }
 
-/*
-   FUNCTION: GetUserLicenses()
-
-   PURPOSE: Gets the user licenses for the product. 
-   
-   This function sends a network request to Cryptlex servers to get the licenses.
-
-   Make sure AuthenticateUser() function is called before calling this function.
-
-   PARAMETERS:
-   * userLicenses - pointer to the array of UserLicense struct that receives the values of the user's licenses.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT
-   LA_E_USER_NOT_AUTHENTICATED, LA_E_BUFFER_SIZE
-*/
-
+// GetUserLicenses gets the user licenses for the product.
+//
+// This function sends a network request to Cryptlex servers to get the licenses.
+//
+// Make sure AuthenticateUser() function is called before calling this function.
+//
+// Parameters:
+//   - userLicenses: pointer to the array of UserLicense struct that receives the values of the user's licenses.
+//
+// Return codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_INET
+//   LA_E_SERVER
+//   LA_E_RATE_LIMIT
+//   LA_E_USER_NOT_AUTHENTICATED
+//   LA_E_BUFFER_SIZE
 func GetUserLicenses(userLicenses *[]UserLicense) int {
    var cUserLicenses = getCArray()
    userLicensesJson := ""
@@ -1036,17 +1038,18 @@ func GetUserLicenses(userLicenses *[]UserLicense) int {
    return int(status)
 }
 
-/*
-   FUNCTION: GetLicenseType()
-
-   PURPOSE: Gets the license type (node-locked or hosted-floating).
-
-   PARAMETERS:
-   * licenseType - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-   LA_E_BUFFER_SIZE
-*/
+// GetLicenseType gets the license type (node-locked or hosted-floating).
+//
+// Parameters:
+//   - licenseType: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetLicenseType(licenseType *string) int {
 	var cLicenseType = getCArray()
 	status := C.GetLicenseType(&cLicenseType[0], maxCArrayLength)
@@ -1054,18 +1057,18 @@ func GetLicenseType(licenseType *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetActivationId()
-
-   PURPOSE: Gets the activation id.
-
-   PARAMETERS:
-   * id - pointer to a buffer that receives the value of the string
-   * length - size of the buffer pointed to by the id parameter
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-   LA_E_BUFFER_SIZE
-*/
+// GetActivationId gets the activation id.
+//
+// Parameters:
+//   - id: pointer to a buffer that receives the value of the string
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetActivationId(id *string) int {
    var cActivationId = getCArray()
    status := C.GetActivationId(&cActivationId[0], maxCArrayLength)
@@ -1073,17 +1076,17 @@ func GetActivationId(id *string) int {
    return int(status)
 }
 
-/*
-   FUNCTION: GetActivationMetadata()
-
-   PURPOSE: Gets the activation metadata.
-
-   PARAMETERS:
-   * key - metadata key to retrieve the value
-   * value - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
-*/
+// GetActivationMetadata gets the activation metadata.
+//
+// Parameters:
+//   - key: metadata key to retrieve the value
+//   - value: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_METADATA_KEY_NOT_FOUND
+//   LA_E_BUFFER_SIZE
 func GetActivationMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -1093,20 +1096,21 @@ func GetActivationMetadata(key string, value *string) int {
 	return int(status)
 }
 
-/*
-    FUNCTION: GetActivationMode()
-
-    PURPOSE: Gets the mode of activation (online or offline).
-
-    PARAMETERS:
-    * initialMode - pointer to a buffer that receives the initial mode of activation
-    * initialModeLength - size of the buffer pointed to by the initialMode parameter
-    * currentMode - pointer to a buffer that receives the current mode of activation
-    * currentModeLength - size of the buffer pointed to by the currentMode parameter
-
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME_MODIFIED,
-    LA_E_BUFFER_SIZE
-*/
+// GetActivationMode gets the mode of activation (online or offline).
+//
+// Parameters:
+//   - initialMode: pointer to a buffer that receives the initial mode of activation
+//   - initialModeLength: size of the buffer pointed to by the initialMode parameter
+//   - currentMode: pointer to a buffer that receives the current mode of activation
+//   - currentModeLength: size of the buffer pointed to by the currentMode parameter
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetActivationMode(initialMode *string, currentMode *string) int {
    var cInitialMode = getCArray()
    var cCurrentMode = getCArray()
@@ -1116,17 +1120,17 @@ func GetActivationMode(initialMode *string, currentMode *string) int {
    return int(status)
 }
 
-/*
-   FUNCTION: GetActivationMeterAttributeUses()
-
-   PURPOSE: Gets the meter attribute uses consumed by the activation.
-
-   PARAMETERS:
-   * name - name of the meter attribute
-   * allowedUses - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
-*/
+// GetActivationMeterAttributeUses gets the meter attribute uses consumed by the activation.
+//
+// Parameters:
+//   - name: name of the meter attribute
+//   - uses: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_METER_ATTRIBUTE_NOT_FOUND
 func GetActivationMeterAttributeUses(name string, uses *uint) int {
 	cName := goToCString(name)
 	var cUses C.uint
@@ -1136,16 +1140,17 @@ func GetActivationMeterAttributeUses(name string, uses *uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetServerSyncGracePeriodExpiryDate()
-
-   PURPOSE: Gets the server sync grace period expiry date timestamp.
-
-   PARAMETERS:
-   * expiryDate - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetServerSyncGracePeriodExpiryDate gets the server sync grace period expiry date timestamp.
+//
+// Parameters:
+//   - expiryDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetServerSyncGracePeriodExpiryDate(expiryDate *uint) int {
 	var cExpiryDate C.uint
 	status := C.GetServerSyncGracePeriodExpiryDate(&cExpiryDate)
@@ -1153,17 +1158,17 @@ func GetServerSyncGracePeriodExpiryDate(expiryDate *uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetTrialActivationMetadata()
-
-   PURPOSE: Gets the trial activation metadata.
-
-   PARAMETERS:
-   * key - metadata key to retrieve the value
-   * value - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
-*/
+// GetTrialActivationMetadata gets the trial activation metadata.
+//
+// Parameters:
+//   - key: metadata key to retrieve the value
+//   - value: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_METADATA_KEY_NOT_FOUND
+//   LA_E_BUFFER_SIZE
 func GetTrialActivationMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -1173,16 +1178,17 @@ func GetTrialActivationMetadata(key string, value *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetTrialExpiryDate()
-
-   PURPOSE: Gets the trial expiry date timestamp.
-
-   PARAMETERS:
-   * trialExpiryDate - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GetTrialExpiryDate gets the trial expiry date timestamp.
+//
+// Parameters:
+//   - trialExpiryDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func GetTrialExpiryDate(trialExpiryDate *uint) int {
 	var cTrialExpiryDate C.uint
 	status := C.GetTrialExpiryDate(&cTrialExpiryDate)
@@ -1190,17 +1196,18 @@ func GetTrialExpiryDate(trialExpiryDate *uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetTrialId()
-
-   PURPOSE: Gets the trial activation id. Used in case of trial extension.
-
-   PARAMETERS:
-   * trialId - pointer to a string that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-   LA_E_BUFFER_SIZE
-*/
+// GetTrialId gets the trial activation id. Used in case of trial extension.
+//
+// Parameters:
+//   - trialId: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
 func GetTrialId(trialId *string) int {
 	var cTrialId = getCArray()
 	status := C.GetTrialId(&cTrialId[0], maxCArrayLength)
@@ -1208,16 +1215,16 @@ func GetTrialId(trialId *string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLocalTrialExpiryDate()
-
-   PURPOSE: Gets the trial expiry date timestamp.
-
-   PARAMETERS:
-   * trialExpiryDate - pointer to the integer that receives the value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
-*/
+// GetLocalTrialExpiryDate gets the trial expiry date timestamp.
+//
+// Parameters:
+//   - trialExpiryDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME_MODIFIED
 func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 	var cTrialExpiryDate C.uint
 	status := C.GetLocalTrialExpiryDate(&cTrialExpiryDate)
@@ -1225,17 +1232,15 @@ func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GetLibraryVersion()
-
-   PURPOSE: Gets the version of this library.
-
-   PARAMETERS:
-   * libraryVersion - pointer to a buffer that receives the value of the string
-   * length - size of the buffer pointed to by the libraryVersion parameter
-
-   RETURN CODES: LA_OK, LA_E_BUFFER_SIZE
-*/
+// GetLibraryVersion gets the version of this library.
+//
+// Parameters:
+//   - libraryVersion: pointer to a buffer that receives the value of the string
+//   - length: size of the buffer pointed to by the libraryVersion parameter
+//
+// Return codes:
+//   LA_OK
+//   LA_E_BUFFER_SIZE
 func GetLibraryVersion(libraryVersion *string) int {
 	var cLibraryVersion = getCArray()
 	status := C.GetLibraryVersion(&cLibraryVersion[0], maxCArrayLength)
@@ -1243,17 +1248,20 @@ func GetLibraryVersion(libraryVersion *string) int {
 	return int(status)
 }
 
-/*
-    FUNCTION: GetLicenseEntitlementSetName()
-    
-    PURPOSE: Gets the license entitlement set name.
-    
-    PARAMETERS:
-    * name - pointer to a buffer that receives the value of the string
-    * length - size of the buffer pointed to by the name parameter
-    
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
-*/
+// GetLicenseEntitlementSetName gets the license entitlement set name.
+//
+// Parameters:
+//   - name: pointer to a buffer that receives the value of the string
+//   - length: size of the buffer pointed to by the name parameter
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
+//   LA_E_ENTITLEMENT_SET_NOT_LINKED
 func GetLicenseEntitlementSetName(name *string) int {
 	var cName = getCArray()
 	status := C.GetLicenseEntitlementSetName(&cName[0], maxCArrayLength)
@@ -1261,18 +1269,20 @@ func GetLicenseEntitlementSetName(name *string) int {
 	return int(status)
 }
 
-/*
-    FUNCTION: GetEntitlementSetDisplayName()
-
-    PURPOSE: Gets the entitlement set display name.
-
-    PARAMETERS:
-    * displayName - pointer to a buffer that receives the value of the string
-    * length - size of the buffer pointed to by the displayName parameter
-    
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE,
-    LA_E_ENTITLEMENT_SET_NOT_LINKED
-*/
+// GetLicenseEntitlementSetDisplayName gets the license entitlement set display name.
+//
+// Parameters:
+//   - displayName: pointer to a buffer that receives the value of the string
+//   - length: size of the buffer pointed to by the displayName parameter
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
+//   LA_E_ENTITLEMENT_SET_NOT_LINKED
 func GetLicenseEntitlementSetDisplayName(displayName *string) int {
 	var cDisplayName = getCArray()
 	status := C.GetLicenseEntitlementSetDisplayName(&cDisplayName[0], maxCArrayLength)
@@ -1280,21 +1290,23 @@ func GetLicenseEntitlementSetDisplayName(displayName *string) int {
 	return int(status)
 }
 
-/*
-    FUNCTION: GetFeatureEntitlements()
-
-    PURPOSE: Gets the feature entitlements associated with the license.
-
-    Feature entitlements can be linked directly to a license (license feature entitlements) 
-    or via entitlement sets. If a feature entitlement is defined in both, the value from 
-    the license feature entitlement takes precedence, overriding the entitlement set value.
-    
-    PARAMETERS:
-    * featureEntitlements - pointer to the struct that receives the values of the feature entitlements.
-
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-    LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENTS_INVALID
-*/
+// GetFeatureEntitlements gets the feature entitlements associated with the license.
+//
+// Feature entitlements can be linked directly to a license (license feature entitlements) 
+// or via entitlement sets. If a feature entitlement is defined in both, the value from 
+// the license feature entitlement takes precedence, overriding the entitlement set value.
+//
+// Parameters:
+//   - featureEntitlements: pointer to the struct that receives the values of the feature entitlements.
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
+//   LA_E_FEATURE_ENTITLEMENTS_INVALID
 func GetFeatureEntitlements(featureEntitlements *[]FeatureEntitlement) int {
    var cFeatureEntitlements = getCArray()
    featureEntitlementsJson := ""
@@ -1307,22 +1319,26 @@ func GetFeatureEntitlements(featureEntitlements *[]FeatureEntitlement) int {
    return int(status)
 }
 
-/*
-    FUNCTION: GetFeatureEntitlement()
+// GetFeatureEntitlement gets the feature entitlement associated with the license.
+//
+// Feature entitlements can be linked directly to a license (license feature entitlements) 
+// or via entitlement sets. If a feature entitlement is defined in both, the value from 
+// the license feature entitlement takes precedence, overriding the entitlement set value.
+//
+// Parameters:
+//   - featureName: name of the feature
+//   - featureEntitlement: pointer to the struct that receives the values of the feature entitlement
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+//   LA_E_BUFFER_SIZE
+//   LA_E_FEATURE_ENTITLEMENT_NOT_FOUND
+//   LA_E_FEATURE_ENTITLEMENTS_INVALID
 
-    PURPOSE: Gets the feature entitlement associated with the license.
-
-    Feature entitlements can be linked directly to a license (license feature entitlements) 
-    or via entitlement sets. If a feature entitlement is defined in both, the value from 
-    the license feature entitlement takes precedence, overriding the entitlement set value.
-
-    PARAMETERS:
-    * featureName - name of the feature
-    * featureEntitlement - pointer to the struct that receives the values of the feature entitlement
-
-    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
-    LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENT_NOT_FOUND, LA_E_FEATURE_ENTITLEMENTS_INVALID
-*/
 func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitlement) int {
    cFeatureName := goToCString(featureName)
    var cFeatureEntitlement = getCArray()
@@ -1336,24 +1352,24 @@ func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitl
    return int(status)
 }
 
-/*
-   FUNCTION: CheckForReleaseUpdate()
-
-   PURPOSE: Checks whether a new release is available for the product.
-
-   This function should only be used if you manage your releases through
-   Cryptlex release management API.
-
-   PARAMETERS:
-   * platform - release platform e.g. windows, macos, linux
-   * version - current release version
-   * channel - release channel e.g. stable
-   * releaseUpdateCallback - name of the callback function.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT
-
-   NOTE: This function is deprecated. Use CheckForReleaseUpdate() instead.
-*/
+// CheckForReleaseUpdate checks whether a new release is available for the product.
+//
+// This function should only be used if you manage your releases through
+// Cryptlex release management API.
+//
+// Parameters:
+//   - platform: release platform e.g. windows, macos, linux
+//   - version: current release version
+//   - channel: release channel e.g. stable
+//   - releaseUpdateCallback: name of the callback function.
+//
+// Return codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_RELEASE_VERSION_FORMAT
+//
+// Deprecated: This function is deprecated. Use CheckForReleaseUpdate() instead.
 func CheckForReleaseUpdate(platform string, version string, channel string, callbackFunction func(int)) int {
 	cPlatform := goToCString(platform)
 	cVersion := goToCString(version)
@@ -1366,39 +1382,41 @@ func CheckForReleaseUpdate(platform string, version string, channel string, call
 	return int(status)
 }
 
-/*
-   FUNCTION: CheckReleaseUpdate()
-
-   PURPOSE: Checks whether a new release is available for the product.
-
-   This function should only be used if you manage your releases through
-   Cryptlex release management API.
-
-   When this function is called the release update callback function gets invoked 
-   which passes the following parameters:
-
-   * status - determines if any update is available or not. It also determines whether 
-     an update is allowed or not. Expected values are LA_RELEASE_UPDATE_AVAILABLE,
-     LA_RELEASE_UPDATE_NOT_AVAILABLE, LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED.
-
-   * release- returns release struct of the latest available release, depending on the 
-     flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
-
-   * userData - data that is passed to the callback function when it is registered
-     using the CheckReleaseUpdate function. This parameter is optional and can be nil if no user data
-     is passed to the CheckReleaseUpdate function.
-
-   PARAMETERS:
-   * releaseUpdateCallback - name of the callback function.
-   * releaseFlags - if an update only related to the allowed release is required, 
-     then use LA_RELEASES_ALLOWED. Otherwise, if an update for all the releases is
-     required, then use LA_RELEASES_ALL.
-   * userData - data that can be passed to the callback function. This parameter has
-     to be nil if no user data needs to be passed to the callback.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT, LA_E_RELEASE_VERSION,
-   LA_E_RELEASE_PLATFORM, LA_E_RELEASE_CHANNEL
-*/
+// CheckReleaseUpdate checks whether a new release is available for the product.
+//
+// This function should only be used if you manage your releases through
+// Cryptlex release management API.
+//
+// When this function is called the release update callback function gets invoked
+// which passes the following parameters:
+//
+// * status - determines if any update is available or not. It also determines whether
+//   an update is allowed or not. Expected values are LA_RELEASE_UPDATE_AVAILABLE,
+//   LA_RELEASE_UPDATE_NOT_AVAILABLE, LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED.
+//
+// * release - returns release struct of the latest available release, depending on the
+//   flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
+//
+// * userData - data that is passed to the callback function when it is registered
+//   using the CheckReleaseUpdate function. This parameter is optional and can be nil if no user data
+//   is passed to the CheckReleaseUpdate function.
+//
+// Parameters:
+//   - releaseUpdateCallback: name of the callback function.
+//   - releaseFlags: if an update only related to the allowed release is required, 
+//     then use LA_RELEASES_ALLOWED. Otherwise, if an update for all the releases is
+//     required, then use LA_RELEASES_ALL.
+//   - userData: data that can be passed to the callback function. This parameter has
+//     to be nil if no user data needs to be passed to the callback.
+//
+// Return codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_RELEASE_VERSION_FORMAT
+//   LA_E_RELEASE_VERSION
+//   LA_E_RELEASE_PLATFORM
+//   LA_E_RELEASE_CHANNEL
 func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release, interface{}), releaseFlags uint, userData interface{}) int {
    cReleaseFlags := (C.uint)(releaseFlags)
 	status := C.CheckReleaseUpdateInternal((C.ReleaseCallbackTypeInternal)(unsafe.Pointer(C.newReleaseUpdateCallbackCgoGateway)), cReleaseFlags, nil)
@@ -1407,18 +1425,19 @@ func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release, interf
 	return int(status)
 }
 
-/*
-   FUNCTION: AuthenticateUser()
-
-   PURPOSE: It sends the request to the Cryptlex servers to authenticate the user.
-
-   PARAMETERS:
-   * email - user email address.
-   * password - user password.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT
-   LA_E_AUTHENTICATION_FAILED
-*/
+// AuthenticateUser It sends the request to the Cryptlex servers to authenticate the user.
+//
+// Parameters:
+//   - email: user email address.
+//   - password: user password.
+//
+// Return codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_INET
+//   LA_E_SERVER
+//   LA_E_RATE_LIMIT
+//   LA_E_AUTHENTICATION_FAILED
 func AuthenticateUser(email string, password string) int {
    cEmail := goToCString(email)
 	cPassword := goToCString(password)
@@ -1428,17 +1447,20 @@ func AuthenticateUser(email string, password string) int {
    return int(status)
 }
 
-/*
-   FUNCTION: AuthenticateUserWithIdToken()
-
-   PURPOSE: Authenticates the user via OIDC Id token.
-
-   PARAMETER:
-   * idToken - The id token obtained from the OIDC provider.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, 
-   LA_E_AUTHENTICATION_ID_TOKEN_INVALID, LA_E_OIDC_SSO_NOT_ENABLED, LA_E_USERS_LIMIT_REACHED
-*/
+// AuthenticateUserWithIdToken authenticates the user via OIDC Id token.
+//
+// Parameters:
+//   - idToken: The id token obtained from the OIDC provider.
+//
+// Return codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//   LA_E_INET
+//   LA_E_SERVER
+//   LA_E_RATE_LIMIT
+//   LA_E_AUTHENTICATION_ID_TOKEN_INVALID
+//   LA_E_OIDC_SSO_NOT_ENABLED
+//   LA_E_USERS_LIMIT_REACHED
 func AuthenticateUserWithIdToken(idToken string) int {
    cIdToken := goToCString(idToken)
    status := C.AuthenticateUserWithIdToken(cIdToken)
@@ -1446,36 +1468,53 @@ func AuthenticateUserWithIdToken(idToken string) int {
    return int(status)
 }
 
-/*
-   FUNCTION: ActivateLicense()
-
-   PURPOSE: Activates the license by contacting the Cryptlex servers. It
-   validates the key and returns with encrypted and digitally signed token
-   which it stores and uses to activate your application.
-
-   This function should be executed at the time of registration, ideally on
-   a button click.
-
-   RETURN CODES: LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED, LA_FAIL, LA_E_PRODUCT_ID,
-   LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_ACTIVATION_LIMIT, LA_E_SERVER, LA_E_CLIENT,
-   LA_E_AUTHENTICATION_FAILED, LA_E_LICENSE_TYPE, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY
-*/
+// ActivateLicense activates the license by contacting the Cryptlex servers. It
+// validates the key and returns with encrypted and digitally signed token
+// which it stores and uses to activate your application.
+//
+// This function should be executed at the time of registration, ideally on
+// a button click.
+//
+// Return codes:
+//   LA_OK
+//   LA_EXPIRED
+//   LA_SUSPENDED
+//   LA_E_REVOKED
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_INET
+//   LA_E_VM
+//   LA_E_TIME
+//   LA_E_ACTIVATION_LIMIT
+//   LA_E_SERVER
+//   LA_E_CLIENT
+//   LA_E_AUTHENTICATION_FAILED
+//   LA_E_LICENSE_TYPE
+//   LA_E_COUNTRY
+//   LA_E_IP
+//   LA_E_RATE_LIMIT
+//   LA_E_LICENSE_KEY
 func ActivateLicense() int {
 	status := C.ActivateLicense()
 	return int(status)
 }
 
-/*
-   FUNCTION: ActivateLicenseOffline()
-
-   PURPOSE: Activates your licenses using the offline activation response file.
-
-   PARAMETERS:
-   * filePath - path of the offline activation response file.
-
-   RETURN CODES: LA_OK, LA_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_OFFLINE_RESPONSE_FILE
-   LA_E_VM, LA_E_TIME, LA_E_FILE_PATH, LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
-*/
+// ActivateLicenseOffline activates your licenses using the offline activation response file.
+//
+// Parameters:
+//   - filePath: path of the offline activation response file.
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_FILE_PERMISSION
+//   LA_E_OFFLINE_RESPONSE_FILE
+//   LA_E_VM 
+//   LA_E_TIME
+//   LA_E_FILE_PATH
+//   LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
 func ActivateLicenseOffline(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.ActivateLicenseOffline(cFilePath)
@@ -1483,17 +1522,18 @@ func ActivateLicenseOffline(filePath string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GenerateOfflineActivationRequest()
-
-   PURPOSE: Generates the offline activation request needed for generating
-   offline activation response in the dashboard.
-
-   PARAMETERS:
-   * filePath - path of the file for the offline request.
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_FILE_PERMISSION
-*/
+// GenerateOfflineActivationRequest generates the offline activation request needed for generating
+// offline activation response in the dashboard.
+//
+// Parameters:
+//   - filePath: path of the file for the offline request.
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_FILE_PERMISSION
 func GenerateOfflineActivationRequest(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineActivationRequest(cFilePath)
@@ -1501,38 +1541,45 @@ func GenerateOfflineActivationRequest(filePath string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: DeactivateLicense()
-
-   PURPOSE: Deactivates the license activation and frees up the corresponding activation
-   slot by contacting the Cryptlex servers.
-
-   This function should be executed at the time of de-registration, ideally on
-   a button click.
-
-   RETURN CODES: LA_OK, LA_E_DEACTIVATION_LIMIT, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME
-   LA_E_LICENSE_KEY, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_TIME_MODIFIED
-*/
+// DeactivateLicense deactivates the license activation and frees up the corresponding activation
+// slot by contacting the Cryptlex servers.
+//
+// This function should be executed at the time of de-registration, ideally on
+// a button click.
+//
+// Return codes:
+//   LA_OK
+//   LA_E_DEACTIVATION_LIMIT
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_LICENSE_KEY
+//   LA_E_INET
+//   LA_E_SERVER
+//   LA_E_RATE_LIMIT
+//   LA_E_TIME_MODIFIED
 func DeactivateLicense() int {
 	status := C.DeactivateLicense()
 	return int(status)
 }
 
-/*
-   FUNCTION: GenerateOfflineDeactivationRequest()
-
-   PURPOSE: Generates the offline deactivation request needed for deactivation of
-   the license in the dashboard and deactivates the license locally.
-
-   A valid offline deactivation file confirms that the license has been successfully
-   deactivated on the user's machine.
-
-   PARAMETERS:
-   * filePath - path of the file for the offline request.
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_FILE_PERMISSION,
-   LA_E_TIME, LA_E_TIME_MODIFIED
-*/
+// GenerateOfflineDeactivationRequest generates the offline deactivation request needed for deactivation of
+// the license in the dashboard and deactivates the license locally.
+//
+// A valid offline deactivation file confirms that the license has been successfully
+// deactivated on the user's machine.
+//
+// Parameters:
+//   - filePath: path of the file for the offline request.
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_FILE_PERMISSION
+//   LA_E_INET
+//   LA_E_TIME_MODIFIED
 func GenerateOfflineDeactivationRequest(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineDeactivationRequest(cFilePath)
@@ -1540,81 +1587,98 @@ func GenerateOfflineDeactivationRequest(filePath string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: IsLicenseGenuine()
+// IsLicenseGenuine verifies whether your app is genuinely activated or not. The verification is
+// done locally by verifying the cryptographic digital signature fetched at the time of
+// activation.
+//
+// After verifying locally, it schedules a server check in a separate thread. After the
+// first server sync it periodically does further syncs at a frequency set for the license.
+//
+// In case server sync fails due to network error, and it continues to fail for fixed
+// number of days (grace period), the function returns LA_GRACE_PERIOD_OVER instead of LA_OK.
+//
+// This function must be called on every start of your program to verify the activation
+// of your app.
+//
+// Return codes:
+//   LA_OK
+//   LA_EXPIRED
+//   LA_SUSPENDED
+//   LA_GRACE_PERIOD_OVER
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 
-   PURPOSE: It verifies whether your app is genuinely activated or not. The verification is
-   done locally by verifying the cryptographic digital signature fetched at the time of
-   activation.
-
-   After verifying locally, it schedules a server check in a separate thread. After the
-   first server sync it periodically does further syncs at a frequency set for the license.
-
-   In case server sync fails due to network error, and it continues to fail for fixed
-   number of days (grace period), the function returns LA_GRACE_PERIOD_OVER instead of LA_OK.
-
-   This function must be called on every start of your program to verify the activation
-   of your app.
-
-   RETURN CODES: LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER, LA_FAIL,
-   LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
-
-   NOTE: If application was activated offline using ActivateLicenseOffline() function, you
-   may want to set grace period to 0 to ignore grace period.
-*/
+//NOTE: If application was activated offline using ActivateLicenseOffline() function, you
+//may want to set grace period to 0 to ignore grace period.
 func IsLicenseGenuine() int {
 	status := C.IsLicenseGenuine()
 	return int(status)
 }
 
-/*
-   FUNCTION: IsLicenseValid()
-
-   PURPOSE: It verifies whether your app is genuinely activated or not. The verification is
-   done locally by verifying the cryptographic digital signature fetched at the time of
-   activation.
-
-   This is just an auxiliary function which you may use in some specific cases, when you
-   want to skip the server sync.
-
-   RETURN CODES: LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER, LA_FAIL,
-   LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
-
-   NOTE: You may want to set grace period to 0 to ignore grace period.
-*/
+// IsLicenseValid verifies whether your app is genuinely activated or not. The verification is
+// done locally by verifying the cryptographic digital signature fetched at the time of
+// activation.
+//
+// This is just an auxiliary function which you may use in some specific cases, when you
+// want to skip the server sync.
+//
+// Return codes:
+//   LA_OK
+//   LA_EXPIRED
+//   LA_SUSPENDED
+//   LA_GRACE_PERIOD_OVER
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_LICENSE_KEY
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
+// NOTE: You may want to set grace period to 0 to ignore grace period.
 func IsLicenseValid() int {
 	status := C.IsLicenseValid()
 	return int(status)
 }
 
-/*
-   FUNCTION: ActivateTrial()
-
-   PURPOSE: Starts the verified trial in your application by contacting the
-   Cryptlex servers.
-
-   This function should be executed when your application starts first time on
-   the user's computer, ideally on a button click.
-
-   RETURN CODES: LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET,
-   LA_E_VM, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT
-*/
+// ActivateTrial starts the verified trial in your application by contacting the Cryptlex servers.
+//
+// This function should be executed when your application starts first time on
+// the user's computer, ideally on a button click.
+//
+// Return codes:
+//   LA_OK
+//   LA_TRIAL_EXPIRED
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_INET
+//   LA_E_VM
+//   LA_E_TIME
+//   LA_E_SERVER
+//   LA_E_CLIENT
+//   LA_E_COUNTRY
+//   LA_E_IP
+//   LA_E_RATE_LIMIT
 func ActivateTrial() int {
 	status := C.ActivateTrial()
 	return int(status)
 }
 
-/*
-   FUNCTION: ActivateTrialOffline()
-
-   PURPOSE: Activates your trial using the offline activation response file.
-
-   PARAMETERS:
-   * filePath - path of the offline activation response file.
-
-   RETURN CODES: LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_OFFLINE_RESPONSE_FILE
-   LA_E_VM, LA_E_TIME, LA_E_FILE_PATH, LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
-*/
+// ActivateTrialOffline activates the trial using the offline activation response file.
+//
+// Parameters:
+//   - filePath: path of the offline activation response file.
+//
+// Return codes:
+//   LA_OK
+//   LA_TRIAL_EXPIRED
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_OFFLINE_RESPONSE_FILE
+//   LA_E_VM
+//   LA_E_TIME
+//   LA_E_FILE_PATH
+//   LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
 func ActivateTrialOffline(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.ActivateTrialOffline(cFilePath)
@@ -1622,17 +1686,17 @@ func ActivateTrialOffline(filePath string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: GenerateOfflineTrialActivationRequest()
-
-   PURPOSE: Generates the offline trial activation request needed for generating
-   offline trial activation response in the dashboard.
-
-   PARAMETERS:
-   * filePath - path of the file for the offline request.
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_FILE_PERMISSION
-*/
+// GenerateOfflineTrialActivationRequest generates the offline trial activation request needed for generating
+// offline trial activation response in the dashboard.
+//
+// Parameters:
+//   - filePath: path of the file for the offline request.
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_FILE_PERMISSION
 func GenerateOfflineTrialActivationRequest(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineTrialActivationRequest(cFilePath)
@@ -1640,94 +1704,102 @@ func GenerateOfflineTrialActivationRequest(filePath string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: IsTrialGenuine()
-
-   PURPOSE: It verifies whether trial has started and is genuine or not. The
-   verification is done locally by verifying the cryptographic digital signature
-   fetched at the time of trial activation.
-
-   This function must be called on every start of your program during the trial period.
-
-   RETURN CODES: LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_TIME, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
-
-*/
+// IsTrialGenuine verifies whether trial has started and is genuine or not. The
+// verification is done locally by verifying the cryptographic digital signature
+// fetched at the time of trial activation.
+//
+// This function must be called on every start of your program during the trial period.
+//
+// Return codes:
+//   LA_OK
+//   LA_TRIAL_EXPIRED
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME
+//   LA_E_TIME_MODIFIED
 func IsTrialGenuine() int {
 	status := C.IsTrialGenuine()
 	return int(status)
 }
 
-/*
-   FUNCTION: ActivateLocalTrial()
-
-   PURPOSE: Starts the local(unverified) trial.
-
-   This function should be executed when your application starts first time on
-   the user's computer.
-
-   PARAMETERS:
-   * trialLength - trial length in days
-
-   RETURN CODES: LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
-
-   NOTE: The function is only meant for local(unverified) trials.
-*/
+// ActivateLocalTrial starts the local(unverified) trial.
+//
+// This function should be executed when your application starts first time on
+// the user's computer.
+//
+// Parameters:
+//   - trialLength: trial length in days
+//
+// Return codes:
+//   LA_OK
+//   LA_LOCAL_TRIAL_EXPIRED
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME_MODIFIED
+//
+// Note: The function is only meant for local(unverified) trials.
 func ActivateLocalTrial(trialLength uint) int {
 	cTrialLength := (C.uint)(trialLength)
 	status := C.ActivateLocalTrial(cTrialLength)
 	return int(status)
 }
 
-/*
-   FUNCTION: IsLocalTrialGenuine()
-
-   PURPOSE: It verifies whether trial has started and is genuine or not. The
-   verification is done locally.
-
-   This function must be called on every start of your program during the trial period.
-
-   RETURN CODES: LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID,
-   LA_E_TIME_MODIFIED
-
-   NOTE: The function is only meant for local(unverified) trials.
-*/
+// IsLocalTrialGenuine It verifies whether trial has started and is genuine or not. The
+//  verification is done locally.
+//
+// This function must be called on every start of your program during the trial period.
+//
+// Return codes:
+//   LA_OK
+//   LA_LOCAL_TRIAL_EXPIRED
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME_MODIFIED
 func IsLocalTrialGenuine() int {
 	status := C.IsLocalTrialGenuine()
 	return int(status)
 }
 
-/*
-   FUNCTION: ExtendLocalTrial()
-
-   PURPOSE: Extends the local trial.
-
-   PARAMETERS:
-   * trialExtensionLength - number of days to extend the trial
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
-
-   NOTE: The function is only meant for local(unverified) trials.
-*/
+// ExtendLocalTrial extends the local trial.
+//
+// Parameters:
+//   - trialExtensionLength: number of days to extend the trial
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_TIME_MODIFIED
+//
+// Note: The function is only meant for local(unverified) trials.
 func ExtendLocalTrial(trialExtensionLength uint) int {
 	cTrialExtensionLength := (C.uint)(trialExtensionLength)
 	status := C.ExtendLocalTrial(cTrialExtensionLength)
 	return int(status)
 }
 
-/*
-   FUNCTION: IncrementActivationMeterAttributeUses()
+// IncrementActivationMeterAttributeUses increments the meter attribute uses of the activation.
+//
+// Parameters:
+//   - name: name of the meter attribute
+//   - increment: the increment value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_METER_ATTRIBUTE_NOT_FOUND
+//   LA_E_INET
+//   LA_E_TIME
+//   LA_E_SERVER
+//   LA_E_CLIENT
+//   LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED
+//   LA_E_AUTHENTICATION_FAILED
+//   LA_E_COUNTRY
+//   LA_E_IP
+//   LA_E_RATE_LIMIT
+//   LA_E_LICENSE_KEY
 
-   PURPOSE: Increments the meter attribute uses of the activation.
-
-   PARAMETERS:
-   * name - name of the meter attribute
-   * increment - the increment value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND,
-   LA_E_INET, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED,
-   LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY
-
-*/
 func IncrementActivationMeterAttributeUses(name string, increment uint) int {
 	cName := goToCString(name)
 	cIncrement := (C.uint)(increment)
@@ -1736,21 +1808,29 @@ func IncrementActivationMeterAttributeUses(name string, increment uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: DecrementActivationMeterAttributeUses()
+// DecrementActivationMeterAttributeUses decrements the meter attribute uses of the activation.
+//
+// Parameters:
+//   - name: name of the meter attribute
+//   - decrement: the decrement value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_METER_ATTRIBUTE_NOT_FOUND
+//   LA_E_INET
+//   LA_E_TIME
+//   LA_E_SERVER
+//   LA_E_CLIENT
+//   LA_E_RATE_LIMIT
+//   LA_E_LICENSE_KEY
+//   LA_E_AUTHENTICATION_FAILED
+//   LA_E_COUNTRY, LA_E_IP
+//   LA_E_ACTIVATION_NOT_FOUND
 
-   PURPOSE: Decrements the meter attribute uses of the activation.
+//NOTE: If the decrement is more than the current uses, it resets the uses to 0.
 
-   PARAMETERS:
-   * name - name of the meter attribute
-   * decrement - the decrement value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND,
-   LA_E_INET, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY,
-   LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_IP, LA_E_ACTIVATION_NOT_FOUND
-
-   NOTE: If the decrement is more than the current uses, it resets the uses to 0.
-*/
 func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
 	cName := goToCString(name)
 	cDecrement := (C.uint)(decrement)
@@ -1759,19 +1839,27 @@ func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: ResetActivationMeterAttributeUses()
-
-   PURPOSE: Resets the meter attribute uses consumed by the activation.
-
-   PARAMETERS:
-   * name - name of the meter attribute
-   * decrement - the decrement value
-
-   RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND,
-   LA_E_INET, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY,
-   LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_IP, LA_E_ACTIVATION_NOT_FOUND
-*/
+// ResetActivationMeterAttributeUses resets the meter attribute uses consumed by the activation.
+//
+// Parameters:
+//   - name: name of the meter attribute
+//   - decrement: the decrement value
+//
+// Return codes:
+//   LA_OK
+//   LA_FAIL
+//   LA_E_PRODUCT_ID
+//   LA_E_METER_ATTRIBUTE_NOT_FOUND
+//   LA_E_INET
+//   LA_E_TIME
+//   LA_E_SERVER
+//   LA_E_CLIENT
+//   LA_E_RATE_LIMIT
+//   LA_E_LICENSE_KEY
+//   LA_E_AUTHENTICATION_FAILED
+//   LA_E_COUNTRY
+//   LA_E_IP
+//   LA_E_ACTIVATION_NOT_FOUND
 func ResetActivationMeterAttributeUses(name string) int {
 	cName := goToCString(name)
 	status := C.ResetActivationMeterAttributeUses(cName)
@@ -1779,17 +1867,15 @@ func ResetActivationMeterAttributeUses(name string) int {
 	return int(status)
 }
 
-/*
-   FUNCTION: Reset()
-
-   PURPOSE: Resets the activation and trial data stored in the machine.
-
-   This function is meant for developer testing only.
-
-   RETURN CODES: LA_OK, LA_E_PRODUCT_ID
-
-   NOTE: The function does not reset local(unverified) trial data.
-*/
+// Reset resets the activation and trial data stored in the machine.
+//
+// This function is meant for developer testing only.
+//
+// Return codes:
+//   LA_OK
+//   LA_E_PRODUCT_ID
+//
+// Note: The function does not reset local(unverified) trial data.
 func Reset() int {
 	status := C.Reset()
 	return int(status)
