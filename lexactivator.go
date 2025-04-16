@@ -66,13 +66,13 @@ func releaseUpdateCallbackWrapper(status int) {
 // This function must be called on every start of your program
 // before any other functions are called.
 //
+// Deprecated: This function is deprecated. Use SetProductData() instead.
+//
 // Parameters:
 //   - filePath: absolute path of the product file (Product.dat)
 //
-// Return Codes: 
-//   LA_OK
-//   LA_E_FILE_PATH
-//   LA_E_PRODUCT_FILE
+// Return codes:
+//   LA_OK, LA_E_FILE_PATH, LA_E_PRODUCT_FILE
 //
 // Note: If this function fails to set the path of product file, none of the
 // other functions will work.
@@ -94,9 +94,8 @@ func SetProductFile(filePath string) int {
 // Parameters:
 //   - productData: content of the Product.dat file
 //
-// Return Codes: 
-//   LA_OK
-//   LA_E_PRODUCT_DATA
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_DATA
 //
 // NOTE: If this function fails to set the product data, none of the
 // other functions will work.
@@ -133,13 +132,8 @@ func SetProductData(productData string) int {
 //     LA_ALL_USERS: This flag is specifically designed for Windows and should be used 
 //     for system-wide activations.
 //
-// Return Codes: 
-//   LA_OK
-//   LA_E_WMIC
-//   LA_E_PRODUCT_FILE
-//   LA_E_PRODUCT_DATA
-//   LA_E_PRODUCT_ID
-//   LA_E_SYSTEM_PERMISSION
+// Return codes: 
+//   LA_OK, LA_E_WMIC, LA_E_PRODUCT_FILE, LA_E_PRODUCT_DATA, LA_E_PRODUCT_ID, LA_E_SYSTEM_PERMISSION
 //
 // NOTE: If this function fails to set the product id, none of the other
 // functions will work.
@@ -204,9 +198,8 @@ func SetDebugMode(enable uint) int {
 // Parameters :
 //   - enable: false or true to disable or enable in-memory caching.
 //
-// Return Codes: 
-//   LA_OK
-//   LA_E_PRODUCT_ID
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID
 func SetCacheMode(enable bool) int {
 	var cEnable C.uint
 	if enable {
@@ -231,10 +224,8 @@ func SetCacheMode(enable bool) int {
 // Parameters:
 //   - fingerprint: string of minimum length 64 characters and maximum length 256 characters.
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_CUSTOM_FINGERPRINT_LENGTH
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_CUSTOM_FINGERPRINT_LENGTH
 func SetCustomDeviceFingerprint(fingerprint string) int {
 	cFingerprint := goToCString(fingerprint)
 	status := C.SetCustomDeviceFingerprint(cFingerprint)
@@ -247,10 +238,8 @@ func SetCustomDeviceFingerprint(fingerprint string) int {
 // Parameters:
 //   - licenseKey: a valid license key.
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 func SetLicenseKey(licenseKey string) int {
 	cLicenseKey := goToCString(licenseKey)
 	status := C.SetLicenseKey(cLicenseKey)
@@ -269,10 +258,8 @@ func SetLicenseKey(licenseKey string) int {
 //   - email: user email address.
 //   - password: user password.
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 func SetLicenseUserCredential(email string, password string) int {
 	cEmail := goToCString(email)
 	cPassword := goToCString(password)
@@ -294,10 +281,8 @@ func SetLicenseUserCredential(email string, password string) int {
 // Parameters:
 //   - callback: name of the callback function
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 func SetLicenseCallback(callbackFunction func(int)) int {
 	status := C.SetLicenseCallback((C.CallbackType)(unsafe.Pointer(C.licenseCallbackCgoGateway)))
 	licenseCallbackFuncion = callbackFunction
@@ -313,10 +298,8 @@ func SetLicenseCallback(callbackFunction func(int)) int {
 //   - leaseDuration: value of the lease duration. A value of -1 indicates unlimited
 //   lease duration.
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 func SetActivationLeaseDuration(leaseDuration int64) int {
    cLeaseDuration := (C.int64_t)(leaseDuration)
    status := C.SetActivationLeaseDuration(cLeaseDuration)
@@ -332,13 +315,8 @@ func SetActivationLeaseDuration(leaseDuration int64) int {
 //   - key: string of maximum length 256 characters with utf-8 encoding.
 //   - value: string of maximum length 4096 characters with utf-8 encoding.
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_METADATA_KEY_LENGTH
-//   LA_E_METADATA_VALUE_LENGTH
-//   LA_E_ACTIVATION_METADATA_LIMIT
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_METADATA_KEY_LENGTH, LA_E_METADATA_VALUE_LENGTH, LA_E_ACTIVATION_METADATA_LIMIT
 func SetActivationMetadata(key string, value string) int {
 	cKey := goToCString(key)
 	cValue := goToCString(value)
@@ -357,12 +335,8 @@ func SetActivationMetadata(key string, value string) int {
 //   - key: string of maximum length 256 characters with utf-8 encoding.
 //   - value: string of maximum length 4096 characters with utf-8 encoding.
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_METADATA_KEY_LENGTH
-//   LA_E_METADATA_VALUE_LENGTH
-//   LA_E_TRIAL_ACTIVATION_METADATA_LIMIT
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_LENGTH, LA_E_METADATA_VALUE_LENGTH, LA_E_TRIAL_ACTIVATION_METADATA_LIMIT
 func SetTrialActivationMetadata(key string, value string) int {
 	cKey := goToCString(key)
 	cValue := goToCString(value)
@@ -382,10 +356,8 @@ func SetTrialActivationMetadata(key string, value string) int {
 // Parameters:
 //   - appVersion: string of maximum length 256 characters with utf-8 encoding.
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_APP_VERSION_LENGTH
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_APP_VERSION_LENGTH
 func SetAppVersion(appVersion string) int {
 	cAppVersion := goToCString(appVersion)
 	status := C.SetAppVersion(cAppVersion)
@@ -400,10 +372,8 @@ func SetAppVersion(appVersion string) int {
 // Parameters:
 //   - releaseVersion: string in following allowed formats: x.x, x.x.x, x.x.x.x
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_RELEASE_VERSION_FORMAT
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_VERSION_FORMAT
 func SetReleaseVersion(releaseVersion string) int {
 	cReleaseVersion := goToCString(releaseVersion)
 	status := C.SetReleaseVersion(cReleaseVersion)
@@ -416,9 +386,8 @@ func SetReleaseVersion(releaseVersion string) int {
 // Parameters:
 //   - releasePublishedDate: unix timestamp of release published date.
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID
 func SetReleasePublishedDate(releasePublishedDate uint) int {
    cReleasePublishedDate := (C.uint)(releasePublishedDate)
    status := C.SetReleasePublishedDate(cReleasePublishedDate)
@@ -432,10 +401,8 @@ func SetReleasePublishedDate(releasePublishedDate uint) int {
 // Parameters:
 //   - releasePlatform: release platform e.g. windows, macos, linux
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_RELEASE_PLATFORM_LENGTH
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_PLATFORM_LENGTH
 func SetReleasePlatform(releasePlatform string) int {
 	cReleasePlatform := goToCString(releasePlatform)
 	status := C.SetReleasePlatform(cReleasePlatform)
@@ -450,10 +417,8 @@ func SetReleasePlatform(releasePlatform string) int {
 // Parameters:
 //   - releaseChannel: release channel e.g. stable
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_RELEASE_CHANNEL_LENGTH
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_RELEASE_CHANNEL_LENGTH
 func SetReleaseChannel(releaseChannel string) int {
 	cReleaseChannel := goToCString(releaseChannel)
 	status := C.SetReleaseChannel(cReleaseChannel)
@@ -469,10 +434,8 @@ func SetReleaseChannel(releaseChannel string) int {
 //   - name: name of the meter attribute
 //   - uses: the uses value
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
 func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
 	cName := goToCString(name)
 	cUses := (C.uint)(uses)
@@ -493,10 +456,8 @@ func SetOfflineActivationRequestMeterAttributeUses(name string, uses uint) int {
 // Parameters:
 //   - proxy: proxy string having correct proxy format
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_NET_PROXY
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_NET_PROXY
 //
 // NOTE: Proxy settings of the computer are automatically detected. So, in most of the
 // cases you don't need to care whether your user is behind a proxy server or not.
@@ -513,10 +474,8 @@ func SetNetworkProxy(proxy string) int {
 // Parameters:
 //   - host: the address of the Cryptlex on-premise server
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_HOST_URL
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_HOST_URL
 func SetCryptlexHost(host string) int {
 	cHost := goToCString(host)
 	status := C.SetCryptlexHost(cHost)
@@ -529,10 +488,8 @@ func SetCryptlexHost(host string) int {
 // Parameters:
 //   - twoFactorAuthenticationCode: the 2FA code
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID
 func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
    cTwoFactorAuthenticationCode := goToCString(twoFactorAuthenticationCode)
    status := C.SetTwoFactorAuthenticationCode(cTwoFactorAuthenticationCode)
@@ -548,11 +505,8 @@ func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
 //   - key: metadata key to retrieve the value
 //   - value: pointer to a string that receives the value
 //
-// Return Codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_METADATA_KEY_NOT_FOUND
-//   LA_E_BUFFER_SIZE
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetProductMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -570,14 +524,8 @@ func GetProductMetadata(key string, value *string) int {
 //   - name: pointer to a buffer that receives the value of the string
 //   - length: size of the buffer pointed to by the name parameter
 //
-// Return Codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_PRODUCT_VERSION_NOT_LINKED
-//   LA_E_BUFFER_SIZE
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED, LA_E_BUFFER_SIZE
 func GetProductVersionName(name *string) int {
 	var cName = getCArray()
 	status := C.GetProductVersionName(&cName[0], maxCArrayLength)
@@ -593,14 +541,8 @@ func GetProductVersionName(name *string) int {
 //   - displayName: pointer to a string that receives the value.
 //   - length: size of the buffer pointed to by the displayName parameter
 //
-// Return Codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_PRODUCT_VERSION_NOT_LINKED
-//   LA_E_BUFFER_SIZE
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED, LA_E_BUFFER_SIZE
 func GetProductVersionDisplayName(displayName *string) int {
 	var cDisplayName = getCArray()
 	status := C.GetProductVersionDisplayName(&cDisplayName[0], maxCArrayLength)
@@ -610,6 +552,8 @@ func GetProductVersionDisplayName(displayName *string) int {
 
 // GetProductVersionFeatureFlag gets the product version feature flag.
 //
+// Deprecated: This function is deprecated. Use GetFeatureEntitlement() instead.
+//
 // Parameters:
 //   name - name of the feature flag
 //   enabled - pointer to the integer that receives the value - 0 or 1
@@ -617,14 +561,7 @@ func GetProductVersionDisplayName(displayName *string) int {
 //   length - size of the buffer pointed to by the data parameter
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_PRODUCT_VERSION_NOT_LINKED
-//   LA_E_FEATURE_FLAG_NOT_FOUND
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED, LA_E_FEATURE_FLAG_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetProductVersionFeatureFlag(name string, enabled *bool, data *string) int {
    cName := goToCString(name)
    var cEnabled C.uint
@@ -643,11 +580,7 @@ func GetProductVersionFeatureFlag(name string, enabled *bool, data *string) int 
 //   - value: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_METADATA_KEY_NOT_FOUND
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetLicenseMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -666,10 +599,7 @@ func GetLicenseMetadata(key string, value *string) int {
 //   - grossUses: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_METER_ATTRIBUTE_NOT_FOUND
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
 func GetLicenseMeterAttribute(name string, allowedUses *int64, totalUses *uint64, grossUses *uint64) int {
 	cName := goToCString(name)
 	var cAllowedUses C.int64_t
@@ -689,10 +619,7 @@ func GetLicenseMeterAttribute(name string, allowedUses *int64, totalUses *uint64
 //   licenseKey - pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_BUFFER_SIZE
 func GetLicenseKey(licenseKey *string) int {
 	var cLicenseKey = getCArray()
 	status := C.GetLicenseKey(&cLicenseKey[0], maxCArrayLength)
@@ -707,11 +634,7 @@ func GetLicenseKey(licenseKey *string) int {
 //     A value of -1 indicates unlimited number of activations.
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetLicenseAllowedActivations(allowedActivations *int64) int {
 	var cAllowedActivations C.int64_t
 	status := C.GetLicenseAllowedActivations(&cAllowedActivations)
@@ -725,11 +648,7 @@ func GetLicenseAllowedActivations(allowedActivations *int64) int {
 //   - totalActivations: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetLicenseTotalActivations(totalActivations *uint) int {
 	var cTotalActivations C.uint
 	status := C.GetLicenseTotalActivations(&cTotalActivations)
@@ -744,11 +663,7 @@ func GetLicenseTotalActivations(totalActivations *uint) int {
 //     A value of -1 indicates unlimited number of deactivations.
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetLicenseAllowedDeactivations(allowedDeactivations *int64) int {
 	var cAllowedDeactivations C.int64_t
 	status := C.GetLicenseAllowedDeactivations(&cAllowedDeactivations)
@@ -762,11 +677,7 @@ func GetLicenseAllowedDeactivations(allowedDeactivations *int64) int {
 //   - totalDeactivations: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetLicenseTotalDeactivations(totalDeactivations *uint) int {
 	var cTotalDeactivations C.uint
 	status := C.GetLicenseTotalDeactivations(&cTotalDeactivations)
@@ -780,12 +691,7 @@ func GetLicenseTotalDeactivations(totalDeactivations *uint) int {
 //   - creationDate: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetLicenseCreationDate(creationDate *uint) int {
    var cCreationDate C.uint
    status := C.GetLicenseCreationDate(&cCreationDate)
@@ -799,12 +705,7 @@ func GetLicenseCreationDate(creationDate *uint) int {
 //   - activationDate: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetLicenseActivationDate(activationDate *uint) int {
    var cActivationDate C.uint
    status := C.GetLicenseActivationDate(&cActivationDate)
@@ -818,12 +719,7 @@ func GetLicenseActivationDate(activationDate *uint) int {
 //   - activationCreationDate: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetActivationCreationDate(activationCreationDate *uint) int {
    var cActivationCreationDate C.uint
    status := C.GetActivationCreationDate(&cActivationCreationDate)
@@ -837,11 +733,7 @@ func GetActivationCreationDate(activationCreationDate *uint) int {
 //   - expiryDate: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetLicenseExpiryDate(expiryDate *uint) int {
 	var cExpiryDate C.uint
 	status := C.GetLicenseExpiryDate(&cExpiryDate)
@@ -855,12 +747,7 @@ func GetLicenseExpiryDate(expiryDate *uint) int {
 //   - maintenanceExpiryDate: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetLicenseMaintenanceExpiryDate(maintenanceExpiryDate *uint) int {
    var cMaintenanceExpiryDate C.uint
 	status := C.GetLicenseMaintenanceExpiryDate(&cMaintenanceExpiryDate)
@@ -874,12 +761,7 @@ func GetLicenseMaintenanceExpiryDate(maintenanceExpiryDate *uint) int {
 //   - maxAllowedReleaseVersion: pointer to a string that receives the value
 //   - length: size of the buffer pointed to by the maxAllowedReleaseVersion parameter
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
 //   LA_E_BUFFER_SIZE
 func GetLicenseMaxAllowedReleaseVersion(maxAllowedReleaseVersion *string) int {
 	var cMaxAllowedReleaseVersion = getCArray()
@@ -894,12 +776,7 @@ func GetLicenseMaxAllowedReleaseVersion(maxAllowedReleaseVersion *string) int {
 //   - email: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetLicenseUserEmail(email *string) int {
 	var cEmail = getCArray()
 	status := C.GetLicenseUserEmail(&cEmail[0], maxCArrayLength)
@@ -913,12 +790,7 @@ func GetLicenseUserEmail(email *string) int {
 //   - name: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetLicenseUserName(name *string) int {
 	var cName = getCArray()
 	status := C.GetLicenseUserName(&cName[0], maxCArrayLength)
@@ -932,12 +804,7 @@ func GetLicenseUserName(name *string) int {
 //   - company: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetLicenseUserCompany(company *string) int {
 	var cCompany = getCArray()
 	status := C.GetLicenseUserCompany(&cCompany[0], maxCArrayLength)
@@ -952,11 +819,7 @@ func GetLicenseUserCompany(company *string) int {
 //   - value: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_METADATA_KEY_NOT_FOUND
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetLicenseUserMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -972,12 +835,7 @@ func GetLicenseUserMetadata(key string, value *string) int {
 //   - organizationName: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetLicenseOrganizationName(organizationName *string) int {
    var cOrganizationName = getCArray()
    status := C.GetLicenseOrganizationName(&cOrganizationName[0], maxCArrayLength)
@@ -991,12 +849,7 @@ func GetLicenseOrganizationName(organizationName *string) int {
 //   - organizationAddress: pointer to the OrganizationAddress struct that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int {
    var cOrganizationAddress = getCArray()
    organizationAddressJson := ""
@@ -1019,12 +872,7 @@ func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int
 //   - userLicenses: pointer to the array of UserLicense struct that receives the values of the user's licenses.
 //
 // Return codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_INET
-//   LA_E_SERVER
-//   LA_E_RATE_LIMIT
-//   LA_E_USER_NOT_AUTHENTICATED
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_USER_NOT_AUTHENTICATED
 //   LA_E_BUFFER_SIZE
 func GetUserLicenses(userLicenses *[]UserLicense) int {
    var cUserLicenses = getCArray()
@@ -1044,12 +892,7 @@ func GetUserLicenses(userLicenses *[]UserLicense) int {
 //   - licenseType: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetLicenseType(licenseType *string) int {
 	var cLicenseType = getCArray()
 	status := C.GetLicenseType(&cLicenseType[0], maxCArrayLength)
@@ -1063,12 +906,7 @@ func GetLicenseType(licenseType *string) int {
 //   - id: pointer to a buffer that receives the value of the string
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetActivationId(id *string) int {
    var cActivationId = getCArray()
    status := C.GetActivationId(&cActivationId[0], maxCArrayLength)
@@ -1083,10 +921,7 @@ func GetActivationId(id *string) int {
 //   - value: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_METADATA_KEY_NOT_FOUND
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetActivationMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -1105,12 +940,7 @@ func GetActivationMetadata(key string, value *string) int {
 //   - currentModeLength: size of the buffer pointed to by the currentMode parameter
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetActivationMode(initialMode *string, currentMode *string) int {
    var cInitialMode = getCArray()
    var cCurrentMode = getCArray()
@@ -1127,10 +957,7 @@ func GetActivationMode(initialMode *string, currentMode *string) int {
 //   - uses: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_METER_ATTRIBUTE_NOT_FOUND
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND
 func GetActivationMeterAttributeUses(name string, uses *uint) int {
 	cName := goToCString(name)
 	var cUses C.uint
@@ -1146,11 +973,7 @@ func GetActivationMeterAttributeUses(name string, uses *uint) int {
 //   - expiryDate: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetServerSyncGracePeriodExpiryDate(expiryDate *uint) int {
 	var cExpiryDate C.uint
 	status := C.GetServerSyncGracePeriodExpiryDate(&cExpiryDate)
@@ -1165,10 +988,7 @@ func GetServerSyncGracePeriodExpiryDate(expiryDate *uint) int {
 //   - value: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_METADATA_KEY_NOT_FOUND
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetTrialActivationMetadata(key string, value *string) int {
 	cKey := goToCString(key)
 	var cValue = getCArray()
@@ -1184,11 +1004,7 @@ func GetTrialActivationMetadata(key string, value *string) int {
 //   - trialExpiryDate: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 func GetTrialExpiryDate(trialExpiryDate *uint) int {
 	var cTrialExpiryDate C.uint
 	status := C.GetTrialExpiryDate(&cTrialExpiryDate)
@@ -1202,12 +1018,7 @@ func GetTrialExpiryDate(trialExpiryDate *uint) int {
 //   - trialId: pointer to a string that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetTrialId(trialId *string) int {
 	var cTrialId = getCArray()
 	status := C.GetTrialId(&cTrialId[0], maxCArrayLength)
@@ -1221,10 +1032,7 @@ func GetTrialId(trialId *string) int {
 //   - trialExpiryDate: pointer to the integer that receives the value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
 func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 	var cTrialExpiryDate C.uint
 	status := C.GetLocalTrialExpiryDate(&cTrialExpiryDate)
@@ -1239,8 +1047,7 @@ func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 //   - length: size of the buffer pointed to by the libraryVersion parameter
 //
 // Return codes:
-//   LA_OK
-//   LA_E_BUFFER_SIZE
+//   LA_OK, LA_E_BUFFER_SIZE
 func GetLibraryVersion(libraryVersion *string) int {
 	var cLibraryVersion = getCArray()
 	status := C.GetLibraryVersion(&cLibraryVersion[0], maxCArrayLength)
@@ -1255,13 +1062,7 @@ func GetLibraryVersion(libraryVersion *string) int {
 //   - length: size of the buffer pointed to by the name parameter
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
-//   LA_E_ENTITLEMENT_SET_NOT_LINKED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
 func GetLicenseEntitlementSetName(name *string) int {
 	var cName = getCArray()
 	status := C.GetLicenseEntitlementSetName(&cName[0], maxCArrayLength)
@@ -1276,13 +1077,7 @@ func GetLicenseEntitlementSetName(name *string) int {
 //   - length: size of the buffer pointed to by the displayName parameter
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
-//   LA_E_ENTITLEMENT_SET_NOT_LINKED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
 func GetLicenseEntitlementSetDisplayName(displayName *string) int {
 	var cDisplayName = getCArray()
 	status := C.GetLicenseEntitlementSetDisplayName(&cDisplayName[0], maxCArrayLength)
@@ -1300,13 +1095,7 @@ func GetLicenseEntitlementSetDisplayName(displayName *string) int {
 //   - featureEntitlements: pointer to the struct that receives the values of the feature entitlements.
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
-//   LA_E_FEATURE_ENTITLEMENTS_INVALID
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENTS_INVALID
 func GetFeatureEntitlements(featureEntitlements *[]FeatureEntitlement) int {
    var cFeatureEntitlements = getCArray()
    featureEntitlementsJson := ""
@@ -1330,19 +1119,12 @@ func GetFeatureEntitlements(featureEntitlements *[]FeatureEntitlement) int {
 //   - featureEntitlement: pointer to the struct that receives the values of the feature entitlement
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
-//   LA_E_BUFFER_SIZE
-//   LA_E_FEATURE_ENTITLEMENT_NOT_FOUND
-//   LA_E_FEATURE_ENTITLEMENTS_INVALID
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENT_NOT_FOUND, LA_E_FEATURE_ENTITLEMENTS_INVALID
 
 func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitlement) int {
    cFeatureName := goToCString(featureName)
    var cFeatureEntitlement = getCArray()
-   status := C.GetFeatureEntitlementInternal(cFeatureName, &cFeatureEntitlement[0])
+   status := C.GetFeatureEntitlementInternal(cFeatureName, &cFeatureEntitlement[0], maxCArrayLength)
    featureEntitlementJson := strings.TrimRight(ctoGoString(&cFeatureEntitlement[0]), "\x00")
    if featureEntitlementJson != "" {
       entitlement := []byte(featureEntitlementJson)
@@ -1357,7 +1139,7 @@ func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitl
 // This function should only be used if you manage your releases through
 // Cryptlex release management API.
 //
-// Deprecated: This function is deprecated. Use CheckForReleaseUpdate() instead.
+// Deprecated: This function is deprecated. Use CheckReleaseUpdate() instead.
 //
 // Parameters:
 //   - platform: release platform e.g. windows, macos, linux
@@ -1366,10 +1148,7 @@ func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitl
 //   - releaseUpdateCallback: name of the callback function.
 //
 // Return codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_RELEASE_VERSION_FORMAT
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT
 func CheckForReleaseUpdate(platform string, version string, channel string, callbackFunction func(int)) int {
 	cPlatform := goToCString(platform)
 	cVersion := goToCString(version)
@@ -1410,13 +1189,7 @@ func CheckForReleaseUpdate(platform string, version string, channel string, call
 //     to be nil if no user data needs to be passed to the callback.
 //
 // Return codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_RELEASE_VERSION_FORMAT
-//   LA_E_RELEASE_VERSION
-//   LA_E_RELEASE_PLATFORM
-//   LA_E_RELEASE_CHANNEL
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT, LA_E_RELEASE_VERSION, LA_E_RELEASE_PLATFORM, LA_E_RELEASE_CHANNEL
 func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release, interface{}), releaseFlags uint, userData interface{}) int {
    cReleaseFlags := (C.uint)(releaseFlags)
 	status := C.CheckReleaseUpdateInternal((C.ReleaseCallbackTypeInternal)(unsafe.Pointer(C.newReleaseUpdateCallbackCgoGateway)), cReleaseFlags, nil)
@@ -1432,12 +1205,7 @@ func CheckReleaseUpdate(releaseUpdateCallbackFunction func(int, *Release, interf
 //   - password: user password.
 //
 // Return codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_INET
-//   LA_E_SERVER
-//   LA_E_RATE_LIMIT
-//   LA_E_AUTHENTICATION_FAILED
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_AUTHENTICATION_FAILED
 func AuthenticateUser(email string, password string) int {
    cEmail := goToCString(email)
 	cPassword := goToCString(password)
@@ -1453,14 +1221,7 @@ func AuthenticateUser(email string, password string) int {
 //   - idToken: The id token obtained from the OIDC provider.
 //
 // Return codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
-//   LA_E_INET
-//   LA_E_SERVER
-//   LA_E_RATE_LIMIT
-//   LA_E_AUTHENTICATION_ID_TOKEN_INVALID
-//   LA_E_OIDC_SSO_NOT_ENABLED
-//   LA_E_USERS_LIMIT_REACHED
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_AUTHENTICATION_ID_TOKEN_INVALID, LA_E_OIDC_SSO_NOT_ENABLED, LA_E_USERS_LIMIT_REACHED
 func AuthenticateUserWithIdToken(idToken string) int {
    cIdToken := goToCString(idToken)
    status := C.AuthenticateUserWithIdToken(cIdToken)
@@ -1476,24 +1237,7 @@ func AuthenticateUserWithIdToken(idToken string) int {
 // a button click.
 //
 // Return codes:
-//   LA_OK
-//   LA_EXPIRED
-//   LA_SUSPENDED
-//   LA_E_REVOKED
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_INET
-//   LA_E_VM
-//   LA_E_TIME
-//   LA_E_ACTIVATION_LIMIT
-//   LA_E_SERVER
-//   LA_E_CLIENT
-//   LA_E_AUTHENTICATION_FAILED
-//   LA_E_LICENSE_TYPE
-//   LA_E_COUNTRY
-//   LA_E_IP
-//   LA_E_RATE_LIMIT
-//   LA_E_LICENSE_KEY
+//   LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_ACTIVATION_LIMIT, LA_E_SERVER, LA_E_CLIENT, LA_E_AUTHENTICATION_FAILED, LA_E_LICENSE_TYPE, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_NOT_ALLOWED, LA_E_RELEASE_VERSION_FORMAT
 func ActivateLicense() int {
 	status := C.ActivateLicense()
 	return int(status)
@@ -1505,16 +1249,7 @@ func ActivateLicense() int {
 //   - filePath: path of the offline activation response file.
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_FILE_PERMISSION
-//   LA_E_OFFLINE_RESPONSE_FILE
-//   LA_E_VM 
-//   LA_E_TIME
-//   LA_E_FILE_PATH
-//   LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_FILE_PERMISSION, LA_E_OFFLINE_RESPONSE_FILE, LA_E_VM, LA_E_TIME, LA_E_FILE_PATH, LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
 func ActivateLicenseOffline(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.ActivateLicenseOffline(cFilePath)
@@ -1529,11 +1264,7 @@ func ActivateLicenseOffline(filePath string) int {
 //   - filePath: path of the file for the offline request.
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_FILE_PERMISSION
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_FILE_PERMISSION
 func GenerateOfflineActivationRequest(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineActivationRequest(cFilePath)
@@ -1548,16 +1279,7 @@ func GenerateOfflineActivationRequest(filePath string) int {
 // a button click.
 //
 // Return codes:
-//   LA_OK
-//   LA_E_DEACTIVATION_LIMIT
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_LICENSE_KEY
-//   LA_E_INET
-//   LA_E_SERVER
-//   LA_E_RATE_LIMIT
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_E_DEACTIVATION_LIMIT, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_LICENSE_KEY, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_TIME_MODIFIED
 func DeactivateLicense() int {
 	status := C.DeactivateLicense()
 	return int(status)
@@ -1573,13 +1295,7 @@ func DeactivateLicense() int {
 //   - filePath: path of the file for the offline request.
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_FILE_PERMISSION
-//   LA_E_INET
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_FILE_PERMISSION, LA_E_INET, LA_E_TIME_MODIFIED
 func GenerateOfflineDeactivationRequest(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineDeactivationRequest(cFilePath)
@@ -1601,15 +1317,7 @@ func GenerateOfflineDeactivationRequest(filePath string) int {
 // of your app.
 //
 // Return codes:
-//   LA_OK
-//   LA_EXPIRED
-//   LA_SUSPENDED
-//   LA_GRACE_PERIOD_OVER
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
 
 //NOTE: If application was activated offline using ActivateLicenseOffline() function, you
 //may want to set grace period to 0 to ignore grace period.
@@ -1626,15 +1334,7 @@ func IsLicenseGenuine() int {
 // want to skip the server sync.
 //
 // Return codes:
-//   LA_OK
-//   LA_EXPIRED
-//   LA_SUSPENDED
-//   LA_GRACE_PERIOD_OVER
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_LICENSE_KEY
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
 // NOTE: You may want to set grace period to 0 to ignore grace period.
 func IsLicenseValid() int {
 	status := C.IsLicenseValid()
@@ -1647,18 +1347,7 @@ func IsLicenseValid() int {
 // the user's computer, ideally on a button click.
 //
 // Return codes:
-//   LA_OK
-//   LA_TRIAL_EXPIRED
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_INET
-//   LA_E_VM
-//   LA_E_TIME
-//   LA_E_SERVER
-//   LA_E_CLIENT
-//   LA_E_COUNTRY
-//   LA_E_IP
-//   LA_E_RATE_LIMIT
+//   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT
 func ActivateTrial() int {
 	status := C.ActivateTrial()
 	return int(status)
@@ -1670,15 +1359,7 @@ func ActivateTrial() int {
 //   - filePath: path of the offline activation response file.
 //
 // Return codes:
-//   LA_OK
-//   LA_TRIAL_EXPIRED
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_OFFLINE_RESPONSE_FILE
-//   LA_E_VM
-//   LA_E_TIME
-//   LA_E_FILE_PATH
-//   LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
+//   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_OFFLINE_RESPONSE_FILE, LA_E_VM, LA_E_TIME, LA_E_FILE_PATH, LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
 func ActivateTrialOffline(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.ActivateTrialOffline(cFilePath)
@@ -1693,10 +1374,7 @@ func ActivateTrialOffline(filePath string) int {
 //   - filePath: path of the file for the offline request.
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_FILE_PERMISSION
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_FILE_PERMISSION
 func GenerateOfflineTrialActivationRequest(filePath string) int {
 	cFilePath := goToCString(filePath)
 	status := C.GenerateOfflineTrialActivationRequest(cFilePath)
@@ -1711,12 +1389,7 @@ func GenerateOfflineTrialActivationRequest(filePath string) int {
 // This function must be called on every start of your program during the trial period.
 //
 // Return codes:
-//   LA_OK
-//   LA_TRIAL_EXPIRED
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED
 func IsTrialGenuine() int {
 	status := C.IsTrialGenuine()
 	return int(status)
@@ -1731,11 +1404,7 @@ func IsTrialGenuine() int {
 //   - trialLength: trial length in days
 //
 // Return codes:
-//   LA_OK
-//   LA_LOCAL_TRIAL_EXPIRED
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
 //
 // Note: The function is only meant for local(unverified) trials.
 func ActivateLocalTrial(trialLength uint) int {
@@ -1750,11 +1419,7 @@ func ActivateLocalTrial(trialLength uint) int {
 // This function must be called on every start of your program during the trial period.
 //
 // Return codes:
-//   LA_OK
-//   LA_LOCAL_TRIAL_EXPIRED
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
 func IsLocalTrialGenuine() int {
 	status := C.IsLocalTrialGenuine()
 	return int(status)
@@ -1766,10 +1431,7 @@ func IsLocalTrialGenuine() int {
 //   - trialExtensionLength: number of days to extend the trial
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_TIME_MODIFIED
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME_MODIFIED
 //
 // Note: The function is only meant for local(unverified) trials.
 func ExtendLocalTrial(trialExtensionLength uint) int {
@@ -1785,21 +1447,7 @@ func ExtendLocalTrial(trialExtensionLength uint) int {
 //   - increment: the increment value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_METER_ATTRIBUTE_NOT_FOUND
-//   LA_E_INET
-//   LA_E_TIME
-//   LA_E_SERVER
-//   LA_E_CLIENT
-//   LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED
-//   LA_E_AUTHENTICATION_FAILED
-//   LA_E_COUNTRY
-//   LA_E_IP
-//   LA_E_RATE_LIMIT
-//   LA_E_LICENSE_KEY
-
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND, LA_E_INET, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED, LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY
 func IncrementActivationMeterAttributeUses(name string, increment uint) int {
 	cName := goToCString(name)
 	cIncrement := (C.uint)(increment)
@@ -1815,19 +1463,7 @@ func IncrementActivationMeterAttributeUses(name string, increment uint) int {
 //   - decrement: the decrement value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_METER_ATTRIBUTE_NOT_FOUND
-//   LA_E_INET
-//   LA_E_TIME
-//   LA_E_SERVER
-//   LA_E_CLIENT
-//   LA_E_RATE_LIMIT
-//   LA_E_LICENSE_KEY
-//   LA_E_AUTHENTICATION_FAILED
-//   LA_E_COUNTRY, LA_E_IP
-//   LA_E_ACTIVATION_NOT_FOUND
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND, LA_E_INET, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY, LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_IP, LA_E_ACTIVATION_NOT_FOUND
 
 //NOTE: If the decrement is more than the current uses, it resets the uses to 0.
 
@@ -1846,20 +1482,7 @@ func DecrementActivationMeterAttributeUses(name string, decrement uint) int {
 //   - decrement: the decrement value
 //
 // Return codes:
-//   LA_OK
-//   LA_FAIL
-//   LA_E_PRODUCT_ID
-//   LA_E_METER_ATTRIBUTE_NOT_FOUND
-//   LA_E_INET
-//   LA_E_TIME
-//   LA_E_SERVER
-//   LA_E_CLIENT
-//   LA_E_RATE_LIMIT
-//   LA_E_LICENSE_KEY
-//   LA_E_AUTHENTICATION_FAILED
-//   LA_E_COUNTRY
-//   LA_E_IP
-//   LA_E_ACTIVATION_NOT_FOUND
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METER_ATTRIBUTE_NOT_FOUND, LA_E_INET, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY, LA_E_AUTHENTICATION_FAILED, LA_E_COUNTRY, LA_E_IP, LA_E_ACTIVATION_NOT_FOUND
 func ResetActivationMeterAttributeUses(name string) int {
 	cName := goToCString(name)
 	status := C.ResetActivationMeterAttributeUses(cName)
@@ -1872,8 +1495,7 @@ func ResetActivationMeterAttributeUses(name string) int {
 // This function is meant for developer testing only.
 //
 // Return codes:
-//   LA_OK
-//   LA_E_PRODUCT_ID
+//   LA_OK, LA_E_PRODUCT_ID
 //
 // Note: The function does not reset local(unverified) trial data.
 func Reset() int {
