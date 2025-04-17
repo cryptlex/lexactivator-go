@@ -247,6 +247,8 @@ LEXACTIVATOR_API int LA_CC SetLicenseKey(CSTRTYPE licenseKey);
     * password - user password.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY
+
+    NOTE: This function is deprecated. Use AuthenticateUser() instead.
 */
 LEXACTIVATOR_API int LA_CC SetLicenseUserCredential(CSTRTYPE email, CSTRTYPE password);
 
@@ -331,6 +333,8 @@ LEXACTIVATOR_API int LA_CC SetTrialActivationMetadata(CSTRTYPE key, CSTRTYPE val
     * appVersion - string of maximum length 256 characters.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_APP_VERSION_LENGTH
+    
+    NOTE: This function is deprecated. Use SetReleaseVersion() instead.
 */
 LEXACTIVATOR_API int LA_CC SetAppVersion(CSTRTYPE appVersion);
 
@@ -480,6 +484,8 @@ LEXACTIVATOR_API int LA_CC GetProductMetadata(CSTRTYPE key, STRTYPE value, uint3
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
     LA_E_BUFFER_SIZE
+
+    NOTE: This function is deprecated. Use GetLicenseEntitlementSetName() instead.
 */
 LEXACTIVATOR_API int LA_CC GetProductVersionName(STRTYPE name, uint32_t length);
 
@@ -494,6 +500,8 @@ LEXACTIVATOR_API int LA_CC GetProductVersionName(STRTYPE name, uint32_t length);
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED,
     LA_E_BUFFER_SIZE
+
+    NOTE: This function is deprecated. Use GetLicenseEntitlementSetDisplayName() instead.
 */
 LEXACTIVATOR_API int LA_CC GetProductVersionDisplayName(STRTYPE displayName, uint32_t length);
 
@@ -527,6 +535,69 @@ LEXACTIVATOR_API int LA_CC GetProductVersionFeatureFlag(CSTRTYPE name, uint32_t 
 */
 LEXACTIVATOR_API int LA_CC GetLicenseMetadata(CSTRTYPE key, STRTYPE value, uint32_t length);
 
+/*
+    FUNCTION: GetLicenseEntitlementSetName()
+
+    PURPOSE: Gets the license entitlement set name.
+
+    PARAMETERS:
+    * name - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the name parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
+*/
+LEXACTIVATOR_API int LA_CC GetLicenseEntitlementSetName(STRTYPE name, uint32_t length);
+
+/*
+    FUNCTION: GetLicenseEntitlementSetDisplayName()
+
+    PURPOSE: Gets the entitlement set display name.
+
+    PARAMETERS:
+    * displayName - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the displayName parameter
+    
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE,
+    LA_E_ENTITLEMENT_SET_NOT_LINKED
+*/
+LEXACTIVATOR_API int LA_CC GetLicenseEntitlementSetDisplayName(STRTYPE displayName, uint32_t length);
+
+/*
+    FUNCTION: GetFeatureEntitlementsInternal()
+
+    PURPOSE: Gets the feature entitlements associated with the license.
+
+    Feature entitlements can be linked directly to a license (license feature entitlements) 
+    or via entitlement sets. If a feature entitlement is defined in both, the value from 
+    the license feature entitlement takes precedence, overriding the entitlement set value.
+    
+    PARAMETERS:
+    * featureEntitlements -  pointer to a buffer that receives the value of the string  
+    * length - size of the buffer pointed to by the featureEntitlements parameter.
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+    LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENTS_INVALID
+*/
+LEXACTIVATOR_API int LA_CC GetFeatureEntitlementsInternal(STRTYPE featureEntitlements, uint32_t length);
+
+/*
+    FUNCTION: GetFeatureEntitlementInternal()
+
+    PURPOSE: Gets the feature entitlement associated with the license.
+
+    Feature entitlements can be linked directly to a license (license feature entitlements) 
+    or via entitlement sets. If a feature entitlement is defined in both, the value from 
+    the license feature entitlement takes precedence, overriding the entitlement set value.
+
+    PARAMETERS:
+    * featureName - name of the feature
+    * featureEntitlement - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the featureEntitlement parameter
+    
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
+    LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENT_NOT_FOUND, LA_E_FEATURE_ENTITLEMENTS_INVALID
+*/
+LEXACTIVATOR_API int LA_CC GetFeatureEntitlementInternal(CSTRTYPE featureName, STRTYPE featureEntitlement, uint32_t length);
 /*
     FUNCTION: GetLicenseMeterAttribute()
 
@@ -978,6 +1049,8 @@ LEXACTIVATOR_API int LA_CC CheckReleaseUpdateInternal(ReleaseCallbackTypeInterna
     * releaseUpdateCallback - name of the callback function.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_FORMAT
+    
+    NOTE: This function is deprecated. Use CheckReleaseUpdate() instead.
 */
 LEXACTIVATOR_API int LA_CC CheckForReleaseUpdate(CSTRTYPE platform, CSTRTYPE version, CSTRTYPE channel, CallbackType releaseUpdateCallback);
 

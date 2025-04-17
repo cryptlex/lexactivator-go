@@ -205,6 +205,9 @@ const (
 	// Client error.
 	LA_E_CLIENT int = 92
 
+	// Invalid account ID.
+	LA_E_ACCOUNT_ID int = 93
+
 	// The user account has been temporarily locked for 5 mins due to 5 failed attempts.
 	LA_E_LOGIN_TEMPORARILY_LOCKED int = 100
 
@@ -225,4 +228,13 @@ const (
 
 	// The free plan has reached its activation limit.
 	LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED int = 106
+
+	// Invalid feature entitlements.
+    LA_E_FEATURE_ENTITLEMENTS_INVALID int = 107
+
+    // The feature entitlement does not exist.
+    LA_E_FEATURE_ENTITLEMENT_NOT_FOUND int = 108
+
+    // No entitlement set is linked to the license.
+    LA_E_ENTITLEMENT_SET_NOT_LINKED int = 109
 )
