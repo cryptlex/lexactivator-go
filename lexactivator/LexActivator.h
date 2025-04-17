@@ -572,8 +572,8 @@ LEXACTIVATOR_API int LA_CC GetLicenseEntitlementSetDisplayName(STRTYPE displayNa
     the license feature entitlement takes precedence, overriding the entitlement set value.
     
     PARAMETERS:
-    * featureEntitlements - pointer to the struct that receives the values of the feature entitlements.
-    * length - size of the featureEntitlementsPtr array.
+    * featureEntitlements -  pointer to a buffer that receives the value of the string  
+    * length - size of the buffer pointed to by the featureEntitlements parameter.
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
     LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENTS_INVALID
@@ -591,7 +591,7 @@ LEXACTIVATOR_API int LA_CC GetFeatureEntitlementsInternal(STRTYPE featureEntitle
 
     PARAMETERS:
     * featureName - name of the feature
-    * featureEntitlement - pointer to the struct that receives the values of the feature entitlement
+    * featureEntitlement - pointer to a buffer that receives the value of the string
     * length - size of the buffer pointed to by the featureEntitlement parameter
     
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED,
