@@ -1092,7 +1092,7 @@ func GetLicenseEntitlementSetDisplayName(displayName *string) int {
 // the license feature entitlement takes precedence, overriding the entitlement set value.
 //
 // Parameters:
-//   - featureEntitlements: pointer to the struct that receives the values of the feature entitlements.
+//   - featureEntitlements: pointer to the array of FeatureEntitlement struct that receives the values of the feature entitlements.
 //
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENTS_INVALID
