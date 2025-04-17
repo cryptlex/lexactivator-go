@@ -522,7 +522,6 @@ func GetProductMetadata(key string, value *string) int {
 //
 // Parameters:
 //   - name: pointer to a buffer that receives the value of the string
-//   - length: size of the buffer pointed to by the name parameter
 //
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED, LA_E_BUFFER_SIZE
@@ -539,7 +538,6 @@ func GetProductVersionName(name *string) int {
 //
 // Parameters:
 //   - displayName: pointer to a string that receives the value.
-//   - length: size of the buffer pointed to by the displayName parameter
 //
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED, LA_E_BUFFER_SIZE
@@ -558,7 +556,6 @@ func GetProductVersionDisplayName(displayName *string) int {
 //   name - name of the feature flag
 //   enabled - pointer to the integer that receives the value - 0 or 1
 //   data - pointer to a buffer that receives the value of the string
-//   length - size of the buffer pointed to by the data parameter
 //
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_PRODUCT_VERSION_NOT_LINKED, LA_E_FEATURE_FLAG_NOT_FOUND, LA_E_BUFFER_SIZE
@@ -570,6 +567,83 @@ func GetProductVersionFeatureFlag(name string, enabled *bool, data *string) int 
    freeCString(cName)
    *enabled = cEnabled > 0
    *data = ctoGoString(&cData[0])
+   return int(status)
+}
+
+// GetLicenseEntitlementSetName gets the license entitlement set name.
+//
+// Parameters:
+//   - name: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
+func GetLicenseEntitlementSetName(name *string) int {
+	var cName = getCArray()
+	status := C.GetLicenseEntitlementSetName(&cName[0], maxCArrayLength)
+	*name = ctoGoString(&cName[0])
+	return int(status)
+}
+
+// GetLicenseEntitlementSetDisplayName gets the license entitlement set display name.
+//
+// Parameters:
+//   - displayName: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
+func GetLicenseEntitlementSetDisplayName(displayName *string) int {
+	var cDisplayName = getCArray()
+	status := C.GetLicenseEntitlementSetDisplayName(&cDisplayName[0], maxCArrayLength)
+	*displayName = ctoGoString(&cDisplayName[0])
+	return int(status)
+}
+
+// GetFeatureEntitlements gets the feature entitlements associated with the license.
+//
+// Feature entitlements can be linked directly to a license (license feature entitlements) 
+// or via entitlement sets. If a feature entitlement is defined in both, the value from 
+// the license feature entitlement takes precedence, overriding the entitlement set value.
+//
+// Parameters:
+//   - featureEntitlements: pointer to an array of FeatureEntitlement structs that receives the value
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENTS_INVALID
+func GetFeatureEntitlements(featureEntitlements *[]FeatureEntitlement) int {
+   var cFeatureEntitlements = getCArray()
+   featureEntitlementsJson := ""
+   status := C.GetFeatureEntitlementsInternal(&cFeatureEntitlements[0], maxCArrayLength)
+   featureEntitlementsJson = strings.TrimRight(ctoGoString(&cFeatureEntitlements[0]), "\x00")
+   if featureEntitlementsJson != "" {
+      entitlements := []byte(featureEntitlementsJson)
+      json.Unmarshal(entitlements, featureEntitlements)
+   }
+   return int(status)
+}
+
+// GetFeatureEntitlement gets the feature entitlement associated with the license.
+//
+// Feature entitlements can be linked directly to a license (license feature entitlements) 
+// or via entitlement sets. If a feature entitlement is defined in both, the value from 
+// the license feature entitlement takes precedence, overriding the entitlement set value.
+//
+// Parameters:
+//   - featureName: name of the feature
+//   - featureEntitlement: pointer to the FeatureEntitlement struct that receives the value
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENT_NOT_FOUND, LA_E_FEATURE_ENTITLEMENTS_INVALID
+
+func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitlement) int {
+   cFeatureName := goToCString(featureName)
+   var cFeatureEntitlement = getCArray()
+   status := C.GetFeatureEntitlementInternal(cFeatureName, &cFeatureEntitlement[0], maxCArrayLength)
+   featureEntitlementJson := strings.TrimRight(ctoGoString(&cFeatureEntitlement[0]), "\x00")
+   if featureEntitlementJson != "" {
+      entitlement := []byte(featureEntitlementJson)
+      json.Unmarshal(entitlement, featureEntitlement)
+   }
+   freeCString(cFeatureName)
    return int(status)
 }
 
@@ -759,7 +833,7 @@ func GetLicenseMaintenanceExpiryDate(maintenanceExpiryDate *uint) int {
 //
 // Parameters:
 //   - maxAllowedReleaseVersion: pointer to a string that receives the value
-//   - length: size of the buffer pointed to by the maxAllowedReleaseVersion parameter
+//
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
 //   LA_E_BUFFER_SIZE
@@ -935,9 +1009,7 @@ func GetActivationMetadata(key string, value *string) int {
 //
 // Parameters:
 //   - initialMode: pointer to a buffer that receives the initial mode of activation
-//   - initialModeLength: size of the buffer pointed to by the initialMode parameter
 //   - currentMode: pointer to a buffer that receives the current mode of activation
-//   - currentModeLength: size of the buffer pointed to by the currentMode parameter
 //
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
@@ -1043,8 +1115,7 @@ func GetLocalTrialExpiryDate(trialExpiryDate *uint) int {
 // GetLibraryVersion gets the version of this library.
 //
 // Parameters:
-//   - libraryVersion: pointer to a buffer that receives the value of the string
-//   - length: size of the buffer pointed to by the libraryVersion parameter
+//   - libraryVersion: pointer to a string that receives the value
 //
 // Return codes:
 //   LA_OK, LA_E_BUFFER_SIZE
@@ -1053,85 +1124,6 @@ func GetLibraryVersion(libraryVersion *string) int {
 	status := C.GetLibraryVersion(&cLibraryVersion[0], maxCArrayLength)
 	*libraryVersion = ctoGoString(&cLibraryVersion[0])
 	return int(status)
-}
-
-// GetLicenseEntitlementSetName gets the license entitlement set name.
-//
-// Parameters:
-//   - name: pointer to a buffer that receives the value of the string
-//   - length: size of the buffer pointed to by the name parameter
-//
-// Return codes:
-//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
-func GetLicenseEntitlementSetName(name *string) int {
-	var cName = getCArray()
-	status := C.GetLicenseEntitlementSetName(&cName[0], maxCArrayLength)
-	*name = ctoGoString(&cName[0])
-	return int(status)
-}
-
-// GetLicenseEntitlementSetDisplayName gets the license entitlement set display name.
-//
-// Parameters:
-//   - displayName: pointer to a buffer that receives the value of the string
-//   - length: size of the buffer pointed to by the displayName parameter
-//
-// Return codes:
-//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_ENTITLEMENT_SET_NOT_LINKED
-func GetLicenseEntitlementSetDisplayName(displayName *string) int {
-	var cDisplayName = getCArray()
-	status := C.GetLicenseEntitlementSetDisplayName(&cDisplayName[0], maxCArrayLength)
-	*displayName = ctoGoString(&cDisplayName[0])
-	return int(status)
-}
-
-// GetFeatureEntitlements gets the feature entitlements associated with the license.
-//
-// Feature entitlements can be linked directly to a license (license feature entitlements) 
-// or via entitlement sets. If a feature entitlement is defined in both, the value from 
-// the license feature entitlement takes precedence, overriding the entitlement set value.
-//
-// Parameters:
-//   - featureEntitlements: pointer to the array of FeatureEntitlement struct that receives the values of the feature entitlements.
-//
-// Return codes:
-//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENTS_INVALID
-func GetFeatureEntitlements(featureEntitlements *[]FeatureEntitlement) int {
-   var cFeatureEntitlements = getCArray()
-   featureEntitlementsJson := ""
-   status := C.GetFeatureEntitlementsInternal(&cFeatureEntitlements[0], maxCArrayLength)
-   featureEntitlementsJson = strings.TrimRight(ctoGoString(&cFeatureEntitlements[0]), "\x00")
-   if featureEntitlementsJson != "" {
-      entitlements := []byte(featureEntitlementsJson)
-      json.Unmarshal(entitlements, featureEntitlements)
-   }
-   return int(status)
-}
-
-// GetFeatureEntitlement gets the feature entitlement associated with the license.
-//
-// Feature entitlements can be linked directly to a license (license feature entitlements) 
-// or via entitlement sets. If a feature entitlement is defined in both, the value from 
-// the license feature entitlement takes precedence, overriding the entitlement set value.
-//
-// Parameters:
-//   - featureName: name of the feature
-//   - featureEntitlement: pointer to the struct that receives the values of the feature entitlement
-//
-// Return codes:
-//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE, LA_E_FEATURE_ENTITLEMENT_NOT_FOUND, LA_E_FEATURE_ENTITLEMENTS_INVALID
-
-func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitlement) int {
-   cFeatureName := goToCString(featureName)
-   var cFeatureEntitlement = getCArray()
-   status := C.GetFeatureEntitlementInternal(cFeatureName, &cFeatureEntitlement[0], maxCArrayLength)
-   featureEntitlementJson := strings.TrimRight(ctoGoString(&cFeatureEntitlement[0]), "\x00")
-   if featureEntitlementJson != "" {
-      entitlement := []byte(featureEntitlementJson)
-      json.Unmarshal(entitlement, featureEntitlement)
-   }
-   freeCString(cFeatureName)
-   return int(status)
 }
 
 // CheckForReleaseUpdate checks whether a new release is available for the product.
