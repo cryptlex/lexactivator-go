@@ -237,4 +237,7 @@ const (
 
     // No entitlement set is linked to the license.
     LA_E_ENTITLEMENT_SET_NOT_LINKED int = 109
+
+	// The license cannot be activated before its effective date.
+	LA_E_LICENSE_NOT_EFFECTIVE int = 110
 )
