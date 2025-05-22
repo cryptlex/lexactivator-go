@@ -833,6 +833,20 @@ func GetActivationCreationDate(activationCreationDate *uint) int {
    return int(status)
 }
 
+// GetActivationLastSyncedDate gets the activation last synced date timestamp.
+//
+// Parameters:
+//   - activationLastSyncedDate: pointer to the integer that receives the value
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_TIME, LA_E_TIME_MODIFIED
+func GetActivationLastSyncedDate(activationLastSyncedDate *uint) int {
+   var cActivationLastSyncedDate C.uint
+   status := C.GetActivationLastSyncedDate(&cActivationLastSyncedDate)
+   *activationLastSyncedDate = uint(cActivationLastSyncedDate)
+   return int(status)
+}
+
 /*
    FUNCTION: GetLicenseExpiryDate()
 
