@@ -45,6 +45,12 @@ type OrganizationAddress struct {
 	PostalCode 	 string `json:"postalCode"`
 }
 
+type FeatureEntitlement struct {
+	FeatureName        string `json:"featureName"`
+    FeatureDisplayName string `json:"featureDisplayName"`
+	Value              string `json:"value"`
+}
+
 type UserLicense struct {
     // The allowed activations of the license. A value of -1 indicates unlimited number of activations.
     AllowedActivations   int64      `json:"allowedActivations"`
