@@ -49,6 +49,7 @@ type FeatureEntitlement struct {
 	FeatureName        string `json:"featureName"`
 	FeatureDisplayName string `json:"featureDisplayName"`
 	Value              string `json:"value"`
+	ExpiresAt		   int64  `json:"expiresAt"`
 }
 
 type UserLicense struct {
