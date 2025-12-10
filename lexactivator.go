@@ -1067,6 +1067,21 @@ func GetServerSyncGracePeriodExpiryDate(expiryDate *uint) int {
 	return int(status)
 }
 
+// GetLastActivationError Gets the error code that caused the activation data to be cleared.
+
+// Parameters:
+// 	- errorCode: pointer to the integer that receives the value
+
+// Return codes:
+//
+//	LA_OK, LA_E_PRODUCT_ID
+func GetLastActivationError(errorCode *uint) int {
+	var cErrorCode C.uint
+	status := C.GetLastActivationError(&cErrorCode)
+	*errorCode = uint(cErrorCode)
+	return int(status)
+}
+
 // GetTrialActivationMetadata gets the trial activation metadata.
 //
 // Parameters:
