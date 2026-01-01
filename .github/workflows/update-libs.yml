@@ -16,29 +16,42 @@ jobs:
   deploy:
 
     runs-on: ubuntu-latest
+    env:
+      LIBRARY_VERSION: ${{ github.event.inputs.libraryVersion }}
+      PACKAGE_VERSION: ${{ github.event.inputs.packageVersion }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
         go-version: '^1.15.0'
 
-    - name: Create new branch
-      run: git checkout -b release/${{ github.event.inputs.packageVersion }}
-
     - name: Update Library Version
       run: |
-          sed -i '/libVersion :=/!b;c \ \ \ \ \ \ \libVersion :=  \"v${{ github.event.inputs.libraryVersion }}";' download_libs/download_libs.go  
+          sed -i -E 's/^([[:space:]]*libVersion[[:space:]]*:=[[:space:]]*)"[^"]*"/\1"v${{ env.LIBRARY_VERSION }}"/' download_libs/download_libs.go
     - name: Download Native Libs
       run: go run download_libs/download_libs.go
-    - name: Commit files
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        branch: release/${{ env.PACKAGE_VERSION }}
+        title: "chore: bump native libs to version ${{ env.PACKAGE_VERSION }}"
+        commit-message: "chore(native libs): updated version"
+        body: |
+          Automated native libs version bump.
+        base: master
+        add-paths: |
+          ./libs
+          ./download_libs/download_libs.go
+    
+    - name: Checkout release branch
+      uses: actions/checkout@v4
+      with:
+        ref: release/${{ env.PACKAGE_VERSION }}
+
+    - name: Create tag
       run: |
-        git add ./libs
-        git add ./download_libs/download_libs.go
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git commit -m "chore(native libs): updated version" -a | exit 0
-        git tag v${{ github.event.inputs.packageVersion }}
-        git push --set-upstream origin release/${{ github.event.inputs.packageVersion }} 
-        git push --tags
+        git tag ${{ env.PACKAGE_VERSION }} || echo "Tag already exists"
+        git push origin ${{ env.PACKAGE_VERSION }} || true
