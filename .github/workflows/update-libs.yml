@@ -45,7 +45,7 @@ jobs:
         add-paths: |
           ./libs
           ./download_libs/download_libs.go
-    
+
     - name: Checkout release branch
       uses: actions/checkout@v4
       with:
@@ -55,3 +55,13 @@ jobs:
       run: |
         git tag ${{ env.PACKAGE_VERSION }} || echo "Tag already exists"
         git push origin ${{ env.PACKAGE_VERSION }} || true
+
+    - name: Notify slack releases channel
+      uses: slackapi/slack-github-action@v2
+      with:
+        webhook: ${{ secrets.SLACK_RELEASES_PROD_WEBHOOK_URL }}
+        webhook-type: webhook-trigger
+        payload: |
+          status: "${{ job.status }}"
+          environment: "PRODUCTION"
+          project: "LexActivator Go"
