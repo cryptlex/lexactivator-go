@@ -36,7 +36,7 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
-        branch: release/${{ env.PACKAGE_VERSION }}
+        branch: ci/${{ env.PACKAGE_VERSION }}
         title: "chore: bump native libs to version ${{ env.PACKAGE_VERSION }}"
         commit-message: "chore(native libs): updated version"
         body: |
@@ -46,10 +46,10 @@ jobs:
           ./libs
           ./download_libs/download_libs.go
 
-    - name: Checkout release branch
+    - name: Checkout ci branch
       uses: actions/checkout@v4
       with:
-        ref: release/${{ env.PACKAGE_VERSION }}
+        ref: ci/${{ env.PACKAGE_VERSION }}
 
     - name: Create tag
       run: |
