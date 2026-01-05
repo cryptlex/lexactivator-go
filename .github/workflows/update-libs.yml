@@ -46,10 +46,14 @@ jobs:
           ./libs
           ./download_libs/download_libs.go
 
+    - name: Checkout release branch
+      uses: actions/checkout@v4
+      with:
+        ref: ci/${{ env.PACKAGE_VERSION }}
+
     - name: Create tag
       run: |
-        git fetch origin ci/${{ env.PACKAGE_VERSION }}
-        git tag v${{ env.PACKAGE_VERSION }} origin/ci/${{ env.PACKAGE_VERSION }} || echo "Tag exists"
+        git tag v${{ env.PACKAGE_VERSION }} || echo "Tag exists"
         git push origin v${{ env.PACKAGE_VERSION }} || true
 
     - name: Notify slack releases channel
