@@ -1511,6 +1511,28 @@ func ResetActivationMeterAttributeUses(name string) int {
 	return int(status)
 }
 
+// Migrates existing license data to system-wide storage.
+//
+// Call this function after SetProductData().
+//
+// If you intend to use a custom data directory after migration,
+// set it first using SetDataDirectory().
+//
+// Parameters:
+//
+//   - oldPermissionFlag: permission flag used previously
+//
+// Return Codes:
+//
+//	LA_OK, LA_E_FILE_PERMISSION, LA_E_PRODUCT_DATA, LA_E_INVALID_PERMISSION_FLAG, LA_E_SYSTEM_PERMISSION, LA_FAIL
+//
+// NOTE: The function does not support migration from custom data directories.
+func MigrateToSystemWideActivation(oldPermissionFlag uint) int {
+	cOldPermissionFlag := (C.uint)(oldPermissionFlag)
+	status := C.MigrateToSystemWideActivation(cOldPermissionFlag)
+	return int(status)
+}
+
 // Reset resets the activation and trial data stored in the machine.
 //
 // This function is meant for developer testing only.
