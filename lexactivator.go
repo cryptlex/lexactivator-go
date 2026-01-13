@@ -1511,12 +1511,11 @@ func ResetActivationMeterAttributeUses(name string) int {
 	return int(status)
 }
 
-// Migrates existing license data to system-wide storage.
+// MigrateToSystemWideActivation migrates existing license data to system-wide storage.
 //
 // Call this function after SetProductData().
 //
-// If you intend to use a custom data directory after migration,
-// set it first using SetDataDirectory().
+// If you intend to use a custom data directory after migration, set it first using SetDataDirectory().
 //
 // Parameters:
 //
