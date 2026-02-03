@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
-	"log"
 )
 
 func main() {
@@ -17,7 +17,11 @@ func main() {
 	basePath := "./libs/"
 	fmt.Println("Downloading LexActivator libs " + libVersion + " ...")
 	url := baseURL + libVersion + "/LexActivator-Static-Mac.zip"
-	err := downloadFile(url, "libs/clang/universal/libLexActivator.a", basePath+"darwin_amd64/libLexActivator.a")
+	err := downloadFile(url, "THIRD-PARTY-NOTICES.txt", basePath+"THIRD-PARTY-NOTICES.txt")
+	if err != nil {
+		panic(err)
+	}
+	err = downloadFile(url, "libs/clang/universal/libLexActivator.a", basePath+"darwin_amd64/libLexActivator.a")
 	if err != nil {
 		panic(err)
 	}
