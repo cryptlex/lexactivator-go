@@ -1,4 +1,4 @@
-// Copyright 2025 Cryptlex LLP. All rights reserved.
+// Copyright 2026 Cryptlex LLP. All rights reserved.
 
 package lexactivator
 
