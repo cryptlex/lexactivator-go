@@ -598,6 +598,20 @@ func GetLicenseEntitlementSetDisplayName(displayName *string) int {
 	return int(status)
 }
 
+// GetLicenseEntitlementSetTier gets the license entitlement set tier.
+//
+// Parameters:
+//   - tier: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_ENTITLEMENT_SET_NOT_LINKED
+func GetLicenseEntitlementSetTier(tier *int64) int {
+	var cTier C.int64_t
+	status := C.GetLicenseEntitlementSetTier(&cTier)
+	*tier = int64(cTier)
+	return int(status)
+}
+
 // GetFeatureEntitlements gets the feature entitlements associated with the license.
 //
 // Feature entitlements can be linked directly to a license (license feature entitlements) 
