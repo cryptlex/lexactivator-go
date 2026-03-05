@@ -24,7 +24,7 @@ func getCArray(length ...C.uint) []C.char {
 	if len(length) > 0 {
 		size = length[0]
 	}
-	return make([]C.char, size)
+	return make([]C.char, int(size))
 }
 
 func freeCString(cString *C.char) {
