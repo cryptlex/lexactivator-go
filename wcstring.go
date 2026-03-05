@@ -11,6 +11,7 @@ import (
 )
 
 const (
+	cArrayLength  C.uint = 1000000
 	maxCArrayLength  C.uint = 1000000
 	maxGoArrayLength C.int  = 1000000
 )
@@ -44,7 +45,7 @@ func wideCtoGoString(cString *C.ushort) string {
 	return goString
 }
 
-func getCArray() [maxCArrayLength]C.ushort {
+func getCArray(length ...C.uint) [maxCArrayLength]C.ushort {
 	var cArray [maxCArrayLength]C.ushort
 	return cArray
 }
