@@ -9,7 +9,7 @@ import (
 
 //export newReleaseUpdateCallbackWrapper
 func newReleaseUpdateCallbackWrapper(status int, releaseJson *C.char) {
-	releaseJsonStr := ctoGoString(releaseJson)
+	releaseJsonStr := ctoGoString(releaseJson, bufferSizeMax)
 	if releaseCallbackFunction != nil {
 	   if releaseJsonStr != "" {
 		  release := &Release{}

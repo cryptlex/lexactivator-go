@@ -6,25 +6,26 @@ package lexactivator
 import "C"
 import "unsafe"
 
-const cArrayLength C.uint = 1024
-const maxCArrayLength C.uint = 4096
+const (
+	bufferSize256 C.uint = 256
+	bufferSize1K C.uint = 1024
+	bufferSize2K C.uint = 2048
+	bufferSize4K C.uint = 4096
+	bufferSizeMax C.uint = 4096
+)
 
 func goToCString(data string) *C.char {
 	cString := C.CString(data)
 	return cString
 }
 
-func ctoGoString(cString *C.char) string {
+func ctoGoString(cString *C.char, length C.uint) string {
 	goString := C.GoString(cString)
 	return goString
 }
 
-func getCArray(length ...C.uint) []C.char {
-	size := cArrayLength
-	if len(length) > 0 {
-		size = length[0]
-	}
-	return make([]C.char, int(size))
+func getCArray(length C.uint) []C.char {
+	return make([]C.char, int(length))
 }
 
 func freeCString(cString *C.char) {

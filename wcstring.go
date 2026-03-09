@@ -11,9 +11,11 @@ import (
 )
 
 const (
-	cArrayLength  C.uint = 1000000
-	maxCArrayLength  C.uint = 1000000
-	maxGoArrayLength C.int  = 1000000
+	bufferSize256 C.uint = 256
+	bufferSize1K C.uint = 1024
+	bufferSize2K C.uint = 2048
+	bufferSize4K C.uint = 4096
+	bufferSizeMax C.uint = 1000000
 )
 
 func goToCString(goString string) *C.ushort {
@@ -25,8 +27,8 @@ func goToCString(goString string) *C.ushort {
 	return cString
 }
 
-func ctoGoString(cString *C.ushort) string {
-	encodedBytes := C.GoBytes(unsafe.Pointer(cString), maxGoArrayLength)
+func ctoGoString(cString *C.ushort, length C.uint) string {
+	encodedBytes := C.GoBytes(unsafe.Pointer(cString), length * 2)
 	goString, _ := decodeUtf16(encodedBytes, binary.LittleEndian)
 	return goString
 }
@@ -45,9 +47,8 @@ func wideCtoGoString(cString *C.ushort) string {
 	return goString
 }
 
-func getCArray(length ...C.uint) [maxCArrayLength]C.ushort {
-	var cArray [maxCArrayLength]C.ushort
-	return cArray
+func getCArray(length C.uint) []C.ushort {
+	return make([]C.ushort, int(length))
 }
 
 func freeCString(cString *C.ushort) {
