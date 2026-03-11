@@ -8,9 +8,9 @@ import "unsafe"
 
 const (
 	bufferSize256 C.uint = 256
-	bufferSize1K C.uint = 1024
-	bufferSize2K C.uint = 2048
-	bufferSize4K C.uint = 4096
+	bufferSize1024 C.uint = 1024
+	bufferSize2048 C.uint = 2048
+	bufferSize4096 C.uint = 4096
 	bufferSizeMax C.uint = 4096
 )
 

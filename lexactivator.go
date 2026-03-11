@@ -509,9 +509,9 @@ func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
 //   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetProductMetadata(key string, value *string) int {
 	cKey := goToCString(key)
-	var cValue = getCArray(bufferSize4K)
-	status := C.GetProductMetadata(cKey, &cValue[0], bufferSize4K)
-	*value = ctoGoString(&cValue[0], bufferSize4K)
+	var cValue = getCArray(bufferSize4096)
+	status := C.GetProductMetadata(cKey, &cValue[0], bufferSize4096)
+	*value = ctoGoString(&cValue[0], bufferSize4096)
 	freeCString(cKey)
 	return int(status)
 }
@@ -562,11 +562,11 @@ func GetProductVersionDisplayName(displayName *string) int {
 func GetProductVersionFeatureFlag(name string, enabled *bool, data *string) int {
    cName := goToCString(name)
    var cEnabled C.uint
-   var cData = getCArray(bufferSize4K)
-   status := C.GetProductVersionFeatureFlag(cName, &cEnabled, &cData[0], bufferSize4K)
+   var cData = getCArray(bufferSize4096)
+   status := C.GetProductVersionFeatureFlag(cName, &cEnabled, &cData[0], bufferSize4096)
    freeCString(cName)
    *enabled = cEnabled > 0
-   *data = ctoGoString(&cData[0], bufferSize4K)
+   *data = ctoGoString(&cData[0], bufferSize4096)
    return int(status)
 }
 
@@ -636,9 +636,9 @@ func GetFeatureEntitlements(featureEntitlements *[]FeatureEntitlement) int {
 
 func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitlement) int {
    cFeatureName := goToCString(featureName)
-   var cFeatureEntitlement = getCArray(bufferSize2K)
-   status := C.GetFeatureEntitlementInternal(cFeatureName, &cFeatureEntitlement[0], bufferSize2K)
-   featureEntitlementJson := strings.TrimRight(ctoGoString(&cFeatureEntitlement[0], bufferSize2K), "\x00")
+   var cFeatureEntitlement = getCArray(bufferSize2048)
+   status := C.GetFeatureEntitlementInternal(cFeatureName, &cFeatureEntitlement[0], bufferSize2048)
+   featureEntitlementJson := strings.TrimRight(ctoGoString(&cFeatureEntitlement[0], bufferSize2048), "\x00")
    if featureEntitlementJson != "" {
       entitlement := []byte(featureEntitlementJson)
       json.Unmarshal(entitlement, featureEntitlement)
@@ -657,9 +657,9 @@ func GetFeatureEntitlement(featureName string, featureEntitlement *FeatureEntitl
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetLicenseMetadata(key string, value *string) int {
 	cKey := goToCString(key)
-	var cValue = getCArray(bufferSize4K)
-	status := C.GetLicenseMetadata(cKey, &cValue[0], bufferSize4K)
-	*value = ctoGoString(&cValue[0], bufferSize4K)
+	var cValue = getCArray(bufferSize4096)
+	status := C.GetLicenseMetadata(cKey, &cValue[0], bufferSize4096)
+	*value = ctoGoString(&cValue[0], bufferSize4096)
 	freeCString(cKey)
 	return int(status)
 }
@@ -880,9 +880,9 @@ func GetLicenseUserEmail(email *string) int {
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetLicenseUserName(name *string) int {
-	var cName = getCArray(bufferSize1K)
-	status := C.GetLicenseUserName(&cName[0], bufferSize1K)
-	*name = ctoGoString(&cName[0], bufferSize1K)
+	var cName = getCArray(bufferSize1024)
+	status := C.GetLicenseUserName(&cName[0], bufferSize1024)
+	*name = ctoGoString(&cName[0], bufferSize1024)
 	return int(status)
 }
 
@@ -910,9 +910,9 @@ func GetLicenseUserCompany(company *string) int {
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetLicenseUserMetadata(key string, value *string) int {
 	cKey := goToCString(key)
-	var cValue = getCArray(bufferSize4K)
-	status := C.GetLicenseUserMetadata(cKey, &cValue[0], bufferSize4K)
-	*value = ctoGoString(&cValue[0], bufferSize4K)
+	var cValue = getCArray(bufferSize4096)
+	status := C.GetLicenseUserMetadata(cKey, &cValue[0], bufferSize4096)
+	*value = ctoGoString(&cValue[0], bufferSize4096)
 	freeCString(cKey)
 	return int(status)
 }
@@ -939,10 +939,10 @@ func GetLicenseOrganizationName(organizationName *string) int {
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_TIME, LA_E_TIME_MODIFIED, LA_E_BUFFER_SIZE
 func GetLicenseOrganizationAddress(organizationAddress *OrganizationAddress) int {
-   var cOrganizationAddress = getCArray(bufferSize4K)
+   var cOrganizationAddress = getCArray(bufferSize4096)
    organizationAddressJson := ""
-   status := C.GetLicenseOrganizationAddressInternal(&cOrganizationAddress[0], bufferSize4K)
-   organizationAddressJson = strings.TrimRight(ctoGoString(&cOrganizationAddress[0], bufferSize4K), "\x00")
+   status := C.GetLicenseOrganizationAddressInternal(&cOrganizationAddress[0], bufferSize4096)
+   organizationAddressJson = strings.TrimRight(ctoGoString(&cOrganizationAddress[0], bufferSize4096), "\x00")
    if organizationAddressJson != "" {
       address := []byte(organizationAddressJson)
       json.Unmarshal(address, organizationAddress)
@@ -1012,9 +1012,9 @@ func GetActivationId(id *string) int {
 //   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetActivationMetadata(key string, value *string) int {
 	cKey := goToCString(key)
-	var cValue = getCArray(bufferSize4K)
-	status := C.GetActivationMetadata(cKey, &cValue[0], bufferSize4K)
-	*value = ctoGoString(&cValue[0], bufferSize4K)
+	var cValue = getCArray(bufferSize4096)
+	status := C.GetActivationMetadata(cKey, &cValue[0], bufferSize4096)
+	*value = ctoGoString(&cValue[0], bufferSize4096)
 	freeCString(cKey)
 	return int(status)
 }
@@ -1092,9 +1092,9 @@ func GetLastActivationError(errorCode *uint) int {
 //   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetTrialActivationMetadata(key string, value *string) int {
 	cKey := goToCString(key)
-	var cValue = getCArray(bufferSize4K)
-	status := C.GetTrialActivationMetadata(cKey, &cValue[0], bufferSize4K)
-	*value = ctoGoString(&cValue[0], bufferSize4K)
+	var cValue = getCArray(bufferSize4096)
+	status := C.GetTrialActivationMetadata(cKey, &cValue[0], bufferSize4096)
+	*value = ctoGoString(&cValue[0], bufferSize4096)
 	freeCString(cKey)
 	return int(status)
 }
