@@ -28,7 +28,7 @@ func goToCString(goString string) *C.ushort {
 }
 
 func ctoGoString(cString *C.ushort, length C.uint) string {
-	encodedBytes := C.GoBytes(unsafe.Pointer(cString), length * 2)
+	encodedBytes := C.GoBytes(unsafe.Pointer(cString), C.int(int(length) * 2))
 	goString, _ := decodeUtf16(encodedBytes, binary.LittleEndian)
 	return goString
 }

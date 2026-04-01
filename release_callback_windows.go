@@ -7,7 +7,7 @@ import (
 )
 //export newReleaseUpdateCallbackWrapper
 func newReleaseUpdateCallbackWrapper(status int, releaseJson *C.ushort) {
-	releaseJsonStr := wideCtoGoString(releaseJson, bufferSizeMax)
+	releaseJsonStr := wideCtoGoString(releaseJson)
 	if releaseCallbackFunction != nil {
 	   if releaseJsonStr != "" {
 		  release := &Release{}
