@@ -1415,7 +1415,7 @@ func ActivateTrial() int {
 // Return codes:
 //   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME,
 // 	 LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_TIME_MODIFIED,
-//   LA_E_TIME_MODIFIED, LA_E_CONTAINER
+//   LA_E_CONTAINER
 //
 // NOTE: Unlike IsTrialGenuine(), which validates the trial activation locally only, this
 // function forces an immediate server check.

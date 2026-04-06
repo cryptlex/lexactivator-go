@@ -1249,7 +1249,7 @@ LEXACTIVATOR_API int LA_CC IsLicenseValid();
     This function should be called only if the license is already activated. This is a
     blocking call that performs a one-time synchronization to refresh the local license data.
 
-    Note: For periodic validation, use IsLicenseGenuine() instead, which schedules background
+    NOTE: For periodic validation, use IsLicenseGenuine() instead, which schedules background
     sync at a defined interval.
 
     RETURN CODES: LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED, LA_FAIL, LA_E_PRODUCT_ID,
@@ -1283,7 +1283,7 @@ LEXACTIVATOR_API int LA_CC ActivateTrial();
     This function should be called only if the trial is already activated. This is a
     blocking call that performs a one-time synchronization to refresh the trial data locally.
 
-    Note: Unlike IsTrialGenuine(), which validates the trial activation locally only, this
+    NOTE: Unlike IsTrialGenuine(), which validates the trial activation locally only, this
     function forces an immediate server check.
 
     RETURN CODES: LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET,
