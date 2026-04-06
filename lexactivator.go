@@ -1376,6 +1376,25 @@ func IsLicenseValid() int {
 	return int(status)
 }
 
+// SyncLicenseActivation syncs the activation data with the Cryptlex server.
+//
+// This function should be called only if the license is already activated. This is a
+// blocking call that performs a one-time synchronization to refresh the local license data.
+//
+// Return codes:
+//   LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM,
+// 	 LA_E_TIME, LA_E_ACTIVATION_LIMIT, LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED, LA_E_SERVER,
+// 	 LA_E_CLIENT, LA_E_TIME_MODIFIED, LA_E_AUTHENTICATION_FAILED, LA_E_LICENSE_TYPE, LA_E_COUNTRY,
+// 	 LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_NOT_ALLOWED,
+// 	 LA_E_RELEASE_VERSION_FORMAT, LA_E_LICENSE_NOT_EFFECTIVE
+//
+// NOTE: For periodic validation, use IsLicenseGenuine() instead, which schedules background
+// sync at a defined interval.
+func SyncLicenseActivation() int {
+	status := C.SyncLicenseActivation()
+	return int(status)
+}
+
 // ActivateTrial starts the verified trial in your application by contacting the Cryptlex servers.
 //
 // This function should be executed when your application starts first time on
@@ -1385,6 +1404,23 @@ func IsLicenseValid() int {
 //   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT
 func ActivateTrial() int {
 	status := C.ActivateTrial()
+	return int(status)
+}
+
+// SyncTrialActivation syncs the trial activation data with the Cryptlex server.
+//
+// This function should be called only if the trial is already activated. This is a
+// blocking call that performs a one-time synchronization to refresh the trial data locally.
+//
+// Return codes:
+//   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME,
+// 	 LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_TIME_MODIFIED,
+//   LA_E_TIME_MODIFIED, LA_E_CONTAINER
+//
+// NOTE: Unlike IsTrialGenuine(), which validates the trial activation locally only, this
+// function forces an immediate server check.
+func SyncTrialActivation() int {
+	status := C.SyncTrialActivation()
 	return int(status)
 }
 
