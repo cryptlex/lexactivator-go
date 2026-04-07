@@ -1376,6 +1376,30 @@ func IsLicenseValid() int {
 	return int(status)
 }
 
+// SyncLicenseActivation synchronizes the activation data with the Cryptlex servers.
+//
+// The license must already be activated when this function is called.
+//
+// This is a blocking call that performs a one-time synchronization to refresh the local
+// license data.
+//
+// In most cases, rely on IsLicenseGenuine(), which automatically handles periodic background
+// synchronization based on the configured interval.
+//
+// Return codes:
+//   LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM,
+// 	 LA_E_TIME, LA_E_ACTIVATION_LIMIT, LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED, LA_E_SERVER,
+// 	 LA_E_CLIENT, LA_E_TIME_MODIFIED, LA_E_AUTHENTICATION_FAILED, LA_E_LICENSE_TYPE, LA_E_COUNTRY,
+// 	 LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_NOT_ALLOWED,
+// 	 LA_E_RELEASE_VERSION_FORMAT, LA_E_LICENSE_NOT_EFFECTIVE
+//
+// NOTE: Do not use this function in regular application flow. Use it only when an immediate
+// synchronization is required.
+func SyncLicenseActivation() int {
+	status := C.SyncLicenseActivation()
+	return int(status)
+}
+
 // ActivateTrial starts the verified trial in your application by contacting the Cryptlex servers.
 //
 // This function should be executed when your application starts first time on
@@ -1385,6 +1409,28 @@ func IsLicenseValid() int {
 //   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT
 func ActivateTrial() int {
 	status := C.ActivateTrial()
+	return int(status)
+}
+
+// SyncTrialActivation synchronizes the trial activation data with the Cryptlex servers.
+//
+// The trial must already be activated when this function is called.
+//
+// This is a blocking call that performs a one-time synchronization to refresh the local trial
+// data.
+//
+// Unlike IsTrialGenuine(), which validates the trial activation data locally, this function
+// performs an immediate synchronization with the servers.
+//
+// Return codes:
+//   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME,
+// 	 LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_TIME_MODIFIED,
+//   LA_E_CONTAINER
+//
+// NOTE: Use this function to immediately reflect server-side changes on the user's machine,
+// such as trial extensions.
+func SyncTrialActivation() int {
+	status := C.SyncTrialActivation()
 	return int(status)
 }
 
