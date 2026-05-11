@@ -21,5 +21,4 @@ Then you can include it in your code:
 ## Usage
 Refer to following for documentation:
 
-https://docs.cryptlex.com/node-locked-licenses/using-lexactivator/using-lexactivator-with-go
-
+https://cryptlex.com/docs/node-locked-licenses/using-lexactivator
