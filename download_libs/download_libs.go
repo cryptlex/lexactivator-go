@@ -13,7 +13,7 @@ import (
 
 func main() {
 	baseURL := "https://dl.cryptlex.com/downloads/"
-      libVersion :=  "v3.42.1";
+	libVersion := "v3.42.1"
 	basePath := "./libs/"
 	fmt.Println("Downloading LexActivator libs " + libVersion + " ...")
 	url := baseURL + libVersion + "/LexActivator-Static-Mac.zip"
@@ -85,7 +85,7 @@ func unzip(body []byte, packagePath string, targetpath string) error {
 			if _, err := io.Copy(targetFile, fileReader); err != nil {
 				return err
 			}
-		}		
+		}
 	}
 
 	return nil
