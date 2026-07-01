@@ -240,4 +240,17 @@ const (
 
 	// The license cannot be activated before its effective date.
 	LA_E_LICENSE_NOT_EFFECTIVE int = 110
+
+	// Device not found.
+	LA_E_DEVICE_NOT_FOUND int = 111
+
+	// Device validation failed.
+	LA_E_DEVICE_VALIDATION_FAILED int = 112
+
+	// Fingerprint validation grace period is over. Please connect to
+	// internet and restart the application.
+	LA_E_FINGERPRINT_VALIDATION_GRACE_PERIOD_OVER int = 113
+
+	// Activation clone detected.
+	LA_E_ACTIVATION_CLONE_DETECTED int = 114
 )
