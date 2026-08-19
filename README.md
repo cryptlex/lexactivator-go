@@ -21,4 +21,4 @@ Then you can include it in your code:
 ## Usage
 Refer to following for documentation:
 
-https://cryptlex.com/docs/node-locked-licenses/using-lexactivator
+https://cryptlex.com/docs/sdks-and-apis/lexactivator
