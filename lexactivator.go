@@ -1264,6 +1264,39 @@ func AuthenticateUserWithIdToken(idToken string) int {
    return int(status)
 }
 
+// LookupLicense retrieves the license information from the Cryptlex servers
+// without activating the license.
+//
+// This function sends a network request to the Cryptlex servers. It is optional
+// and is not required by the standard activation flow. It is intended for
+// applications that need license information before activation, e.g. the license
+// type.
+//
+// This function must be called after SetProductData(). It does not require
+// SetProductId() to be called first.
+//
+// Parameters:
+//   - licenseKey: the license key to look up.
+//   - licenseLookupInfo: pointer to the LicenseLookupInfo struct that receives the license information.
+//
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_DATA, LA_E_LICENSE_KEY, LA_E_INET, LA_E_SERVER, LA_E_CLIENT, LA_E_RATE_LIMIT, LA_E_BUFFER_SIZE
+//
+// Note: This function neither validates the license nor stores anything on the
+// device, and it has no effect on the activation state of the application. Use
+// ActivateLicense() to activate the license.
+func LookupLicense(licenseKey string, licenseLookupInfo *LicenseLookupInfo) int {
+   cLicenseKey := goToCString(licenseKey)
+   var cLicenseLookupInfo = getCArray(bufferSize1024)
+   status := C.LookupLicenseInternal(cLicenseKey, &cLicenseLookupInfo[0], bufferSize1024)
+   freeCString(cLicenseKey)
+   licenseLookupInfoJson := strings.TrimRight(ctoGoString(&cLicenseLookupInfo[0], bufferSize1024), "\x00")
+   if licenseLookupInfoJson != "" {
+      json.Unmarshal([]byte(licenseLookupInfoJson), licenseLookupInfo)
+   }
+   return int(status)
+}
+
 // ActivateLicense activates the license by contacting the Cryptlex servers. It
 // validates the key and returns with encrypted and digitally signed token
 // which it stores and uses to activate your application.
