@@ -57,8 +57,8 @@ type DataStoreInfo struct {
 	// Kind of storage used on the current platform ("file", "registry" or "in-memory").
 	StorageKind           string `json:"storageKind"`
 
-	// The permission flag in effect.
-	PermissionFlag        uint   `json:"permissionFlag"`
+	// The permission flag in effect ("la-user", "la-system", "la-all-users" or "la-in-memory").
+	PermissionFlag        string `json:"permissionFlag"`
 
 	// Whether the directory set using SetDataDirectory() is in effect.
 	IsCustomDataDirectory bool   `json:"isCustomDataDirectory"`
