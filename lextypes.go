@@ -53,6 +53,20 @@ type FeatureEntitlement struct {
 	ExpiresAt		   int64  `json:"expiresAt"`
 }
 
+type DataStoreInfo struct {
+	// Kind of storage used on the current platform ("file", "registry" or "in-memory").
+	StorageKind           string `json:"storageKind"`
+
+	// The permission flag in effect.
+	PermissionFlag        uint   `json:"permissionFlag"`
+
+	// Whether the directory set using SetDataDirectory() is in effect.
+	IsCustomDataDirectory bool   `json:"isCustomDataDirectory"`
+
+	// Location of the data store.
+	Path                  string `json:"path"`
+}
+
 type UserLicense struct {
 	// The allowed activations of the license. A value of -1 indicates unlimited number of activations.
 	AllowedActivations   int64      `json:"allowedActivations"`

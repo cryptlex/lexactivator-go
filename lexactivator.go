@@ -1169,6 +1169,43 @@ func GetLibraryVersion(libraryVersion *string) int {
 	return int(status)
 }
 
+// GetDataStoreInfo gets information about the data store used by LexActivator on
+// the current platform, including the location where the data is stored.
+//
+// The path is the fully resolved location of the data and does not include the
+// name of the data file. If a custom directory has been set using the
+// SetDataDirectory() function, that directory is returned.
+//
+// On Windows, when the LA_USER or LA_SYSTEM flag is used, the data is stored in
+// the registry. In that case the path is the registry key path and not a
+// filesystem directory.
+//
+// When the LA_IN_MEMORY flag is used, nothing is persisted, StorageKind is
+// "in-memory" and Path is empty.
+//
+// This function must be called after calling the SetProductId() function.
+//
+// Parameters:
+//   - dataStoreInfo: pointer to the DataStoreInfo struct that receives the information.
+//
+// Return codes:
+//
+//	LA_OK, LA_E_PRODUCT_ID, LA_E_BUFFER_SIZE
+//
+// Note: The path is intended for inspection only. Do not delete, move or modify
+// its contents. To release the activation and clear the activation data of your
+// product, use the DeactivateLicense() function.
+func GetDataStoreInfo(dataStoreInfo *DataStoreInfo) int {
+	var cDataStoreInfo = getCArray(bufferSize2048)
+	status := C.GetDataStoreInfoInternal(&cDataStoreInfo[0], bufferSize2048)
+	dataStoreInfoJson := strings.TrimRight(ctoGoString(&cDataStoreInfo[0], bufferSize2048), "\x00")
+	if dataStoreInfoJson != "" {
+		dataStore := []byte(dataStoreInfoJson)
+		json.Unmarshal(dataStore, dataStoreInfo)
+	}
+	return int(status)
+}
+
 // CheckForReleaseUpdate checks whether a new release is available for the product.
 //
 // This function should only be used if you manage your releases through
