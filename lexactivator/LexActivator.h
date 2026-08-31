@@ -1042,6 +1042,38 @@ LEXACTIVATOR_API int LA_CC GetLocalTrialExpiryDate(uint32_t *trialExpiryDate);
 LEXACTIVATOR_API int LA_CC GetLibraryVersion(STRTYPE libraryVersion, uint32_t length);
 
 /*
+    FUNCTION: GetDataStoreInfoInternal()
+
+    PURPOSE: Gets the data store information json for the data store used by
+    LexActivator on the current platform, including the location where the data
+    is stored.
+
+    The path member is the fully resolved location of the data and does not
+    include the name of the data file. If a custom directory has been set using
+    the SetDataDirectory() function, that directory is returned.
+
+    On Windows, when the LA_USER or LA_SYSTEM flag is used, the data is stored in
+    the registry. In that case the path member is the registry key path and not a
+    filesystem directory.
+
+    When the LA_IN_MEMORY flag is used, nothing is persisted, storageKind is
+    "in-memory" and path is empty.
+
+    This function must be called after calling the SetProductId() function.
+
+    PARAMETERS:
+    * dataStoreInfo - pointer to a buffer that receives the value of the string.
+    * length - size of the buffer pointed to by the dataStoreInfo parameter
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_BUFFER_SIZE
+
+    NOTE: The path is intended for inspection only. Do not delete, move or modify
+    its contents. To release the activation and clear the activation data of your
+    product, use the DeactivateLicense() function.
+*/
+LEXACTIVATOR_API int LA_CC GetDataStoreInfoInternal(STRTYPE dataStoreInfo, uint32_t length);
+
+/*
     FUNCTION: CheckReleaseUpdateInternal()
 
     PURPOSE: Checks whether a new release is available for the product.
