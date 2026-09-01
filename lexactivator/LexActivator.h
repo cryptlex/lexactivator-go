@@ -1156,6 +1156,34 @@ LEXACTIVATOR_API int LA_CC AuthenticateUser(CSTRTYPE email, CSTRTYPE password);
 LEXACTIVATOR_API int LA_CC AuthenticateUserWithIdToken(CSTRTYPE idToken);
 
 /*
+    FUNCTION: LookupLicenseInternal()
+
+    PURPOSE: Retrieves the license information json from the Cryptlex servers
+    without activating the license.
+
+    This function sends a network request to the Cryptlex servers. It is optional
+    and is not required by the standard activation flow. It is intended for
+    applications that need license information before activation, e.g. the license
+    type.
+
+    This function must be called after SetProductData(). It does not
+    require SetProductId() to be called first.
+
+    PARAMETERS:
+    * licenseKey - the license key to look up.
+    * licenseLookupInfo - pointer to a buffer that receives the value of the string.
+    * length - size of the buffer pointed to by the licenseLookupInfo parameter
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_DATA, LA_E_LICENSE_KEY, LA_E_INET, LA_E_SERVER,
+    LA_E_CLIENT, LA_E_RATE_LIMIT, LA_E_BUFFER_SIZE
+
+    NOTE: This function neither validates the license nor stores anything on the
+    device, and it has no effect on the activation state of the application. Use
+    ActivateLicense() to activate the license.
+*/
+LEXACTIVATOR_API int LA_CC LookupLicenseInternal(CSTRTYPE licenseKey, STRTYPE licenseLookupInfo, uint32_t length);
+
+/*
     FUNCTION: ActivateLicense()
 
     PURPOSE: Activates the license by contacting the Cryptlex servers. It
