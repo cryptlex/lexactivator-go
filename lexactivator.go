@@ -509,9 +509,9 @@ func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
 //   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetProductMetadata(key string, value *string) int {
 	cKey := goToCString(key)
-	var cValue = getCArray(bufferSize4096)
-	status := C.GetProductMetadata(cKey, &cValue[0], bufferSize4096)
-	*value = ctoGoString(&cValue[0], bufferSize4096)
+	var cValue = getCArray(bufferSize8192)
+	status := C.GetProductMetadata(cKey, &cValue[0], bufferSize8192)
+	*value = ctoGoString(&cValue[0], bufferSize8192)
 	freeCString(cKey)
 	return int(status)
 }
