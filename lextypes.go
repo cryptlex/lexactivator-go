@@ -53,6 +53,13 @@ type FeatureEntitlement struct {
 	ExpiresAt          int64  `json:"expiresAt"`
 }
 
+type CustomAttribute struct {
+	Name         string `json:"name"`
+	Value        string `json:"value"`
+	DataType     string `json:"dataType"`
+	ResourceType uint   `json:"resourceType"`
+}
+
 type LicenseLookupInfo struct {
 	Key  string `json:"key"`
 	Type string `json:"type"`

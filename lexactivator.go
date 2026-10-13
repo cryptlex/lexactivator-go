@@ -39,6 +39,14 @@ const (
    LA_RELEASES_ALLOWED uint = 2
 )
 
+const (
+	LA_RESOURCE_TYPE_PRODUCT          uint = 1
+	LA_RESOURCE_TYPE_LICENSE          uint = 2
+	LA_RESOURCE_TYPE_USER             uint = 4
+	LA_RESOURCE_TYPE_ACTIVATION       uint = 8
+	LA_RESOURCE_TYPE_TRIAL_ACTIVATION uint = 16
+)
+
 var licenseCallbackFuncion callbackType
 
 var legacyReleaseCallbackFunction callbackType
@@ -342,6 +350,45 @@ func SetTrialActivationMetadata(key string, value string) int {
 	cValue := goToCString(value)
 	status := C.SetTrialActivationMetadata(cKey, cValue)
 	freeCString(cKey)
+	freeCString(cValue)
+	return int(status)
+}
+
+// SetCustomAttribute sets the value of the custom attribute for the specified resource type.
+//
+// If the custom attribute is required, this function must be called before the
+// license or trial is activated.
+//
+// GetCustomAttribute() does not return the value until the license or trial has
+// been activated.
+//
+// Setting an existing custom attribute overwrites its value. A value cannot be
+// removed; an empty string is a valid value.
+//
+// A license custom attribute must grant the application read-write access;
+// activation custom attributes are always read-write. Setting a read-only license
+// custom attribute fails with LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED. As the access
+// levels may not be available on the client, such a value is rejected by the
+// server on the next server sync with the same code.
+//
+// Parameters:
+//   - resourceType: the resource to set the custom attribute on. Pass exactly one of the
+//     following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
+//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION. The product and user custom attributes cannot be
+//     set by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
+//   - name: name of the custom attribute.
+//   - value: string of maximum length 1024 characters with utf-8 encoding.
+//
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID,
+//   LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH, LA_E_CUSTOM_ATTRIBUTE_VALUE_LENGTH,
+//   LA_E_CUSTOM_ATTRIBUTE_LIMIT, LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED
+func SetCustomAttribute(resourceType uint, name string, value string) int {
+	cResourceType := (C.uint)(resourceType)
+	cName := goToCString(name)
+	cValue := goToCString(value)
+	status := C.SetCustomAttribute(cResourceType, cName, cValue)
+	freeCString(cName)
 	freeCString(cValue)
 	return int(status)
 }
@@ -1110,6 +1157,59 @@ func GetTrialActivationMetadata(key string, value *string) int {
 	status := C.GetTrialActivationMetadata(cKey, &cValue[0], bufferSize4096)
 	*value = ctoGoString(&cValue[0], bufferSize4096)
 	freeCString(cKey)
+	return int(status)
+}
+
+// GetCustomAttribute gets the value of the custom attribute for the specified resource type.
+//
+// Only the custom attributes which grant the application read access are available. An
+// attribute whose application access is set to none behaves as if it does not exist and
+// returns LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND.
+//
+// A value set with SetCustomAttribute() is not returned by this function until the server
+// has accepted it and issued a new token.
+//
+// Parameters:
+//   - resourceType: the resource the custom attribute belongs to. Pass exactly one of the
+//     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+//     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
+//   - name: name of the custom attribute to retrieve the value
+//   - value: pointer to a string that receives the value
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID,
+//   LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND, LA_E_BUFFER_SIZE
+func GetCustomAttribute(resourceType uint, name string, value *string) int {
+	cResourceType := (C.uint)(resourceType)
+	cName := goToCString(name)
+	var cValue = getCArray(bufferSize4096)
+	status := C.GetCustomAttribute(cResourceType, cName, &cValue[0], bufferSize4096)
+	*value = strings.TrimRight(ctoGoString(&cValue[0], bufferSize4096), "\x00")
+	freeCString(cName)
+	return int(status)
+}
+
+// GetCustomAttributes gets the custom attributes of the specified resource type.
+//
+// Only the custom attributes which grant the application read access are returned.
+//
+// Parameters:
+//   - resourceType: the resource to get the custom attributes of. Pass exactly one of the
+//     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+//     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
+//   - customAttributes: pointer to an array of CustomAttribute structs that receives the values
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_BUFFER_SIZE
+func GetCustomAttributes(resourceType uint, customAttributes *[]CustomAttribute) int {
+	cResourceType := (C.uint)(resourceType)
+	var cCustomAttributes = getCArray(bufferSize262144)
+	status := C.GetCustomAttributesInternal(cResourceType, &cCustomAttributes[0], bufferSize262144)
+	customAttributesJson := strings.TrimRight(ctoGoString(&cCustomAttributes[0], bufferSize262144), "\x00")
+	if customAttributesJson != "" {
+		attributes := []byte(customAttributesJson)
+		json.Unmarshal(attributes, customAttributes)
+	}
 	return int(status)
 }
 

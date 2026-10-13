@@ -16,6 +16,7 @@ const (
 	bufferSize2048 C.uint = 2048
 	bufferSize4096 C.uint = 4096
 	bufferSize8192 C.uint = 8192
+	bufferSize262144 C.uint = 262144
 	bufferSizeMax C.uint = 1000000
 )
 

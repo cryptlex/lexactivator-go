@@ -69,6 +69,12 @@ typedef void (LA_CC *ReleaseCallbackTypeInternal)(int, CSTRTYPE);
 #define LA_RELEASES_ALL ((uint32_t)1)
 #define LA_RELEASES_ALLOWED ((uint32_t)2)
 
+#define LA_RESOURCE_TYPE_PRODUCT ((uint32_t)1)
+#define LA_RESOURCE_TYPE_LICENSE ((uint32_t)2)
+#define LA_RESOURCE_TYPE_USER ((uint32_t)4)
+#define LA_RESOURCE_TYPE_ACTIVATION ((uint32_t)8)
+#define LA_RESOURCE_TYPE_TRIAL_ACTIVATION ((uint32_t)16)
+
 /*
     FUNCTION: SetProductFile()
 
@@ -320,6 +326,42 @@ LEXACTIVATOR_API int LA_CC SetActivationMetadata(CSTRTYPE key, CSTRTYPE value);
     LA_E_METADATA_VALUE_LENGTH, LA_E_TRIAL_ACTIVATION_METADATA_LIMIT
 */
 LEXACTIVATOR_API int LA_CC SetTrialActivationMetadata(CSTRTYPE key, CSTRTYPE value);
+
+/*
+    FUNCTION: SetCustomAttribute()
+
+    PURPOSE: Sets the value of the custom attribute for the specified resource type.
+
+    If the custom attribute is required, this function must be called before the
+    license or trial is activated.
+
+    GetCustomAttribute() does not return the value until the license or trial has
+    been activated.
+
+    Setting an existing custom attribute overwrites its value. A value cannot be
+    removed; an empty string is a valid value.
+
+    A license custom attribute must grant the application read-write access; activation
+    custom attributes are always read-write. Setting a read-only license custom
+    attribute fails with LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED. As the access levels may
+    not be available on the client, such a value is rejected by the server on the next
+    server sync with the same code.
+
+    PARAMETERS:
+    * resourceType - the resource to set the custom attribute on. Pass exactly one of
+      the following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
+      LA_RESOURCE_TYPE_TRIAL_ACTIVATION. Combining the values using the bitwise OR
+      operator is not supported. The product and user custom attributes cannot be set
+      by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
+    * name - name of the custom attribute.
+    * value - value of the custom attribute. String of maximum length 1024 characters.
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY,
+    LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH,
+    LA_E_CUSTOM_ATTRIBUTE_VALUE_LENGTH, LA_E_CUSTOM_ATTRIBUTE_LIMIT,
+    LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED
+*/
+LEXACTIVATOR_API int LA_CC SetCustomAttribute(uint32_t resourceType, CSTRTYPE name, CSTRTYPE value);
 
 /*
     FUNCTION: SetAppVersion()
@@ -989,6 +1031,53 @@ LEXACTIVATOR_API int LA_CC GetLastActivationError(uint32_t *errorPtr);
 */
 
 LEXACTIVATOR_API int LA_CC GetTrialActivationMetadata(CSTRTYPE key, STRTYPE value, uint32_t length);
+
+/*
+    FUNCTION: GetCustomAttribute()
+
+    PURPOSE: Gets the value of the custom attribute for the specified resource type.
+
+    Only the custom attributes which grant the application read access are available. An
+    attribute whose application access is set to none behaves as if it does not exist and
+    returns LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND.
+
+    A value set with SetCustomAttribute() is not returned by this function until the server
+    has accepted it and issued a new token.
+
+    PARAMETERS:
+    * resourceType - the resource the custom attribute belongs to. Pass exactly one of the
+      following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+      LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
+      Combining the values using the bitwise OR operator is not supported.
+    * name - name of the custom attribute to retrieve the value
+    * value - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the value parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID,
+    LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND,
+    LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetCustomAttribute(uint32_t resourceType, CSTRTYPE name, STRTYPE value, uint32_t length);
+
+/*
+    FUNCTION: GetCustomAttributesInternal()
+
+    PURPOSE: Gets the custom attributes json of the specified resource type.
+
+    Only the custom attributes which grant the application read access are returned.
+
+    PARAMETERS:
+    * resourceType - the resource to get the custom attributes of. Pass exactly one of the
+      following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+      LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
+      Combining the values using the bitwise OR operator is not supported.
+    * customAttributesJson - pointer to a buffer that receives the value of the string
+    * length - size of the buffer pointed to by the customAttributesJson parameter
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID,
+    LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetCustomAttributesInternal(uint32_t resourceType, STRTYPE customAttributesJson, uint32_t length);
 
 /*
     FUNCTION: GetTrialExpiryDate()
