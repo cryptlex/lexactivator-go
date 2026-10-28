@@ -275,6 +275,6 @@ const (
 	// The application does not have write access to the custom attribute.
 	LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED int = 124
 
-	// A required custom attribute has not been set.
-	LA_E_CUSTOM_ATTRIBUTE_REQUIRED int = 125
+	// Invalid custom attribute.
+	LA_E_CUSTOM_ATTRIBUTE_INVALID int = 125
 )

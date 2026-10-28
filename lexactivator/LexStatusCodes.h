@@ -626,11 +626,11 @@ enum LexStatusCodes
     LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED = 124,
 
     /*
-        CODE: LA_E_CUSTOM_ATTRIBUTE_REQUIRED
+        CODE: LA_E_CUSTOM_ATTRIBUTE_INVALID
 
-        MESSAGE: A required custom attribute has not been set.
+        MESSAGE: Invalid custom attribute.
     */
-    LA_E_CUSTOM_ATTRIBUTE_REQUIRED = 125
+    LA_E_CUSTOM_ATTRIBUTE_INVALID = 125
 };
 
 #endif // LEX_STATUS_CODES_H
