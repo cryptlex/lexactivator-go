@@ -360,19 +360,17 @@ func SetTrialActivationMetadata(key string, value string) int {
 // license or trial is activated.
 //
 // GetCustomAttribute() does not return the value until the license or trial has
-// been activated.
+// been activated or synced.
 //
 // Setting an existing custom attribute overwrites its value. A value cannot be
-// removed; an empty string is a valid value.
+// removed, but an empty string is a valid value.
 //
-// A license custom attribute must grant the application read-write access;
-// activation custom attributes are always read-write. Setting a read-only license
-// custom attribute fails with LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED. As the access
-// levels may not be available on the client, such a value is rejected by the
-// server on the next server sync with the same code.
+// A license custom attribute must grant the application read-write access.
+// Activation custom attributes are always read-write. Setting a read-only license
+// custom attribute returns LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED.
 //
 // Parameters:
-//   - resourceType: the resource to set the custom attribute on. Pass exactly one of the
+//   - resourceType: the resource on which to set the custom attribute. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
 //     LA_RESOURCE_TYPE_TRIAL_ACTIVATION. The product and user custom attributes cannot be
 //     set by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
@@ -1166,15 +1164,15 @@ func GetTrialActivationMetadata(key string, value *string) int {
 // attribute whose application access is set to none behaves as if it does not exist and
 // returns LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND.
 //
-// A value set with SetCustomAttribute() is not returned by this function until the server
-// has accepted it and issued a new token.
+// A value set with SetCustomAttribute() is not returned by this function until the license
+// or trial has been activated or synced.
 //
 // Parameters:
-//   - resourceType: the resource the custom attribute belongs to. Pass exactly one of the
+//   - resourceType: the resource on which the custom attribute is defined. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
 //     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
-//   - name: name of the custom attribute to retrieve the value
-//   - value: pointer to a string that receives the value
+//   - name: name of the custom attribute to retrieve the value.
+//   - value: pointer to a string that receives the value.
 //
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID,
@@ -1189,15 +1187,15 @@ func GetCustomAttribute(resourceType uint, name string, value *string) int {
 	return int(status)
 }
 
-// GetCustomAttributes gets the custom attributes of the specified resource type.
+// GetCustomAttributes gets the custom attributes for the specified resource type.
 //
 // Only the custom attributes which grant the application read access are returned.
 //
 // Parameters:
-//   - resourceType: the resource to get the custom attributes of. Pass exactly one of the
+//   - resourceType: the resource on which the custom attributes are defined. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
 //     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
-//   - customAttributes: pointer to an array of CustomAttribute structs that receives the values
+//   - customAttributes: pointer to an array of CustomAttribute structs that receives the values.
 //
 // Return codes:
 //   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_BUFFER_SIZE

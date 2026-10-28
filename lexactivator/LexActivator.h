@@ -336,25 +336,35 @@ LEXACTIVATOR_API int LA_CC SetTrialActivationMetadata(CSTRTYPE key, CSTRTYPE val
     license or trial is activated.
 
     GetCustomAttribute() does not return the value until the license or trial has
-    been activated.
+    been activated or synced.
 
     Setting an existing custom attribute overwrites its value. A value cannot be
-    removed; an empty string is a valid value.
+    removed, but an empty string is a valid value.
 
-    A license custom attribute must grant the application read-write access; activation
-    custom attributes are always read-write. Setting a read-only license custom
-    attribute fails with LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED. As the access levels may
-    not be available on the client, such a value is rejected by the server on the next
-    server sync with the same code.
+    A license custom attribute must grant the application read-write access. Activation
+    custom attributes are always read-write. Setting a read only license custom
+    attribute returns LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED.
 
     PARAMETERS:
-    * resourceType - the resource to set the custom attribute on. Pass exactly one of
-      the following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
+    * resourceType - the resource on which to set the custom attribute. Pass exactly
+      one of the following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
       LA_RESOURCE_TYPE_TRIAL_ACTIVATION. Combining the values using the bitwise OR
       operator is not supported. The product and user custom attributes cannot be set
       by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
+
+      - LA_RESOURCE_TYPE_LICENSE: Sets the custom attribute on the license. The
+        value appears along with the license details in the dashboard.
+
+      - LA_RESOURCE_TYPE_ACTIVATION: Sets the custom attribute on the activation.
+        The value appears along with the activation details of the license in the
+        dashboard.
+
+      - LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Sets the custom attribute on the trial
+        activation. The value appears along with the trial activation details of the
+        product in the dashboard.
+
     * name - name of the custom attribute.
-    * value - value of the custom attribute. String of maximum length 1024 characters.
+    * value - value of the custom attribute, of maximum length 1024 characters.
 
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY,
     LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH,
@@ -1041,17 +1051,32 @@ LEXACTIVATOR_API int LA_CC GetTrialActivationMetadata(CSTRTYPE key, STRTYPE valu
     attribute whose application access is set to none behaves as if it does not exist and
     returns LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND.
 
-    A value set with SetCustomAttribute() is not returned by this function until the server
-    has accepted it and issued a new token.
+    A value set with SetCustomAttribute() is not returned by this function until the license
+    or trial has been activated or synced.
 
     PARAMETERS:
-    * resourceType - the resource the custom attribute belongs to. Pass exactly one of the
-      following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+    * resourceType - the resource on which the custom attribute is defined. Pass exactly
+      one of the following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
       LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
       Combining the values using the bitwise OR operator is not supported.
-    * name - name of the custom attribute to retrieve the value
-    * value - pointer to a buffer that receives the value of the string
-    * length - size of the buffer pointed to by the value parameter
+
+      - LA_RESOURCE_TYPE_PRODUCT: Gets the custom attribute defined on the product. This is
+        available for trial as well as license activations.
+
+      - LA_RESOURCE_TYPE_LICENSE: Gets the custom attribute defined on the license.
+
+      - LA_RESOURCE_TYPE_USER: Gets the custom attribute defined on the user the license is
+        assigned to.
+
+      - LA_RESOURCE_TYPE_ACTIVATION: Gets the custom attribute defined on the current
+        activation.
+
+      - LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Gets the custom attribute defined on the current
+        trial activation.
+
+    * name - name of the custom attribute to retrieve the value.
+    * value - pointer to a buffer that receives the value of the custom attribute.
+    * length - size of the buffer pointed to by the value parameter.
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID,
     LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND,
@@ -1062,17 +1087,17 @@ LEXACTIVATOR_API int LA_CC GetCustomAttribute(uint32_t resourceType, CSTRTYPE na
 /*
     FUNCTION: GetCustomAttributesInternal()
 
-    PURPOSE: Gets the custom attributes json of the specified resource type.
+    PURPOSE: Gets the custom attributes json for the specified resource type.
 
     Only the custom attributes which grant the application read access are returned.
 
     PARAMETERS:
-    * resourceType - the resource to get the custom attributes of. Pass exactly one of the
-      following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+    * resourceType - the resource on which the custom attributes are defined. Pass exactly
+      one of the following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
       LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
       Combining the values using the bitwise OR operator is not supported.
-    * customAttributesJson - pointer to a buffer that receives the value of the string
-    * length - size of the buffer pointed to by the customAttributesJson parameter
+    * customAttributesJson - pointer to a buffer that receives the custom attributes json.
+    * length - size of the buffer pointed to by the customAttributesJson parameter.
 
     RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID,
     LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_BUFFER_SIZE
