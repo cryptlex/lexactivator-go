@@ -577,6 +577,13 @@ enum LexStatusCodes
     LA_E_ACTIVATION_CLONE_DETECTED = 114,
 
     /*
+        CODE: LA_E_INSUFFICIENT_SYSTEM_RESOURCES
+
+        MESSAGE: Insufficient system resources to complete the operation.
+    */
+    LA_E_INSUFFICIENT_SYSTEM_RESOURCES = 118,
+
+    /*
         CODE: LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH
 
         MESSAGE: The custom attribute name length is more than 256 characters.
@@ -617,6 +624,13 @@ enum LexStatusCodes
         MESSAGE: The application does not have write access to the custom attribute.
     */
     LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED = 124,
+
+    /*
+        CODE: LA_E_CUSTOM_ATTRIBUTE_REQUIRED
+
+        MESSAGE: A required custom attribute has not been set.
+    */
+    LA_E_CUSTOM_ATTRIBUTE_REQUIRED = 125
 };
 
 #endif // LEX_STATUS_CODES_H

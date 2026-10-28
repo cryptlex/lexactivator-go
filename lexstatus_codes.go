@@ -254,6 +254,9 @@ const (
 	// Activation clone detected.
 	LA_E_ACTIVATION_CLONE_DETECTED int = 114
 
+	// Insufficient system resources to complete the operation.
+	LA_E_INSUFFICIENT_SYSTEM_RESOURCES int = 118
+
 	// The custom attribute name length is more than 256 characters.
 	LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH int = 119
 
@@ -271,4 +274,7 @@ const (
 
 	// The application does not have write access to the custom attribute.
 	LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED int = 124
+
+	// A required custom attribute has not been set.
+	LA_E_CUSTOM_ATTRIBUTE_REQUIRED int = 125
 )
