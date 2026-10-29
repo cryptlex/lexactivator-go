@@ -526,13 +526,15 @@ func SetTlsPeerVerification(enable bool) int {
 // Return codes:
 //   LA_OK
 func SetTlsTrustStore(caBundleFilePath string, caDirectoryPath string) int {
-	var bundlePath *C.char
-	var directoryPath *C.char
-	if caBundleFilePath != "" {
-		bundlePath = goToCString(caBundleFilePath)
+	bundlePath := goToCString(caBundleFilePath)
+	if caBundleFilePath == "" {
+		freeCString(bundlePath)
+		bundlePath = nil
 	}
-	if caDirectoryPath != "" {
-		directoryPath = goToCString(caDirectoryPath)
+	directoryPath := goToCString(caDirectoryPath)
+	if caDirectoryPath == "" {
+		freeCString(directoryPath)
+		directoryPath = nil
 	}
 	status := C.SetTlsTrustStore(bundlePath, directoryPath)
 	freeCString(bundlePath)
