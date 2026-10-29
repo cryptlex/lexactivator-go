@@ -497,6 +497,49 @@ func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
    return int(status)
 }
 
+// SetTlsPeerVerification enables or disables TLS peer verification.
+// TLS peer verification is disabled by default for linux.
+//
+// Parameters:
+//   - enable: true enables peer verification and false disables it.
+//
+// Return codes:
+//   LA_OK
+func SetTlsPeerVerification(enable bool) int {
+	var cEnable C.uint
+	if enable {
+		cEnable = 1
+	} else {
+		cEnable = 0
+	}
+	status := C.SetTlsPeerVerification(cEnable)
+	return int(status)
+}
+
+// SetTlsTrustStore sets the CA bundle file and/or CA directory used for TLS
+// certificate verification.
+//
+// Parameters:
+//   - caBundleFilePath: path to the CA bundle file
+//   - caDirectoryPath: path to the CA directory
+//
+// Return codes:
+//   LA_OK
+func SetTlsTrustStore(caBundleFilePath string, caDirectoryPath string) int {
+	var bundlePath *C.char
+	var directoryPath *C.char
+	if caBundleFilePath != "" {
+		bundlePath = goToCString(caBundleFilePath)
+	}
+	if caDirectoryPath != "" {
+		directoryPath = goToCString(caDirectoryPath)
+	}
+	status := C.SetTlsTrustStore(bundlePath, directoryPath)
+	freeCString(bundlePath)
+	freeCString(directoryPath)
+	return int(status)
+}
+
 // GetProductMetadata gets the product metadata as set in the dashboard.
 //
 // This is available for trial as well as license activations.
