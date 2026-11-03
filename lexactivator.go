@@ -45,6 +45,7 @@ const (
 	LA_RESOURCE_TYPE_USER             uint = 4
 	LA_RESOURCE_TYPE_ACTIVATION       uint = 8
 	LA_RESOURCE_TYPE_TRIAL_ACTIVATION uint = 16
+	LA_RESOURCE_TYPE_ORGANIZATION     uint = 32
 )
 
 var licenseCallbackFuncion callbackType
@@ -372,8 +373,8 @@ func SetTrialActivationMetadata(key string, value string) int {
 // Parameters:
 //   - resourceType: the resource on which to set the custom attribute. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
-//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION. The product and user custom attributes cannot be
-//     set by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
+//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION. The product, user and organization custom attributes
+//     cannot be set by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
 //   - name: name of the custom attribute.
 //   - value: string of maximum length 1024 characters with utf-8 encoding.
 //
@@ -1170,7 +1171,8 @@ func GetTrialActivationMetadata(key string, value *string) int {
 // Parameters:
 //   - resourceType: the resource on which the custom attribute is defined. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
-//     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
+//     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION,
+//     LA_RESOURCE_TYPE_ORGANIZATION.
 //   - name: name of the custom attribute to retrieve the value.
 //   - value: pointer to a string that receives the value.
 //
@@ -1194,7 +1196,8 @@ func GetCustomAttribute(resourceType uint, name string, value *string) int {
 // Parameters:
 //   - resourceType: the resource on which the custom attributes are defined. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
-//     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
+//     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION,
+//     LA_RESOURCE_TYPE_ORGANIZATION.
 //   - customAttributes: pointer to an array of CustomAttribute structs that receives the values.
 //
 // Return codes:
