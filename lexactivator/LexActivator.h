@@ -1075,8 +1075,8 @@ LEXACTIVATOR_API int LA_CC GetTrialActivationMetadata(CSTRTYPE key, STRTYPE valu
       - LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Gets the custom attribute defined on the current
         trial activation.
 
-      - LA_RESOURCE_TYPE_ORGANIZATION: Gets the custom attribute defined on the current
-        organization.
+      - LA_RESOURCE_TYPE_ORGANIZATION: Gets the custom attribute defined on the organization the license
+        is linked to.
 
     * name - name of the custom attribute to retrieve the value.
     * value - pointer to a buffer that receives the value of the custom attribute.

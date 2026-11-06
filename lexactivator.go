@@ -373,10 +373,21 @@ func SetTrialActivationMetadata(key string, value string) int {
 // Parameters:
 //   - resourceType: the resource on which to set the custom attribute. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
-//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION. The product, user and organization custom attributes
-//     cannot be set by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
+//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION. Combining the values using the bitwise OR operator
+//     is not supported. The product, user and organization custom attributes cannot be set
+//     by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
+//
+//     LA_RESOURCE_TYPE_LICENSE: Sets the custom attribute on the license. The value appears
+//     along with the license details in the dashboard.
+//
+//     LA_RESOURCE_TYPE_ACTIVATION: Sets the custom attribute on the activation. The value
+//     appears along with the activation details of the license in the dashboard.
+//
+//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Sets the custom attribute on the trial activation.
+//     The value appears along with the trial activation details of the product in the dashboard.
+//
 //   - name: name of the custom attribute.
-//   - value: string of maximum length 1024 characters with utf-8 encoding.
+//   - value: value of the custom attribute, of maximum length 1024 characters.
 //
 // Return codes:
 //   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID,
@@ -1172,7 +1183,25 @@ func GetTrialActivationMetadata(key string, value *string) int {
 //   - resourceType: the resource on which the custom attribute is defined. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
 //     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION,
-//     LA_RESOURCE_TYPE_ORGANIZATION.
+//     LA_RESOURCE_TYPE_ORGANIZATION. Combining the values using the bitwise OR operator is
+//     not supported.
+//
+//     LA_RESOURCE_TYPE_PRODUCT: Gets the custom attribute defined on the product. This is
+//     available for trial as well as license activations.
+//
+//     LA_RESOURCE_TYPE_LICENSE: Gets the custom attribute defined on the license.
+//
+//     LA_RESOURCE_TYPE_USER: Gets the custom attribute defined on the user the license is
+//     assigned to.
+//
+//     LA_RESOURCE_TYPE_ACTIVATION: Gets the custom attribute defined on the current activation.
+//
+//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Gets the custom attribute defined on the current
+//     trial activation.
+//
+//     LA_RESOURCE_TYPE_ORGANIZATION: Gets the custom attribute defined on the organization
+//     the license is linked to.
+//
 //   - name: name of the custom attribute to retrieve the value.
 //   - value: pointer to a string that receives the value.
 //
@@ -1197,7 +1226,8 @@ func GetCustomAttribute(resourceType uint, name string, value *string) int {
 //   - resourceType: the resource on which the custom attributes are defined. Pass exactly one of the
 //     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
 //     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION,
-//     LA_RESOURCE_TYPE_ORGANIZATION.
+//     LA_RESOURCE_TYPE_ORGANIZATION. Combining the values using the bitwise OR operator is
+//     not supported.
 //   - customAttributes: pointer to an array of CustomAttribute structs that receives the values.
 //
 // Return codes:
