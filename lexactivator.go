@@ -387,7 +387,7 @@ func SetTrialActivationMetadata(key string, value string) int {
 //     The value appears along with the trial activation details of the product in the dashboard.
 //
 //   - name: name of the custom attribute.
-//   - value: value of the custom attribute, of maximum length 1024 characters.
+//   - value: string of maximum length 1024 characters with utf-8 encoding.
 //
 // Return codes:
 //   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID,
