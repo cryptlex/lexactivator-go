@@ -74,6 +74,7 @@ typedef void (LA_CC *ReleaseCallbackTypeInternal)(int, CSTRTYPE);
 #define LA_RESOURCE_TYPE_USER ((uint32_t)4)
 #define LA_RESOURCE_TYPE_ACTIVATION ((uint32_t)8)
 #define LA_RESOURCE_TYPE_TRIAL_ACTIVATION ((uint32_t)16)
+#define LA_RESOURCE_TYPE_ORGANIZATION ((uint32_t)32)
 
 /*
     FUNCTION: SetProductFile()
@@ -349,7 +350,7 @@ LEXACTIVATOR_API int LA_CC SetTrialActivationMetadata(CSTRTYPE key, CSTRTYPE val
     * resourceType - the resource on which to set the custom attribute. Pass exactly
       one of the following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
       LA_RESOURCE_TYPE_TRIAL_ACTIVATION. Combining the values using the bitwise OR
-      operator is not supported. The product and user custom attributes cannot be set
+      operator is not supported. The product, user and organization custom attributes cannot be set
       by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
 
       - LA_RESOURCE_TYPE_LICENSE: Sets the custom attribute on the license. The
@@ -1114,7 +1115,7 @@ LEXACTIVATOR_API int LA_CC GetTrialActivationMetadata(CSTRTYPE key, STRTYPE valu
     PARAMETERS:
     * resourceType - the resource on which the custom attribute is defined. Pass exactly
       one of the following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
-      LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
+      LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION, LA_RESOURCE_TYPE_ORGANIZATION.
       Combining the values using the bitwise OR operator is not supported.
 
       - LA_RESOURCE_TYPE_PRODUCT: Gets the custom attribute defined on the product. This is
@@ -1130,6 +1131,9 @@ LEXACTIVATOR_API int LA_CC GetTrialActivationMetadata(CSTRTYPE key, STRTYPE valu
 
       - LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Gets the custom attribute defined on the current
         trial activation.
+
+      - LA_RESOURCE_TYPE_ORGANIZATION: Gets the custom attribute defined on the organization the license
+        is linked to.
 
     * name - name of the custom attribute to retrieve the value.
     * value - pointer to a buffer that receives the value of the custom attribute.
@@ -1151,7 +1155,7 @@ LEXACTIVATOR_API int LA_CC GetCustomAttribute(uint32_t resourceType, CSTRTYPE na
     PARAMETERS:
     * resourceType - the resource on which the custom attributes are defined. Pass exactly
       one of the following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
-      LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION.
+      LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION, LA_RESOURCE_TYPE_ORGANIZATION.
       Combining the values using the bitwise OR operator is not supported.
     * customAttributesJson - pointer to a buffer that receives the custom attributes json.
     * length - size of the buffer pointed to by the customAttributesJson parameter.
