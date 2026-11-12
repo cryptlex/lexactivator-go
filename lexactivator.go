@@ -542,6 +542,81 @@ func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
    return int(status)
 }
 
+// SetTlsPeerVerification enables or disables TLS peer verification.
+// 
+// Use enable = true to explicitly enable verification. Use SetTlsTrustStore() to
+// specify the certificate bundle or CA directory explicitly; otherwise the SDK
+// probes the following standard system paths and uses the first one found:
+// 
+// CA bundle file candidates (CURLOPT_CAINFO), in order:
+//  /etc/ssl/certs/ca-certificates.crt
+//  /etc/pki/tls/certs/ca-bundle.crt
+//  /etc/ssl/ca-bundle.pem
+//  /etc/pki/tls/cacert.pem
+//  /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+//  /etc/ssl/cert.pem
+//  /etc/openssl/certs/ca-certificates.crt
+//  /usr/local/etc/ssl/cert.pem
+//  /usr/local/etc/openssl/cert.pem
+//  /usr/local/share/certs/ca-root-nss.crt
+// 
+// CA directory candidates (CURLOPT_CAPATH), in order:
+//  /etc/ssl/certs
+//  /etc/pki/tls/certs
+//  /etc/openssl/certs
+// 
+// NOTE: This function is only supported on Linux. On Linux, TLS/SSL peer
+// verification is disabled by default; on all other platforms, it is enabled
+// by default, and this function has no effect.
+//
+// Parameters:
+//   - enable: true enables peer verification and false disables it.
+//
+// Return codes:
+//   LA_OK
+func SetTlsPeerVerification(enable bool) int {
+	var cEnable C.uint
+	if enable {
+		cEnable = 1
+	} else {
+		cEnable = 0
+	}
+	status := C.SetTlsPeerVerification(cEnable)
+	return int(status)
+}
+
+// SetTlsTrustStore specifies the certificate bundle file and/or CA directory the SDK uses
+// to validate server certificates over HTTPS; if not called the standard system CA paths
+// are probed automatically when verification is enabled. See SetTlsPeerVerification()
+// for the list of candidate paths used during automatic resolution.
+// 
+// NOTE: This function is only supported on Linux. It only configures the trust store;
+// call SetTlsPeerVerification(true) to enable verification. If both arguments are NULL or
+// point to unresolvable paths, standard system paths are used.
+//
+// Parameters:
+//   - caBundleFilePath: path to a certificate bundle file (CURLOPT_CAINFO)
+//   - caDirectoryPath: path to a directory of CA certificates (CURLOPT_CAPATH)
+//
+// Return codes:
+//   LA_OK
+func SetTlsTrustStore(caBundleFilePath string, caDirectoryPath string) int {
+	bundlePath := goToCString(caBundleFilePath)
+	if caBundleFilePath == "" {
+		freeCString(bundlePath)
+		bundlePath = nil
+	}
+	directoryPath := goToCString(caDirectoryPath)
+	if caDirectoryPath == "" {
+		freeCString(directoryPath)
+		directoryPath = nil
+	}
+	status := C.SetTlsTrustStore(bundlePath, directoryPath)
+	freeCString(bundlePath)
+	freeCString(directoryPath)
+	return int(status)
+}
+
 // GetProductMetadata gets the product metadata as set in the dashboard.
 //
 // This is available for trial as well as license activations.

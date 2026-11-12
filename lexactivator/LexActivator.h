@@ -510,6 +510,63 @@ LEXACTIVATOR_API int LA_CC SetCryptlexHost(CSTRTYPE host);
 LEXACTIVATOR_API int LA_CC SetTwoFactorAuthenticationCode(CSTRTYPE twoFactorAuthenticationCode);
 
 /*
+   FUNCTION: SetTlsPeerVerification()
+
+   PURPOSE: Enables or disables TLS/SSL peer certificate verification.
+
+   Use enable = 1 to explicitly enable verification. Use SetTlsTrustStore() to
+   specify the certificate bundle or CA directory explicitly; otherwise the SDK
+   probes the following standard system paths and uses the first one found:
+
+   CA bundle file candidates (CURLOPT_CAINFO), in order:
+     /etc/ssl/certs/ca-certificates.crt
+     /etc/pki/tls/certs/ca-bundle.crt
+     /etc/ssl/ca-bundle.pem
+     /etc/pki/tls/cacert.pem
+     /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+     /etc/ssl/cert.pem
+     /etc/openssl/certs/ca-certificates.crt
+     /usr/local/etc/ssl/cert.pem
+     /usr/local/etc/openssl/cert.pem
+     /usr/local/share/certs/ca-root-nss.crt
+
+   CA directory candidates (CURLOPT_CAPATH), in order:
+     /etc/ssl/certs
+     /etc/pki/tls/certs
+     /etc/openssl/certs
+
+   NOTE: This function is only supported on Linux. On Linux, TLS/SSL peer
+   verification is disabled by default; on all other platforms, it is enabled
+   by default, and this function has no effect.
+
+   PARAMETERS:
+   * enable - 0 to disable peer verification, 1 to enable it.
+
+   RETURN CODES: LA_OK
+*/
+LEXACTIVATOR_API int LA_CC SetTlsPeerVerification(uint32_t enable);
+
+/*
+   FUNCTION: SetTlsTrustStore()
+
+   PURPOSE: Specifies the certificate bundle file and/or CA directory the SDK uses
+   to validate server certificates over HTTPS; if not called the standard system CA paths
+   are probed automatically when verification is enabled. See SetTlsPeerVerification()
+   for the list of candidate paths used during automatic resolution.
+
+   NOTE: This function is only supported on Linux. It only configures the trust store;
+   call SetTlsPeerVerification(1) to enable verification. If both arguments are NULL or
+   point to unresolvable paths, standard system paths are used.
+
+   PARAMETERS:
+   * caBundleFilePath - path to a certificate bundle file (CURLOPT_CAINFO)
+   * caDirectoryPath - path to a directory of CA certificates (CURLOPT_CAPATH)
+
+   RETURN CODES: LA_OK
+*/
+LEXACTIVATOR_API int LA_CC SetTlsTrustStore(CSTRTYPE caBundleFilePath, CSTRTYPE caDirectoryPath);
+
+/*
     FUNCTION: GetProductMetadata()
 
     PURPOSE: Gets the product metadata as set in the dashboard.
