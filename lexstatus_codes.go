@@ -240,4 +240,41 @@ const (
 
 	// The license cannot be activated before its effective date.
 	LA_E_LICENSE_NOT_EFFECTIVE int = 110
+
+	// Device not found.
+	LA_E_DEVICE_NOT_FOUND int = 111
+
+	// Device validation failed.
+	LA_E_DEVICE_VALIDATION_FAILED int = 112
+
+	// Fingerprint validation grace period is over. Please connect to
+	// internet and restart the application.
+	LA_E_FINGERPRINT_VALIDATION_GRACE_PERIOD_OVER int = 113
+
+	// Activation clone detected.
+	LA_E_ACTIVATION_CLONE_DETECTED int = 114
+
+	// Insufficient system resources to complete the operation.
+	LA_E_INSUFFICIENT_SYSTEM_RESOURCES int = 118
+
+	// The custom attribute name length is more than 256 characters.
+	LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH int = 119
+
+	// The custom attribute value length is more than 1024 characters.
+	LA_E_CUSTOM_ATTRIBUTE_VALUE_LENGTH int = 120
+
+	// The maximum allowed number of custom attributes has already been set.
+	LA_E_CUSTOM_ATTRIBUTE_LIMIT int = 121
+
+	// The custom attribute does not exist, or the application does not have read access to it.
+	LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND int = 122
+
+	// Invalid custom attribute resource type.
+	LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID int = 123
+
+	// The application does not have write access to the custom attribute.
+	LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED int = 124
+
+	// Invalid custom attribute.
+	LA_E_CUSTOM_ATTRIBUTE_INVALID int = 125
 )

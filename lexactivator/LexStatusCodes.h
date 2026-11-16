@@ -547,6 +547,90 @@ enum LexStatusCodes
         MESSAGE: The license cannot be activated before its effective date.
     */
     LA_E_LICENSE_NOT_EFFECTIVE = 110,
+
+    /*
+        CODE: LA_E_DEVICE_NOT_FOUND
+
+        MESSAGE: Device not found.
+    */
+    LA_E_DEVICE_NOT_FOUND = 111,
+
+    /*
+        CODE: LA_E_DEVICE_VALIDATION_FAILED
+
+        MESSAGE: Device validation failed.
+    */
+    LA_E_DEVICE_VALIDATION_FAILED = 112,
+
+    /*
+        CODE: LA_E_FINGERPRINT_VALIDATION_GRACE_PERIOD_OVER
+
+        MESSAGE: Fingerprint validation grace period is over. Please connect to internet and restart the application.
+    */
+    LA_E_FINGERPRINT_VALIDATION_GRACE_PERIOD_OVER = 113,
+
+    /*
+        CODE: LA_E_ACTIVATION_CLONE_DETECTED
+
+        MESSAGE: Activation clone detected.
+    */
+    LA_E_ACTIVATION_CLONE_DETECTED = 114,
+
+    /*
+        CODE: LA_E_INSUFFICIENT_SYSTEM_RESOURCES
+
+        MESSAGE: Insufficient system resources to complete the operation.
+    */
+    LA_E_INSUFFICIENT_SYSTEM_RESOURCES = 118,
+
+    /*
+        CODE: LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH
+
+        MESSAGE: The custom attribute name length is more than 256 characters.
+    */
+    LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH = 119,
+
+    /*
+        CODE: LA_E_CUSTOM_ATTRIBUTE_VALUE_LENGTH
+
+        MESSAGE: The custom attribute value length is more than 1024 characters.
+    */
+    LA_E_CUSTOM_ATTRIBUTE_VALUE_LENGTH = 120,
+
+    /*
+        CODE: LA_E_CUSTOM_ATTRIBUTE_LIMIT
+
+        MESSAGE: The maximum allowed number of custom attributes has already been set.
+    */
+    LA_E_CUSTOM_ATTRIBUTE_LIMIT = 121,
+
+    /*
+        CODE: LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND
+
+        MESSAGE: The custom attribute does not exist, or the application does not have read access to it.
+    */
+    LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND = 122,
+
+    /*
+        CODE: LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID
+
+        MESSAGE: Invalid custom attribute resource type.
+    */
+    LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID = 123,
+
+    /*
+        CODE: LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED
+
+        MESSAGE: The application does not have write access to the custom attribute.
+    */
+    LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED = 124,
+
+    /*
+        CODE: LA_E_CUSTOM_ATTRIBUTE_INVALID
+
+        MESSAGE: Invalid custom attribute.
+    */
+    LA_E_CUSTOM_ATTRIBUTE_INVALID = 125
 };
 
 #endif // LEX_STATUS_CODES_H

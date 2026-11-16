@@ -50,7 +50,33 @@ type FeatureEntitlement struct {
 	FeatureDisplayName string `json:"featureDisplayName"`
 	Value              string `json:"value"`
 	BaseValue          string `json:"baseValue"`
-	ExpiresAt		   int64  `json:"expiresAt"`
+	ExpiresAt          int64  `json:"expiresAt"`
+}
+
+type CustomAttribute struct {
+	Name         string `json:"name"`
+	Value        string `json:"value"`
+	DataType     string `json:"dataType"`
+	ResourceType uint   `json:"resourceType"`
+}
+
+type LicenseLookupInfo struct {
+	Key  string `json:"key"`
+	Type string `json:"type"`
+}
+
+type DataStoreInfo struct {
+	// Kind of storage used on the current platform ("file", "registry" or "in-memory").
+	StorageKind           string `json:"storageKind"`
+
+	// The permission flag in effect ("la-user", "la-system", "la-all-users" or "la-in-memory").
+	PermissionFlag        string `json:"permissionFlag"`
+
+	// Whether the directory set using SetDataDirectory() is in effect.
+	IsCustomDataDirectory bool   `json:"isCustomDataDirectory"`
+
+	// Location of the data store.
+	Path                  string `json:"path"`
 }
 
 type UserLicense struct {

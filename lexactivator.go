@@ -39,6 +39,15 @@ const (
    LA_RELEASES_ALLOWED uint = 2
 )
 
+const (
+	LA_RESOURCE_TYPE_PRODUCT          uint = 1
+	LA_RESOURCE_TYPE_LICENSE          uint = 2
+	LA_RESOURCE_TYPE_USER             uint = 4
+	LA_RESOURCE_TYPE_ACTIVATION       uint = 8
+	LA_RESOURCE_TYPE_TRIAL_ACTIVATION uint = 16
+	LA_RESOURCE_TYPE_ORGANIZATION     uint = 32
+)
+
 var licenseCallbackFuncion callbackType
 
 var legacyReleaseCallbackFunction callbackType
@@ -346,6 +355,54 @@ func SetTrialActivationMetadata(key string, value string) int {
 	return int(status)
 }
 
+// SetCustomAttribute sets the value of the custom attribute for the specified resource type.
+//
+// If the custom attribute is required, this function must be called before the
+// license or trial is activated.
+//
+// GetCustomAttribute() does not return the value until the license or trial has
+// been activated or synced.
+//
+// Setting an existing custom attribute overwrites its value. A value cannot be
+// removed, but an empty string is a valid value.
+//
+// A license custom attribute must grant the application read-write access.
+// Activation custom attributes are always read-write. Setting a read-only license
+// custom attribute returns LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED.
+//
+// Parameters:
+//   - resourceType: the resource on which to set the custom attribute. Pass exactly one of the
+//     following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
+//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION. Combining the values using the bitwise OR operator
+//     is not supported. The product, user and organization custom attributes cannot be set
+//     by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
+//
+//     LA_RESOURCE_TYPE_LICENSE: Sets the custom attribute on the license. The value appears
+//     along with the license details in the dashboard.
+//
+//     LA_RESOURCE_TYPE_ACTIVATION: Sets the custom attribute on the activation. The value
+//     appears along with the activation details of the license in the dashboard.
+//
+//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Sets the custom attribute on the trial activation.
+//     The value appears along with the trial activation details of the product in the dashboard.
+//
+//   - name: name of the custom attribute.
+//   - value: string of maximum length 1024 characters with utf-8 encoding.
+//
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID,
+//   LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH, LA_E_CUSTOM_ATTRIBUTE_VALUE_LENGTH,
+//   LA_E_CUSTOM_ATTRIBUTE_LIMIT, LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED
+func SetCustomAttribute(resourceType uint, name string, value string) int {
+	cResourceType := (C.uint)(resourceType)
+	cName := goToCString(name)
+	cValue := goToCString(value)
+	status := C.SetCustomAttribute(cResourceType, cName, cValue)
+	freeCString(cName)
+	freeCString(cValue)
+	return int(status)
+}
+
 // SetAppVersion sets the current app version of your application.
 //
 // The app version appears along with the activation details in dashboard. It
@@ -497,6 +554,81 @@ func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
    return int(status)
 }
 
+// SetTlsPeerVerification enables or disables TLS peer verification.
+// 
+// Use enable = true to explicitly enable verification. Use SetTlsTrustStore() to
+// specify the certificate bundle or CA directory explicitly; otherwise the SDK
+// probes the following standard system paths and uses the first one found:
+// 
+// CA bundle file candidates (CURLOPT_CAINFO), in order:
+//  /etc/ssl/certs/ca-certificates.crt
+//  /etc/pki/tls/certs/ca-bundle.crt
+//  /etc/ssl/ca-bundle.pem
+//  /etc/pki/tls/cacert.pem
+//  /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+//  /etc/ssl/cert.pem
+//  /etc/openssl/certs/ca-certificates.crt
+//  /usr/local/etc/ssl/cert.pem
+//  /usr/local/etc/openssl/cert.pem
+//  /usr/local/share/certs/ca-root-nss.crt
+// 
+// CA directory candidates (CURLOPT_CAPATH), in order:
+//  /etc/ssl/certs
+//  /etc/pki/tls/certs
+//  /etc/openssl/certs
+// 
+// NOTE: This function is only supported on Linux. On Linux, TLS/SSL peer
+// verification is disabled by default; on all other platforms, it is enabled
+// by default, and this function has no effect.
+//
+// Parameters:
+//   - enable: true enables peer verification and false disables it.
+//
+// Return codes:
+//   LA_OK
+func SetTlsPeerVerification(enable bool) int {
+	var cEnable C.uint
+	if enable {
+		cEnable = 1
+	} else {
+		cEnable = 0
+	}
+	status := C.SetTlsPeerVerification(cEnable)
+	return int(status)
+}
+
+// SetTlsTrustStore specifies the certificate bundle file and/or CA directory the SDK uses
+// to validate server certificates over HTTPS; if not called the standard system CA paths
+// are probed automatically when verification is enabled. See SetTlsPeerVerification()
+// for the list of candidate paths used during automatic resolution.
+// 
+// NOTE: This function is only supported on Linux. It only configures the trust store;
+// call SetTlsPeerVerification(true) to enable verification. If both arguments are NULL or
+// point to unresolvable paths, standard system paths are used.
+//
+// Parameters:
+//   - caBundleFilePath: path to a certificate bundle file (CURLOPT_CAINFO)
+//   - caDirectoryPath: path to a directory of CA certificates (CURLOPT_CAPATH)
+//
+// Return codes:
+//   LA_OK
+func SetTlsTrustStore(caBundleFilePath string, caDirectoryPath string) int {
+	bundlePath := goToCString(caBundleFilePath)
+	if caBundleFilePath == "" {
+		freeCString(bundlePath)
+		bundlePath = nil
+	}
+	directoryPath := goToCString(caDirectoryPath)
+	if caDirectoryPath == "" {
+		freeCString(directoryPath)
+		directoryPath = nil
+	}
+	status := C.SetTlsTrustStore(bundlePath, directoryPath)
+	freeCString(bundlePath)
+	freeCString(directoryPath)
+	return int(status)
+}
+
 // GetProductMetadata gets the product metadata as set in the dashboard.
 //
 // This is available for trial as well as license activations.
@@ -509,9 +641,9 @@ func SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode string) int {
 //   LA_OK, LA_E_PRODUCT_ID, LA_E_METADATA_KEY_NOT_FOUND, LA_E_BUFFER_SIZE
 func GetProductMetadata(key string, value *string) int {
 	cKey := goToCString(key)
-	var cValue = getCArray(bufferSize4096)
-	status := C.GetProductMetadata(cKey, &cValue[0], bufferSize4096)
-	*value = ctoGoString(&cValue[0], bufferSize4096)
+	var cValue = getCArray(bufferSize8192)
+	status := C.GetProductMetadata(cKey, &cValue[0], bufferSize8192)
+	*value = ctoGoString(&cValue[0], bufferSize8192)
 	freeCString(cKey)
 	return int(status)
 }
@@ -1113,6 +1245,80 @@ func GetTrialActivationMetadata(key string, value *string) int {
 	return int(status)
 }
 
+// GetCustomAttribute gets the value of the custom attribute for the specified resource type.
+//
+// Only the custom attributes which grant the application read access are available. An
+// attribute whose application access is set to none behaves as if it does not exist and
+// returns LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND.
+//
+// A value set with SetCustomAttribute() is not returned by this function until the license
+// or trial has been activated or synced.
+//
+// Parameters:
+//   - resourceType: the resource on which the custom attribute is defined. Pass exactly one of the
+//     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+//     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION,
+//     LA_RESOURCE_TYPE_ORGANIZATION. Combining the values using the bitwise OR operator is
+//     not supported.
+//
+//     LA_RESOURCE_TYPE_PRODUCT: Gets the custom attribute defined on the product. This is
+//     available for trial as well as license activations.
+//
+//     LA_RESOURCE_TYPE_LICENSE: Gets the custom attribute defined on the license.
+//
+//     LA_RESOURCE_TYPE_USER: Gets the custom attribute defined on the user the license is
+//     assigned to.
+//
+//     LA_RESOURCE_TYPE_ACTIVATION: Gets the custom attribute defined on the current activation.
+//
+//     LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Gets the custom attribute defined on the current
+//     trial activation.
+//
+//     LA_RESOURCE_TYPE_ORGANIZATION: Gets the custom attribute defined on the organization
+//     the license is linked to.
+//
+//   - name: name of the custom attribute to retrieve the value.
+//   - value: pointer to a string that receives the value.
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID,
+//   LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND, LA_E_BUFFER_SIZE
+func GetCustomAttribute(resourceType uint, name string, value *string) int {
+	cResourceType := (C.uint)(resourceType)
+	cName := goToCString(name)
+	var cValue = getCArray(bufferSize4096)
+	status := C.GetCustomAttribute(cResourceType, cName, &cValue[0], bufferSize4096)
+	*value = strings.TrimRight(ctoGoString(&cValue[0], bufferSize4096), "\x00")
+	freeCString(cName)
+	return int(status)
+}
+
+// GetCustomAttributes gets the custom attributes for the specified resource type.
+//
+// Only the custom attributes which grant the application read access are returned.
+//
+// Parameters:
+//   - resourceType: the resource on which the custom attributes are defined. Pass exactly one of the
+//     following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+//     LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION,
+//     LA_RESOURCE_TYPE_ORGANIZATION. Combining the values using the bitwise OR operator is
+//     not supported.
+//   - customAttributes: pointer to an array of CustomAttribute structs that receives the values.
+//
+// Return codes:
+//   LA_OK, LA_FAIL, LA_E_PRODUCT_ID, LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_BUFFER_SIZE
+func GetCustomAttributes(resourceType uint, customAttributes *[]CustomAttribute) int {
+	cResourceType := (C.uint)(resourceType)
+	var cCustomAttributes = getCArray(bufferSize262144)
+	status := C.GetCustomAttributesInternal(cResourceType, &cCustomAttributes[0], bufferSize262144)
+	customAttributesJson := strings.TrimRight(ctoGoString(&cCustomAttributes[0], bufferSize262144), "\x00")
+	if customAttributesJson != "" {
+		attributes := []byte(customAttributesJson)
+		json.Unmarshal(attributes, customAttributes)
+	}
+	return int(status)
+}
+
 // GetTrialExpiryDate gets the trial expiry date timestamp.
 //
 // Parameters:
@@ -1166,6 +1372,43 @@ func GetLibraryVersion(libraryVersion *string) int {
 	var cLibraryVersion = getCArray(bufferSize256)
 	status := C.GetLibraryVersion(&cLibraryVersion[0], bufferSize256)
 	*libraryVersion = ctoGoString(&cLibraryVersion[0], bufferSize256)
+	return int(status)
+}
+
+// GetDataStoreInfo gets information about the data store used by LexActivator on
+// the current platform, including the location where the data is stored.
+//
+// The path is the fully resolved location of the data and does not include the
+// name of the data file. If a custom directory has been set using the
+// SetDataDirectory() function, that directory is returned.
+//
+// On Windows, when the LA_USER or LA_SYSTEM flag is used, the data is stored in
+// the registry. In that case the path is the registry key path and not a
+// filesystem directory.
+//
+// When the LA_IN_MEMORY flag is used, nothing is persisted, StorageKind is
+// "in-memory" and Path is empty.
+//
+// This function must be called after calling the SetProductId() function.
+//
+// Parameters:
+//   - dataStoreInfo: pointer to the DataStoreInfo struct that receives the information.
+//
+// Return codes:
+//
+//	LA_OK, LA_E_PRODUCT_ID, LA_E_BUFFER_SIZE
+//
+// Note: The path is intended for inspection only. Do not delete, move or modify
+// its contents. To release the activation and clear the activation data of your
+// product, use the DeactivateLicense() function.
+func GetDataStoreInfo(dataStoreInfo *DataStoreInfo) int {
+	var cDataStoreInfo = getCArray(bufferSize2048)
+	status := C.GetDataStoreInfoInternal(&cDataStoreInfo[0], bufferSize2048)
+	dataStoreInfoJson := strings.TrimRight(ctoGoString(&cDataStoreInfo[0], bufferSize2048), "\x00")
+	if dataStoreInfoJson != "" {
+		dataStore := []byte(dataStoreInfoJson)
+		json.Unmarshal(dataStore, dataStoreInfo)
+	}
 	return int(status)
 }
 
@@ -1264,6 +1507,39 @@ func AuthenticateUserWithIdToken(idToken string) int {
    return int(status)
 }
 
+// LookupLicense retrieves the license information from the Cryptlex servers
+// without activating the license.
+//
+// This function sends a network request to the Cryptlex servers. It is optional
+// and is not required by the standard activation flow. It is intended for
+// applications that need license information before activation, e.g. the license
+// type.
+//
+// This function must be called after SetProductData(). It does not require
+// SetProductId() to be called first.
+//
+// Parameters:
+//   - licenseKey: the license key to look up.
+//   - licenseLookupInfo: pointer to the LicenseLookupInfo struct that receives the license information.
+//
+// Return codes:
+//   LA_OK, LA_E_PRODUCT_DATA, LA_E_LICENSE_KEY, LA_E_INET, LA_E_SERVER, LA_E_CLIENT, LA_E_RATE_LIMIT, LA_E_BUFFER_SIZE
+//
+// Note: This function neither validates the license nor stores anything on the
+// device, and it has no effect on the activation state of the application. Use
+// ActivateLicense() to activate the license.
+func LookupLicense(licenseKey string, licenseLookupInfo *LicenseLookupInfo) int {
+   cLicenseKey := goToCString(licenseKey)
+   var cLicenseLookupInfo = getCArray(bufferSize1024)
+   status := C.LookupLicenseInternal(cLicenseKey, &cLicenseLookupInfo[0], bufferSize1024)
+   freeCString(cLicenseKey)
+   licenseLookupInfoJson := strings.TrimRight(ctoGoString(&cLicenseLookupInfo[0], bufferSize1024), "\x00")
+   if licenseLookupInfoJson != "" {
+      json.Unmarshal([]byte(licenseLookupInfoJson), licenseLookupInfo)
+   }
+   return int(status)
+}
+
 // ActivateLicense activates the license by contacting the Cryptlex servers. It
 // validates the key and returns with encrypted and digitally signed token
 // which it stores and uses to activate your application.
@@ -1272,7 +1548,7 @@ func AuthenticateUserWithIdToken(idToken string) int {
 // a button click.
 //
 // Return codes:
-//   LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_ACTIVATION_LIMIT, LA_E_SERVER, LA_E_CLIENT, LA_E_AUTHENTICATION_FAILED, LA_E_LICENSE_TYPE, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_NOT_ALLOWED, LA_E_RELEASE_VERSION_FORMAT
+//   LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_ACTIVATION_LIMIT, LA_E_SERVER, LA_E_CLIENT, LA_E_AUTHENTICATION_FAILED, LA_E_LICENSE_TYPE, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY, LA_E_RELEASE_VERSION_NOT_ALLOWED, LA_E_RELEASE_VERSION_FORMAT, LA_E_CUSTOM_ATTRIBUTE_INVALID
 func ActivateLicense() int {
 	status := C.ActivateLicense()
 	return int(status)
@@ -1406,7 +1682,7 @@ func SyncLicenseActivation() int {
 // the user's computer, ideally on a button click.
 //
 // Return codes:
-//   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT
+//   LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_CUSTOM_ATTRIBUTE_INVALID
 func ActivateTrial() int {
 	status := C.ActivateTrial()
 	return int(status)

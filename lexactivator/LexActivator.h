@@ -69,6 +69,13 @@ typedef void (LA_CC *ReleaseCallbackTypeInternal)(int, CSTRTYPE);
 #define LA_RELEASES_ALL ((uint32_t)1)
 #define LA_RELEASES_ALLOWED ((uint32_t)2)
 
+#define LA_RESOURCE_TYPE_PRODUCT ((uint32_t)1)
+#define LA_RESOURCE_TYPE_LICENSE ((uint32_t)2)
+#define LA_RESOURCE_TYPE_USER ((uint32_t)4)
+#define LA_RESOURCE_TYPE_ACTIVATION ((uint32_t)8)
+#define LA_RESOURCE_TYPE_TRIAL_ACTIVATION ((uint32_t)16)
+#define LA_RESOURCE_TYPE_ORGANIZATION ((uint32_t)32)
+
 /*
     FUNCTION: SetProductFile()
 
@@ -322,6 +329,52 @@ LEXACTIVATOR_API int LA_CC SetActivationMetadata(CSTRTYPE key, CSTRTYPE value);
 LEXACTIVATOR_API int LA_CC SetTrialActivationMetadata(CSTRTYPE key, CSTRTYPE value);
 
 /*
+    FUNCTION: SetCustomAttribute()
+
+    PURPOSE: Sets the value of the custom attribute for the specified resource type.
+
+    If the custom attribute is required, this function must be called before the
+    license or trial is activated.
+
+    GetCustomAttribute() does not return the value until the license or trial has
+    been activated or synced.
+
+    Setting an existing custom attribute overwrites its value. A value cannot be
+    removed, but an empty string is a valid value.
+
+    A license custom attribute must grant the application read-write access. Activation
+    custom attributes are always read-write. Setting a read only license custom
+    attribute returns LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED.
+
+    PARAMETERS:
+    * resourceType - the resource on which to set the custom attribute. Pass exactly
+      one of the following values: LA_RESOURCE_TYPE_LICENSE, LA_RESOURCE_TYPE_ACTIVATION,
+      LA_RESOURCE_TYPE_TRIAL_ACTIVATION. Combining the values using the bitwise OR
+      operator is not supported. The product, user and organization custom attributes cannot be set
+      by the application and return LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID.
+
+      - LA_RESOURCE_TYPE_LICENSE: Sets the custom attribute on the license. The
+        value appears along with the license details in the dashboard.
+
+      - LA_RESOURCE_TYPE_ACTIVATION: Sets the custom attribute on the activation.
+        The value appears along with the activation details of the license in the
+        dashboard.
+
+      - LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Sets the custom attribute on the trial
+        activation. The value appears along with the trial activation details of the
+        product in the dashboard.
+
+    * name - name of the custom attribute.
+    * value - value of the custom attribute, of maximum length 1024 characters.
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_LICENSE_KEY,
+    LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_CUSTOM_ATTRIBUTE_NAME_LENGTH,
+    LA_E_CUSTOM_ATTRIBUTE_VALUE_LENGTH, LA_E_CUSTOM_ATTRIBUTE_LIMIT,
+    LA_E_CUSTOM_ATTRIBUTE_ACCESS_DENIED
+*/
+LEXACTIVATOR_API int LA_CC SetCustomAttribute(uint32_t resourceType, CSTRTYPE name, CSTRTYPE value);
+
+/*
     FUNCTION: SetAppVersion()
 
     PURPOSE: Sets the current app version of your application.
@@ -456,6 +509,63 @@ LEXACTIVATOR_API int LA_CC SetCryptlexHost(CSTRTYPE host);
     RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID
 */
 LEXACTIVATOR_API int LA_CC SetTwoFactorAuthenticationCode(CSTRTYPE twoFactorAuthenticationCode);
+
+/*
+   FUNCTION: SetTlsPeerVerification()
+
+   PURPOSE: Enables or disables TLS/SSL peer certificate verification.
+
+   Use enable = 1 to explicitly enable verification. Use SetTlsTrustStore() to
+   specify the certificate bundle or CA directory explicitly; otherwise the SDK
+   probes the following standard system paths and uses the first one found:
+
+   CA bundle file candidates (CURLOPT_CAINFO), in order:
+     /etc/ssl/certs/ca-certificates.crt
+     /etc/pki/tls/certs/ca-bundle.crt
+     /etc/ssl/ca-bundle.pem
+     /etc/pki/tls/cacert.pem
+     /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+     /etc/ssl/cert.pem
+     /etc/openssl/certs/ca-certificates.crt
+     /usr/local/etc/ssl/cert.pem
+     /usr/local/etc/openssl/cert.pem
+     /usr/local/share/certs/ca-root-nss.crt
+
+   CA directory candidates (CURLOPT_CAPATH), in order:
+     /etc/ssl/certs
+     /etc/pki/tls/certs
+     /etc/openssl/certs
+
+   NOTE: This function is only supported on Linux. On Linux, TLS/SSL peer
+   verification is disabled by default; on all other platforms, it is enabled
+   by default, and this function has no effect.
+
+   PARAMETERS:
+   * enable - 0 to disable peer verification, 1 to enable it.
+
+   RETURN CODES: LA_OK
+*/
+LEXACTIVATOR_API int LA_CC SetTlsPeerVerification(uint32_t enable);
+
+/*
+   FUNCTION: SetTlsTrustStore()
+
+   PURPOSE: Specifies the certificate bundle file and/or CA directory the SDK uses
+   to validate server certificates over HTTPS; if not called the standard system CA paths
+   are probed automatically when verification is enabled. See SetTlsPeerVerification()
+   for the list of candidate paths used during automatic resolution.
+
+   NOTE: This function is only supported on Linux. It only configures the trust store;
+   call SetTlsPeerVerification(1) to enable verification. If both arguments are NULL or
+   point to unresolvable paths, standard system paths are used.
+
+   PARAMETERS:
+   * caBundleFilePath - path to a certificate bundle file (CURLOPT_CAINFO)
+   * caDirectoryPath - path to a directory of CA certificates (CURLOPT_CAPATH)
+
+   RETURN CODES: LA_OK
+*/
+LEXACTIVATOR_API int LA_CC SetTlsTrustStore(CSTRTYPE caBundleFilePath, CSTRTYPE caDirectoryPath);
 
 /*
     FUNCTION: GetProductMetadata()
@@ -991,6 +1101,71 @@ LEXACTIVATOR_API int LA_CC GetLastActivationError(uint32_t *errorPtr);
 LEXACTIVATOR_API int LA_CC GetTrialActivationMetadata(CSTRTYPE key, STRTYPE value, uint32_t length);
 
 /*
+    FUNCTION: GetCustomAttribute()
+
+    PURPOSE: Gets the value of the custom attribute for the specified resource type.
+
+    Only the custom attributes which grant the application read access are available. An
+    attribute whose application access is set to none behaves as if it does not exist and
+    returns LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND.
+
+    A value set with SetCustomAttribute() is not returned by this function until the license
+    or trial has been activated or synced.
+
+    PARAMETERS:
+    * resourceType - the resource on which the custom attribute is defined. Pass exactly
+      one of the following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+      LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION, LA_RESOURCE_TYPE_ORGANIZATION.
+      Combining the values using the bitwise OR operator is not supported.
+
+      - LA_RESOURCE_TYPE_PRODUCT: Gets the custom attribute defined on the product. This is
+        available for trial as well as license activations.
+
+      - LA_RESOURCE_TYPE_LICENSE: Gets the custom attribute defined on the license.
+
+      - LA_RESOURCE_TYPE_USER: Gets the custom attribute defined on the user the license is
+        assigned to.
+
+      - LA_RESOURCE_TYPE_ACTIVATION: Gets the custom attribute defined on the current
+        activation.
+
+      - LA_RESOURCE_TYPE_TRIAL_ACTIVATION: Gets the custom attribute defined on the current
+        trial activation.
+
+      - LA_RESOURCE_TYPE_ORGANIZATION: Gets the custom attribute defined on the organization the license
+        is linked to.
+
+    * name - name of the custom attribute to retrieve the value.
+    * value - pointer to a buffer that receives the value of the custom attribute.
+    * length - size of the buffer pointed to by the value parameter.
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID,
+    LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_CUSTOM_ATTRIBUTE_NOT_FOUND,
+    LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetCustomAttribute(uint32_t resourceType, CSTRTYPE name, STRTYPE value, uint32_t length);
+
+/*
+    FUNCTION: GetCustomAttributesInternal()
+
+    PURPOSE: Gets the custom attributes json for the specified resource type.
+
+    Only the custom attributes which grant the application read access are returned.
+
+    PARAMETERS:
+    * resourceType - the resource on which the custom attributes are defined. Pass exactly
+      one of the following values: LA_RESOURCE_TYPE_PRODUCT, LA_RESOURCE_TYPE_LICENSE,
+      LA_RESOURCE_TYPE_USER, LA_RESOURCE_TYPE_ACTIVATION, LA_RESOURCE_TYPE_TRIAL_ACTIVATION, LA_RESOURCE_TYPE_ORGANIZATION.
+      Combining the values using the bitwise OR operator is not supported.
+    * customAttributesJson - pointer to a buffer that receives the custom attributes json.
+    * length - size of the buffer pointed to by the customAttributesJson parameter.
+
+    RETURN CODES: LA_OK, LA_FAIL, LA_E_PRODUCT_ID,
+    LA_E_CUSTOM_ATTRIBUTE_RESOURCE_TYPE_INVALID, LA_E_BUFFER_SIZE
+*/
+LEXACTIVATOR_API int LA_CC GetCustomAttributesInternal(uint32_t resourceType, STRTYPE customAttributesJson, uint32_t length);
+
+/*
     FUNCTION: GetTrialExpiryDate()
 
     PURPOSE: Gets the trial expiry date timestamp.
@@ -1040,6 +1215,38 @@ LEXACTIVATOR_API int LA_CC GetLocalTrialExpiryDate(uint32_t *trialExpiryDate);
     RETURN CODES: LA_OK, LA_E_BUFFER_SIZE
 */
 LEXACTIVATOR_API int LA_CC GetLibraryVersion(STRTYPE libraryVersion, uint32_t length);
+
+/*
+    FUNCTION: GetDataStoreInfoInternal()
+
+    PURPOSE: Gets the data store information json for the data store used by
+    LexActivator on the current platform, including the location where the data
+    is stored.
+
+    The path member is the fully resolved location of the data and does not
+    include the name of the data file. If a custom directory has been set using
+    the SetDataDirectory() function, that directory is returned.
+
+    On Windows, when the LA_USER or LA_SYSTEM flag is used, the data is stored in
+    the registry. In that case the path member is the registry key path and not a
+    filesystem directory.
+
+    When the LA_IN_MEMORY flag is used, nothing is persisted, storageKind is
+    "in-memory" and path is empty.
+
+    This function must be called after calling the SetProductId() function.
+
+    PARAMETERS:
+    * dataStoreInfo - pointer to a buffer that receives the value of the string.
+    * length - size of the buffer pointed to by the dataStoreInfo parameter
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_ID, LA_E_BUFFER_SIZE
+
+    NOTE: The path is intended for inspection only. Do not delete, move or modify
+    its contents. To release the activation and clear the activation data of your
+    product, use the DeactivateLicense() function.
+*/
+LEXACTIVATOR_API int LA_CC GetDataStoreInfoInternal(STRTYPE dataStoreInfo, uint32_t length);
 
 /*
     FUNCTION: CheckReleaseUpdateInternal()
@@ -1124,6 +1331,34 @@ LEXACTIVATOR_API int LA_CC AuthenticateUser(CSTRTYPE email, CSTRTYPE password);
 LEXACTIVATOR_API int LA_CC AuthenticateUserWithIdToken(CSTRTYPE idToken);
 
 /*
+    FUNCTION: LookupLicenseInternal()
+
+    PURPOSE: Retrieves the license information json from the Cryptlex servers
+    without activating the license.
+
+    This function sends a network request to the Cryptlex servers. It is optional
+    and is not required by the standard activation flow. It is intended for
+    applications that need license information before activation, e.g. the license
+    type.
+
+    This function must be called after SetProductData(). It does not
+    require SetProductId() to be called first.
+
+    PARAMETERS:
+    * licenseKey - the license key to look up.
+    * licenseLookupInfo - pointer to a buffer that receives the value of the string.
+    * length - size of the buffer pointed to by the licenseLookupInfo parameter
+
+    RETURN CODES: LA_OK, LA_E_PRODUCT_DATA, LA_E_LICENSE_KEY, LA_E_INET, LA_E_SERVER,
+    LA_E_CLIENT, LA_E_RATE_LIMIT, LA_E_BUFFER_SIZE
+
+    NOTE: This function neither validates the license nor stores anything on the
+    device, and it has no effect on the activation state of the application. Use
+    ActivateLicense() to activate the license.
+*/
+LEXACTIVATOR_API int LA_CC LookupLicenseInternal(CSTRTYPE licenseKey, STRTYPE licenseLookupInfo, uint32_t length);
+
+/*
     FUNCTION: ActivateLicense()
 
     PURPOSE: Activates the license by contacting the Cryptlex servers. It
@@ -1136,7 +1371,8 @@ LEXACTIVATOR_API int LA_CC AuthenticateUserWithIdToken(CSTRTYPE idToken);
     RETURN CODES: LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED, LA_FAIL, LA_E_PRODUCT_ID,
     LA_E_INET, LA_E_VM, LA_E_TIME, LA_E_ACTIVATION_LIMIT, LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED, LA_E_SERVER, LA_E_CLIENT,
     LA_E_AUTHENTICATION_FAILED, LA_E_LICENSE_TYPE, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT, LA_E_LICENSE_KEY,
-    LA_E_RELEASE_VERSION_NOT_ALLOWED, LA_E_RELEASE_VERSION_FORMAT, LA_E_LICENSE_NOT_EFFECTIVE
+    LA_E_RELEASE_VERSION_NOT_ALLOWED, LA_E_RELEASE_VERSION_FORMAT, LA_E_LICENSE_NOT_EFFECTIVE,
+    LA_E_CUSTOM_ATTRIBUTE_INVALID
 
 */
 LEXACTIVATOR_API int LA_CC ActivateLicense();
@@ -1276,7 +1512,8 @@ LEXACTIVATOR_API int LA_CC SyncLicenseActivation();
     the user's computer, ideally on a button click.
 
     RETURN CODES: LA_OK, LA_TRIAL_EXPIRED, LA_FAIL, LA_E_PRODUCT_ID, LA_E_INET,
-    LA_E_VM, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT
+    LA_E_VM, LA_E_TIME, LA_E_SERVER, LA_E_CLIENT, LA_E_COUNTRY, LA_E_IP, LA_E_RATE_LIMIT,
+    LA_E_CUSTOM_ATTRIBUTE_INVALID
 */
 LEXACTIVATOR_API int LA_CC ActivateTrial();
 
